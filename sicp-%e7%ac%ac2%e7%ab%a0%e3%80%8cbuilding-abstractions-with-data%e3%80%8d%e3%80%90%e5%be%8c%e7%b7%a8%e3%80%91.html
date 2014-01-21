@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="だからといって、このままでいいはずがない。, ">
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+    <link rel="stylesheet" href="/theme/pure.css">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://use.typekit.net/ajf8ggy.js"></script>
+    <script>
+        try { Typekit.load(); } catch (e) {}
+    </script>
+
+
+        <title>SICP 第2章「Building Abstractions with Data」【後編】 // だからといって、このままでいいはずがない。 // </title>
+</head>
+
+<body>
+    <div class="pure-g-r content" id="layout">
+        <div class="pure-u" id="nav">
+            <a href="#" class="nav-menu-button">Menu</a>
+
+            <div class="nav-inner">
+                <h1>
+                    <a class="logo" href=""><img id="profileimg" src="" alt="だからといって、このままでいいはずがない。"></a>
+                </h1>
+                <div class="pure-menu pure-menu-open">
+                    <ul>
+                        <span class="pure-menu-heading">だからといって、このままでいいはずがない。</span>
+                            <li><a href="/pages/about-me.html">About Me</a></li>
+                        <li class="pure-menu-heading">Categories</li>
+                            <li><a href="/category/impressions.html"><span class="cat-label-blue"></span>Impressions</a></li>
+                            <li><a href="/category/impressions-music.html"><span class="cat-label-blue"></span>Impressions, Music</a></li>
+                            <li><a href="/category/impressions-music-programming.html"><span class="cat-label-blue"></span>Impressions, Music, Programming</a></li>
+                            <li><a href="/category/impressions-programming.html"><span class="cat-label-blue"></span>Impressions, Programming</a></li>
+                            <li><a href="/category/impressions-programming-sicp.html"><span class="cat-label-blue"></span>Impressions, Programming, SICP</a></li>
+                            <li><a href="/category/misc.html"><span class="cat-label-blue"></span>misc</a></li>
+                            <li><a href="/category/programming.html"><span class="cat-label-blue"></span>Programming</a></li>
+                            <li><a href="/category/programming-sicp.html"><span class="cat-label-yellow"<span class="cat-label-blue"></span>Programming, SICP</a></li>
+                            <li><a href="/category/programming-sicp-patahene.html"><span class="cat-label-blue"></span>Programming, SICP, パタヘネ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    <div class="pure-u-3-4">
+        <div class="article-content margin-blue">
+            <div class="article-content-header pure-g">
+                <div class="pure-u-1">
+                    <h1 class="article-content-title">SICP 第2章「Building Abstractions with Data」【後編】</h1>
+                    <p class="article-content-subtitle">
+                        by <a href="/author/nishiyama101.html">nishiyama101</a> on <span>日 08 12月 2013</span>
+                        // Posted in <a href="/category/programming-sicp.html">Programming, SICP</a>
+                    </p>
+                </div>
+            </div>
+            <div class="article-content-body">
+                <p>
+                    <p>後半はGeneric Procedure関する解説。</p>
+<p>オブジェクト指向の言語で開発を行っていると、「そもそも型とは」というようなことを考える機会がほとんどない。言語のプリミティブな機能を利用して、型の仕組みを実装してみるのはなかなか貴重な経験だ。</p>
+<p>ここでは、Generic Procedureを実現するための戦略が3つ紹介される。</p>
+<ul>
+<li>
+<p>explicit dispatch  </p>
+<p>総称関数側(「たす」、「ひく」など)が、データの型(「実数」、「複素数」など)を見て、実際に実行される函数を決定する。  </p>
+<p>型が追加されるたびに、総称関数側の分岐を追加する必要がある。既存のコードを修正する必要があるので、余り得策とはいえない？</p>
+</li>
+<li>
+<p>data-directed  </p>
+<p>「総称函数名」、「型」、「実際に実行される函数」の結びつきを管理するテーブルを作成する。  </p>
+<p>総称関数内での分岐を作る必要はないが、新しい函数や型が追加されるたびにグローバルなテーブルを更新する必要がある。</p>
+</li>
+<li>
+<p>message-passing<br />
+    "intelligent operation"ではなく、"intelligent data
+    object"。つまり、型に応じた処理を行う「賢い処理」の代わりに、処理に応じて動作を変える「賢いデータ」を作るという方針。</p>
+</li>
+</ul>
+<p>message-passingは非常にオブジェクト指向的だ。直交座標系で複素数を表現する、以下の例が紹介されている。</p>
+<p>``` {.lang:lisp .decode:true title="Message Passing"}
+(define (make-from-real-imag x y)
+  (define (dispatch op)
+    (cond ((eq? op 'real-part) x)
+          ((eq? op 'imag-part) y)
+          ((eq? op 'magnitude)
+           (sqrt (+ (square x) (square y))))
+          ((eq? op 'angle) (atan y x))
+          (else
+           (error "Unknown op -- MAKE-FROM-REAL-IMAG" op))))
+  dispatch)</p>
+<div class="highlight"><pre><span class="err">つまり、処理の塊としての函数が返却される。</span>
+<span class="err">利用する側は、以下の様なコードを書けば良い。</span>
+
+<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">lisp</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Message Passing&quot;</span><span class="p">}</span>
+<span class="p">(</span><span class="n">define</span> <span class="n">real</span><span class="o">-</span><span class="n">imag</span> <span class="p">(</span><span class="n">make</span><span class="o">-</span><span class="n">from</span><span class="o">-</span><span class="n">real</span><span class="o">-</span><span class="n">imag</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">))</span>
+<span class="p">(</span><span class="n">real</span><span class="o">-</span><span class="n">imag</span> <span class="err">&#39;</span><span class="n">magnitude</span><span class="p">)</span>
+
+<span class="p">;;</span> <span class="err">実行結果</span>
+<span class="p">;;</span> <span class="n">gosh</span> <span class="o">&lt;</span> <span class="mf">2.8284271247461903</span>
+</pre></div>
+
+
+<p>かなり、オブジェクトっぽい。3章ではクロージャがでてくるので、いよいよデータと手続きが一緒になったデータを定義できるようになるだろう。</p>
+<p>この後、継承などについても軽く触れていたが、この本ではクラスや継承などについて深くは扱わないようだ。もう少し理解が深まったら型システムなどもじっくり勉強してみたい。</p>
+<p>[amazonjs asin="4274069117" locale="JP" title="型システム入門
+−プログラミング言語と型の理論−"]</p>
+                </p>
+ 
+            </div>
+        </div>
+    </div>
+
+        <div class="pure-u-3-4">
+            <footer class="footer">
+                <p>&copy; だからといって、このままでいいはずがない。 &ndash;
+                    Built with <a href="https://github.com/danclaudiupop/pure">Pure Theme</a>
+                    for <a href="http://blog.getpelican.com/">Pelican</a>
+                </p>
+                <p>Licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_GB">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</p>
+                <a href="#" class="go-top">Go Top</a>
+            </footer>
+        </div>
+
+    <script src="http://yui.yahooapis.com/3.10.1/build/yui/yui-min.js"></script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+
+            var menuButton = Y.one('.nav-menu-button'),
+                nav        = Y.one('#nav');
+
+            // Setting the active class name expands the menu vertically on small screens.
+            menuButton.on('click', function (e) {
+                nav.toggleClass('active');
+            });
+
+            // Your application code goes here...
+
+        });
+    </script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+            // This just makes sure that the href="#" attached to the <a> elements
+            // don't scroll you back up the page.
+            Y.one('body').delegate('click', function (e) {
+                e.preventDefault();
+            }, 'a[href="#"]');
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Show or hide the sticky footer button
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 200) {
+                    $('.go-top').fadeIn(200);
+                } else {
+                    $('.go-top').fadeOut(200);
+                }
+            });
+
+            // Animate the scroll to top
+            $('.go-top').click(function(event) {
+                event.preventDefault();
+
+                $('html, body').animate({scrollTop: 0}, 300);
+            })
+        });
+    </script>
+
+</body>
+</html>

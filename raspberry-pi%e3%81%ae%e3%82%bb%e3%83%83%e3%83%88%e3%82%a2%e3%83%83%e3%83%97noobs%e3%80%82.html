@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="だからといって、このままでいいはずがない。, ">
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+    <link rel="stylesheet" href="/theme/pure.css">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://use.typekit.net/ajf8ggy.js"></script>
+    <script>
+        try { Typekit.load(); } catch (e) {}
+    </script>
+
+
+        <title>Raspberry Piのセットアップ(NOOBS)。 // だからといって、このままでいいはずがない。 // </title>
+</head>
+
+<body>
+    <div class="pure-g-r content" id="layout">
+        <div class="pure-u" id="nav">
+            <a href="#" class="nav-menu-button">Menu</a>
+
+            <div class="nav-inner">
+                <h1>
+                    <a class="logo" href=""><img id="profileimg" src="" alt="だからといって、このままでいいはずがない。"></a>
+                </h1>
+                <div class="pure-menu pure-menu-open">
+                    <ul>
+                        <span class="pure-menu-heading">だからといって、このままでいいはずがない。</span>
+                            <li><a href="/pages/about-me.html">About Me</a></li>
+                        <li class="pure-menu-heading">Categories</li>
+                            <li><a href="/category/impressions.html"><span class="cat-label-blue"></span>Impressions</a></li>
+                            <li><a href="/category/impressions-music.html"><span class="cat-label-blue"></span>Impressions, Music</a></li>
+                            <li><a href="/category/impressions-music-programming.html"><span class="cat-label-blue"></span>Impressions, Music, Programming</a></li>
+                            <li><a href="/category/impressions-programming.html"><span class="cat-label-blue"></span>Impressions, Programming</a></li>
+                            <li><a href="/category/impressions-programming-sicp.html"><span class="cat-label-blue"></span>Impressions, Programming, SICP</a></li>
+                            <li><a href="/category/misc.html"><span class="cat-label-blue"></span>misc</a></li>
+                            <li><a href="/category/programming.html"><span class="cat-label-yellow"<span class="cat-label-blue"></span>Programming</a></li>
+                            <li><a href="/category/programming-sicp.html"><span class="cat-label-blue"></span>Programming, SICP</a></li>
+                            <li><a href="/category/programming-sicp-patahene.html"><span class="cat-label-blue"></span>Programming, SICP, パタヘネ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    <div class="pure-u-3-4">
+        <div class="article-content margin-blue">
+            <div class="article-content-header pure-g">
+                <div class="pure-u-1">
+                    <h1 class="article-content-title">Raspberry Piのセットアップ(NOOBS)。</h1>
+                    <p class="article-content-subtitle">
+                        by <a href="/author/nishiyama101.html">nishiyama101</a> on <span>土 31 8月 2013</span>
+                        // Posted in <a href="/category/programming.html">Programming</a>
+                    </p>
+                </div>
+            </div>
+            <div class="article-content-body">
+                <p>
+                    <p>購入してからしばらく放置していたRaspberry Piをセットアップしてみる。</p>
+<p>今のところRaspberry
+Piでやりたいことはないから、セットアップするに足る目的もないけどなぁ、などと思いつつ作業を開始する。すると、どうしたことか全然上手くいかないので、セットアップすることが目的になって、Raspberry
+Piが起動した時には、なんとも言えない達成感が・・・。セットアップとは得てして、このような性質を持った作業である。</p>
+<p>さて、私の「セットアップ観」など何の役にも立たないので、私がセットアップの際に困った事を展開したい。</p>
+<p>まずインストールするOSをダウンロードするために、下記サイトを見る。</p>
+<p><a href="http://www.raspberrypi.org/downloads">http://www.raspberrypi.org/downloads</a></p>
+<p>「初心者はNOOBSを利用してOSをインストールするのが、おすすめ」ということなので、それに従う(ちなみにnoobは「新参者」という意味らしい)。「俺は利口だから中級者以上の扱いで頼むぜ」という感じで臨んで、マニュアルで色々やろうとしたら散々な結果になった、などということはぜひとも避けたい。</p>
+<p>さて、Transcendの8GB(Class10)のSDカードをフォーマットし、そこにNOOBSのファイルを突っ込み、Raspberry
+Piを起動した。</p>
+<p>しかし、画面に何も表示されない。よくみると「ACT」のLEDが消灯しているので、それを手がかりに調べてみる。</p>
+<p><a href="http://elinux.org/R-Pi_Troubleshooting">http://elinux.org/R-Pi_Troubleshooting</a></p>
+<p>上記のサイトによると、ACTはSDカードのステータスらしい。これは、所謂「<a href="http://elinux.org/RPi_SD_cards">SDカードの相性問題</a>」かと思い、別のSDカード(TOSHIBA)のもので試す。が、これも同じ結果。無念、Raspberry
+Piは屋根裏行きかなと思ったものの、さすがに本体・入門用書籍・SDカードx2の代金を捨てるのはあまりに勿体ないので、もうちょっと調べてみる。すると、気になる投稿を見つけた。</p>
+<p><a href="http://www.raspberrypi.org/phpBB3/viewtopic.php?t=48389&amp;p=378706">http://www.raspberrypi.org/phpBB3/viewtopic.php?t=48389&amp;p=378706</a></p>
+<hr />
+<p>by <strong><a href="http://www.raspberrypi.org/phpBB3/memberlist.php?mode=viewprofile&amp;u=14062">mahjongg</a></strong> » Fri Jun 28, 2013 12:26 am</p>
+<p>Okay, my bad, I suddenly realized you didn't make any install yet, and
+config.txt is (only) installed after you choose to install a linux
+variant. config.txt doesn't exist on the card until then.</p>
+<p>the NOOBS menu itself shouldn't need config.txt, as it uses the most
+elementary VGA format that any (VGA) monitor should be able to display.</p>
+<p>By default, NOOBS 1.2 will try to output over HDMI at your display's
+preferred resolution. If you do not see any output on your HDMI display
+or are using the composite output, you can manually select a different
+output mode by pressing one of the following number keys on your
+keyboard;</p>
+<p>​1. HDMI preferred mode - this is the default display mode for NOOBS.<br />
+2. HDMI safe mode - select this mode if your display is connected to
+the Pi's HDMI connector and you cannot see anything on screen after the
+Pi has booted.<br />
+3. Composite PAL mode - select either this mode or composite NTSC mode
+if you are using the composite RCA video connector on the Pi<br />
+4. Composite NTSC mode</p>
+<p>So in your case you will need to boot the Pi, wait for a second or so,
+then press either 3 or 4 until you get a display on your monitor.</p>
+<p>You can tell that your keypress has been registered as the green ACT LED
+will turn on after the key has been pressed before switching off once
+the display mode has been changed. If you still do no see a display
+after the LED goes off then try another mode.</p>
+<hr />
+<p>私も同じくVGAのディスプレイに出力していた。どうやらNOOBSをVGA出力で起動する場合にはキーボードのキーを押して、出力モードを選択しないといけないようだ。試しにキーボードの1を押してみる。すると、NOOBSのセットアップ画面が表示されたではないか！ということで、SDカードの問題ではなく、VGA出力が問題であったことが発覚した。こうして、無事にNOOBSからRaspbian
+“wheezy”をインストールすることができたのだが、ここで再度つまずいた。OS起動後、またもや画面が表示されないのである。だが、VGAが問題であることは分かっているので、再度調べてみる。すると、こういう記事を発見した。</p>
+<p><a href="http://nomolk.hatenablog.com/entry/2013/03/28/234247">http://nomolk.hatenablog.com/entry/2013/03/28/234247</a></p>
+<p>この記事と、記事のリンクにあるtwitterの投稿を参考にして、config.txtを編集し、最終的に、</p>
+<p>hdmi_safe=1<br />
+hdmi_drive=2</p>
+<p>という設定にすることで、画面が出力された。こうして、ゆとりプログラマー(noob)はハードウェアの手痛い洗礼を受けながらも、無事にRaspberry
+Piをセットアップすることができたのである。</p>
+<p>VGA出力にしている人は参考にしていただきたい。</p>
+                </p>
+ 
+            </div>
+        </div>
+    </div>
+
+        <div class="pure-u-3-4">
+            <footer class="footer">
+                <p>&copy; だからといって、このままでいいはずがない。 &ndash;
+                    Built with <a href="https://github.com/danclaudiupop/pure">Pure Theme</a>
+                    for <a href="http://blog.getpelican.com/">Pelican</a>
+                </p>
+                <p>Licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_GB">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</p>
+                <a href="#" class="go-top">Go Top</a>
+            </footer>
+        </div>
+
+    <script src="http://yui.yahooapis.com/3.10.1/build/yui/yui-min.js"></script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+
+            var menuButton = Y.one('.nav-menu-button'),
+                nav        = Y.one('#nav');
+
+            // Setting the active class name expands the menu vertically on small screens.
+            menuButton.on('click', function (e) {
+                nav.toggleClass('active');
+            });
+
+            // Your application code goes here...
+
+        });
+    </script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+            // This just makes sure that the href="#" attached to the <a> elements
+            // don't scroll you back up the page.
+            Y.one('body').delegate('click', function (e) {
+                e.preventDefault();
+            }, 'a[href="#"]');
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Show or hide the sticky footer button
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 200) {
+                    $('.go-top').fadeIn(200);
+                } else {
+                    $('.go-top').fadeOut(200);
+                }
+            });
+
+            // Animate the scroll to top
+            $('.go-top').click(function(event) {
+                event.preventDefault();
+
+                $('html, body').animate({scrollTop: 0}, 300);
+            })
+        });
+    </script>
+
+</body>
+</html>

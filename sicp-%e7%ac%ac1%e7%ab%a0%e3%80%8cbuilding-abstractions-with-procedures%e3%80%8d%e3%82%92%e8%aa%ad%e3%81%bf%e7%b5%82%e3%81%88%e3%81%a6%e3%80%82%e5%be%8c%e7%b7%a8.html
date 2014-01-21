@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="だからといって、このままでいいはずがない。, ">
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+    <link rel="stylesheet" href="/theme/pure.css">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://use.typekit.net/ajf8ggy.js"></script>
+    <script>
+        try { Typekit.load(); } catch (e) {}
+    </script>
+
+
+        <title>SICP 第1章「Building Abstractions with Procedures」を読み終えて。(後編) // だからといって、このままでいいはずがない。 // </title>
+</head>
+
+<body>
+    <div class="pure-g-r content" id="layout">
+        <div class="pure-u" id="nav">
+            <a href="#" class="nav-menu-button">Menu</a>
+
+            <div class="nav-inner">
+                <h1>
+                    <a class="logo" href=""><img id="profileimg" src="" alt="だからといって、このままでいいはずがない。"></a>
+                </h1>
+                <div class="pure-menu pure-menu-open">
+                    <ul>
+                        <span class="pure-menu-heading">だからといって、このままでいいはずがない。</span>
+                            <li><a href="/pages/about-me.html">About Me</a></li>
+                        <li class="pure-menu-heading">Categories</li>
+                            <li><a href="/category/impressions.html"><span class="cat-label-blue"></span>Impressions</a></li>
+                            <li><a href="/category/impressions-music.html"><span class="cat-label-blue"></span>Impressions, Music</a></li>
+                            <li><a href="/category/impressions-music-programming.html"><span class="cat-label-blue"></span>Impressions, Music, Programming</a></li>
+                            <li><a href="/category/impressions-programming.html"><span class="cat-label-blue"></span>Impressions, Programming</a></li>
+                            <li><a href="/category/impressions-programming-sicp.html"><span class="cat-label-blue"></span>Impressions, Programming, SICP</a></li>
+                            <li><a href="/category/misc.html"><span class="cat-label-blue"></span>misc</a></li>
+                            <li><a href="/category/programming.html"><span class="cat-label-blue"></span>Programming</a></li>
+                            <li><a href="/category/programming-sicp.html"><span class="cat-label-yellow"<span class="cat-label-blue"></span>Programming, SICP</a></li>
+                            <li><a href="/category/programming-sicp-patahene.html"><span class="cat-label-blue"></span>Programming, SICP, パタヘネ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    <div class="pure-u-3-4">
+        <div class="article-content margin-blue">
+            <div class="article-content-header pure-g">
+                <div class="pure-u-1">
+                    <h1 class="article-content-title">SICP 第1章「Building Abstractions with Procedures」を読み終えて。(後編)</h1>
+                    <p class="article-content-subtitle">
+                        by <a href="/author/nishiyama101.html">nishiyama101</a> on <span>日 27 10月 2013</span>
+                        // Posted in <a href="/category/programming-sicp.html">Programming, SICP</a>
+                    </p>
+                </div>
+            </div>
+            <div class="article-content-body">
+                <p>
+                    <p><a href="http://yuseinishiyama.com/archives/184" title="SICP 第1章「Building Abstractions with Procedures」を読み終えて。(前編)">(前編はこちら)</a></p>
+<p>1章から学べたことを列挙する。</p>
+<p>・Schemeに慣れた。  </p>
+<p>if、cond、define、let、lambdaなどを用いてプログラミングできるようになった。例の「カッコ」にもだいぶ慣れてきた。</p>
+<p>・linear recursionとiterationの違いが分かるようになった。  </p>
+<p>今以上に不慣れな時のコードではあるが、以下のようにrecursionとiterationで再帰が書けるようになった。後者のほうが遥かに効率が良い。</p>
+<p>``` {.lang:scheme .decode:true title="Exercise 1.11. "}
+;recursion
+(define (f n)
+  (cond ((&lt; n 3) n)
+        (else (+ (f (- n 1))
+                 (<em> 2 (f (- n 2)))
+                 (</em> 3 (f (- n 3)))))))</p>
+<p>;iteration
+(define (f-iter product product-1 product-2 counter max-count)
+  (cond ((&gt; counter max-count) product)
+        (else (f-iter (+ product (<em> 2 product-1) (</em> 3 product-2)) product product-1 (+ counter 1) max-count))))
+```</p>
+<p>・ファーストクラスオブジェクトについて理解した。  </p>
+<p>当然Lispをやるのだから事前に知っていたことではあったが、Procedureを返す関数とかをたくさん書いているうちに以前よりはっきり「ファーストクラス感(？)」を理解できるようになった。</p>
+<blockquote>
+<p>In general, programming languages impose restrictions on the ways in
+which computational elements can be manipulated. Elements with the
+fewest restrictions are said to have first-class status. Some of the
+``rights and privileges'' of first-class elements are:</p>
+<p>They may be named by variables.<br />
+ They may be passed as arguments to procedures.<br />
+ They may be returned as the results of procedures.<br />
+ They may be included in data structures.</p>
+<p>Lisp, unlike other common programming languages, awards procedures
+full first-class status. This poses challenges for efficient
+implementation, but the resulting gain in expressive power is
+enormous.</p>
+</blockquote>
+<p>・数学的な考え方が身についた。  </p>
+<p>いや、はっきりいって数学で躓いて飛ばしてしまった問題とかもたくさんあって、むしろ数学をなんとかしないとヤバイ感じがするが、それでも前よりは数学的な考えが身についたような気がする。数学が苦手で今まで無視し続けた自分としては、これだけたくさんの近似値を求める式を実装しただけでもかなり変わったと思う。</p>
+<blockquote>
+<p>Several of the numerical methods described in this chapter are
+instances of an extremely general computational strategy known as
+iterative improvement. Iterative improvement says that, to compute
+something, we start with an initial guess for the answer, test if the
+guess is good enough, and otherwise improve the guess and continue the
+process using the improved guess as the new guess.</p>
+</blockquote>
+<p>数学ってこういうことなんだな、とほんの少し思えた。</p>
+<p>どうせ、最初はほとんど理解できないんだろうな、と思った割には重要な点はかなり吸収できたと思う。とは言え、数学でつまずいて1/3くらいのExerciseはあいまいなままだから、なんとかしないといけない。どっちにしろ、最近3Dグラフィックスとか画像処理とか齧るようになってきて、数学の重要性を実感してきたところだし、ちょうど良いだろう。</p>
+<p>さて、次はデータの抽象化だ。</p>
+                </p>
+ 
+            </div>
+        </div>
+    </div>
+
+        <div class="pure-u-3-4">
+            <footer class="footer">
+                <p>&copy; だからといって、このままでいいはずがない。 &ndash;
+                    Built with <a href="https://github.com/danclaudiupop/pure">Pure Theme</a>
+                    for <a href="http://blog.getpelican.com/">Pelican</a>
+                </p>
+                <p>Licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_GB">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</p>
+                <a href="#" class="go-top">Go Top</a>
+            </footer>
+        </div>
+
+    <script src="http://yui.yahooapis.com/3.10.1/build/yui/yui-min.js"></script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+
+            var menuButton = Y.one('.nav-menu-button'),
+                nav        = Y.one('#nav');
+
+            // Setting the active class name expands the menu vertically on small screens.
+            menuButton.on('click', function (e) {
+                nav.toggleClass('active');
+            });
+
+            // Your application code goes here...
+
+        });
+    </script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+            // This just makes sure that the href="#" attached to the <a> elements
+            // don't scroll you back up the page.
+            Y.one('body').delegate('click', function (e) {
+                e.preventDefault();
+            }, 'a[href="#"]');
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Show or hide the sticky footer button
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 200) {
+                    $('.go-top').fadeIn(200);
+                } else {
+                    $('.go-top').fadeOut(200);
+                }
+            });
+
+            // Animate the scroll to top
+            $('.go-top').click(function(event) {
+                event.preventDefault();
+
+                $('html, body').animate({scrollTop: 0}, 300);
+            })
+        });
+    </script>
+
+</body>
+</html>

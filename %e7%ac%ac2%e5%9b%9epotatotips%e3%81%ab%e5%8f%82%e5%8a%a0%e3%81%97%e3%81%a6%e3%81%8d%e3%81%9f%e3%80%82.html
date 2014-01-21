@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="だからといって、このままでいいはずがない。, ">
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+    <link rel="stylesheet" href="/theme/pure.css">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://use.typekit.net/ajf8ggy.js"></script>
+    <script>
+        try { Typekit.load(); } catch (e) {}
+    </script>
+
+
+        <title>第2回potatotipsに参加してきた。 // だからといって、このままでいいはずがない。 // </title>
+</head>
+
+<body>
+    <div class="pure-g-r content" id="layout">
+        <div class="pure-u" id="nav">
+            <a href="#" class="nav-menu-button">Menu</a>
+
+            <div class="nav-inner">
+                <h1>
+                    <a class="logo" href=""><img id="profileimg" src="" alt="だからといって、このままでいいはずがない。"></a>
+                </h1>
+                <div class="pure-menu pure-menu-open">
+                    <ul>
+                        <span class="pure-menu-heading">だからといって、このままでいいはずがない。</span>
+                            <li><a href="/pages/about-me.html">About Me</a></li>
+                        <li class="pure-menu-heading">Categories</li>
+                            <li><a href="/category/impressions.html"><span class="cat-label-blue"></span>Impressions</a></li>
+                            <li><a href="/category/impressions-music.html"><span class="cat-label-blue"></span>Impressions, Music</a></li>
+                            <li><a href="/category/impressions-music-programming.html"><span class="cat-label-blue"></span>Impressions, Music, Programming</a></li>
+                            <li><a href="/category/impressions-programming.html"><span class="cat-label-yellow"<span class="cat-label-blue"></span>Impressions, Programming</a></li>
+                            <li><a href="/category/impressions-programming-sicp.html"><span class="cat-label-blue"></span>Impressions, Programming, SICP</a></li>
+                            <li><a href="/category/misc.html"><span class="cat-label-blue"></span>misc</a></li>
+                            <li><a href="/category/programming.html"><span class="cat-label-blue"></span>Programming</a></li>
+                            <li><a href="/category/programming-sicp.html"><span class="cat-label-blue"></span>Programming, SICP</a></li>
+                            <li><a href="/category/programming-sicp-patahene.html"><span class="cat-label-blue"></span>Programming, SICP, パタヘネ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    <div class="pure-u-3-4">
+        <div class="article-content margin-blue">
+            <div class="article-content-header pure-g">
+                <div class="pure-u-1">
+                    <h1 class="article-content-title">第2回potatotipsに参加してきた。</h1>
+                    <p class="article-content-subtitle">
+                        by <a href="/author/nishiyama101.html">nishiyama101</a> on <span>木 12 12月 2013</span>
+                        // Posted in <a href="/category/impressions-programming.html">Impressions, Programming</a>
+                    </p>
+                </div>
+            </div>
+            <div class="article-content-body">
+                <p>
+                    <p><a href="https://github.com/potatotips/potatotips/wiki/potatotips-2#potatotips-iosandroid%E9%96%8B%E7%99%BAtips%E5%85%B1%E6%9C%89%E4%BC%9A-%E7%AC%AC2%E5%9B%9E" title="potatotips (iOS/Android開発Tips共有会) 第2回">第2回potatotipsに</a>参加し、発表してきた。  </p>
+<p>主にAVFoundationを利用した、iOSでの動画編集の話をした。使用したスライドは以下のものである。</p>
+<p>[slideshare id=29084610&amp;doc=potatotips2-131210141939-phpapp02]</p>
+<p>噂通りのハイレベルさで、1人持ち時間5分という短さながらも、濃い内容の発表ばかりであった。<br />
+特に珍しい意見でもないと思うが、</p>
+<ul>
+<li>調べたらすぐに発見できるわけではないが、</li>
+<li>かといってニッチすぎず、普段の業務に活かせて、</li>
+<li>しかも、ユーモアがあって面白い内容</li>
+</ul>
+<p>これらが揃うと、「良い発表」だったなと感じる。<br />
+とはいえ、普通は1つ満たすだけでも難しい。  </p>
+<p>それぞれのトレードオフもあるので、全部揃えるとなると、これは並大抵のことではない。</p>
+<p>まだまだ、先は長い。</p>
+                </p>
+ 
+            </div>
+        </div>
+    </div>
+
+        <div class="pure-u-3-4">
+            <footer class="footer">
+                <p>&copy; だからといって、このままでいいはずがない。 &ndash;
+                    Built with <a href="https://github.com/danclaudiupop/pure">Pure Theme</a>
+                    for <a href="http://blog.getpelican.com/">Pelican</a>
+                </p>
+                <p>Licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_GB">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</p>
+                <a href="#" class="go-top">Go Top</a>
+            </footer>
+        </div>
+
+    <script src="http://yui.yahooapis.com/3.10.1/build/yui/yui-min.js"></script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+
+            var menuButton = Y.one('.nav-menu-button'),
+                nav        = Y.one('#nav');
+
+            // Setting the active class name expands the menu vertically on small screens.
+            menuButton.on('click', function (e) {
+                nav.toggleClass('active');
+            });
+
+            // Your application code goes here...
+
+        });
+    </script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+            // This just makes sure that the href="#" attached to the <a> elements
+            // don't scroll you back up the page.
+            Y.one('body').delegate('click', function (e) {
+                e.preventDefault();
+            }, 'a[href="#"]');
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Show or hide the sticky footer button
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 200) {
+                    $('.go-top').fadeIn(200);
+                } else {
+                    $('.go-top').fadeOut(200);
+                }
+            });
+
+            // Animate the scroll to top
+            $('.go-top').click(function(event) {
+                event.preventDefault();
+
+                $('html, body').animate({scrollTop: 0}, 300);
+            })
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="だからといって、このままでいいはずがない。, ">
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+    <link rel="stylesheet" href="/theme/pure.css">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://use.typekit.net/ajf8ggy.js"></script>
+    <script>
+        try { Typekit.load(); } catch (e) {}
+    </script>
+
+
+        <title>Programming category // だからといって、このままでいいはずがない。 // </title>
+</head>
+
+<body>
+    <div class="pure-g-r content" id="layout">
+        <div class="pure-u" id="nav">
+            <a href="#" class="nav-menu-button">Menu</a>
+
+            <div class="nav-inner">
+                <h1>
+                    <a class="logo" href=""><img id="profileimg" src="" alt="だからといって、このままでいいはずがない。"></a>
+                </h1>
+                <div class="pure-menu pure-menu-open">
+                    <ul>
+                        <span class="pure-menu-heading">だからといって、このままでいいはずがない。</span>
+                            <li><a href="/pages/about-me.html">About Me</a></li>
+                        <li class="pure-menu-heading">Categories</li>
+                            <li><a href="/category/impressions.html"><span class="cat-label-blue"></span>Impressions</a></li>
+                            <li><a href="/category/impressions-music.html"><span class="cat-label-blue"></span>Impressions, Music</a></li>
+                            <li><a href="/category/impressions-music-programming.html"><span class="cat-label-blue"></span>Impressions, Music, Programming</a></li>
+                            <li><a href="/category/impressions-programming.html"><span class="cat-label-blue"></span>Impressions, Programming</a></li>
+                            <li><a href="/category/impressions-programming-sicp.html"><span class="cat-label-blue"></span>Impressions, Programming, SICP</a></li>
+                            <li><a href="/category/misc.html"><span class="cat-label-blue"></span>misc</a></li>
+                            <li><a href="/category/programming.html"><span class="cat-label-yellow"<span class="cat-label-blue"></span>Programming</a></li>
+                            <li><a href="/category/programming-sicp.html"><span class="cat-label-blue"></span>Programming, SICP</a></li>
+                            <li><a href="/category/programming-sicp-patahene.html"><span class="cat-label-blue"></span>Programming, SICP, パタヘネ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+<div class="pure-u-3-4 margin-blue">
+    <h1 class="h1-pad">
+Posts in 'Programming'    </h1>
+</div>
+<div class="pure-u-3-4">
+    <div class="article-item margin-yellow pure-g">
+        <div class="pure-u">
+            <img class="author-avatar" alt="nishiyama101" src="" height="64" width="64">
+        </div>
+
+        <div class="pure-u-3-4">
+            <h4 class="article-title">
+                <a href="/%e5%8b%95%e7%94%bb%e3%81%ab%e5%af%be%e3%81%99%e3%82%8b%e9%a1%94%e6%a4%9c%e5%87%ba.html" rel='bookmark'>動画に対する顔検出</a>
+                <p class="pure-u-1 email-desc2">
+                    火 24 12月 2013
+                </p>
+            </h4>
+            <div class="article-summary">
+                <p>(この投稿はQiitaの<a href="http://qiita.com/advent-calendar/2013/ios-2">iOS Second Stage Advent Calendar
+2013</a>の25日目の記事です)</p>
+<p>もはや非常に一般的となった、CIDetectorによる顔検出。  </p>
+<p>ただ、よく見るサンプルはほとんどカメラの入力に対するリアルタイム検出ばかりだったので、</p>
+<p>試しに動画に対して顔を検出するサンプルを作成してみた。</p>
+<p><a href="https://github.com/yuseinishiyama/VideoFaceDetection">https://github.com/yuseinishiyama/VideoFaceDetection</a></p>
+<p>CIDetectorとAVAssetReaderを組み合わせるだけで簡単にできる。</p>
+<p>``` {.lang:objc .decode:true title="VFDVideoFaceDetector.h"}</p>
+<h1>import <Foundation/Foundation.h></h1>
+<p>typedef void(^VFDVideoReaderCompletionHandler)(NSArray *allFeatures);</p>
+<p>@interface VFDVideoFaceDetector : NSObject
+- (void)readFromURL:(NSURL *)targetURL
+  complitionHandler:(VFDVideoReaderCompletionHandler)completionHandler;
+@end</p>
+<div class="highlight"><pre><span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">objc</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;VFDVideoFaceDetector.m ...</span></pre></div>
+            </div>
+        </div>
+    </div>
+    <div class="article-item margin-yellow pure-g">
+        <div class="pure-u">
+            <img class="author-avatar" alt="nishiyama101" src="" height="64" width="64">
+        </div>
+
+        <div class="pure-u-3-4">
+            <h4 class="article-title">
+                <a href="/%e7%ac%ac7%e5%9b%9e%e3%83%86%e3%83%83%e3%82%af%e3%83%92%e3%83%ab%e3%82%ba%e3%81%ab%e3%81%84%e3%81%a3%e3%81%a6%e3%81%8d%e3%81%be%e3%81%97%e3%81%9f%e3%80%82.html" rel='bookmark'>第7回テックヒルズにいってきました。</a>
+                <p class="pure-u-1 email-desc2">
+                    水 13 11月 2013
+                </p>
+            </h4>
+            <div class="article-summary">
+                <p>Unityを触ったり、簡単なシェーダー書いたりしてるうちに描画処理への関心が高まってきた。ゲームとかグラフィックスの分野は、一定以上のものを作るために比較的コアな知識がいる一方で、結果がキャッチーで分かりやすい。ゲームにはあまり興味がない私だが、ゲームエンジンブームである。先日、<a href="http://d.hatena.ne.jp/hdk_embedded/20131106/1383681073">「Playgroundハッカソン」</a>に参加してからというもの、ますます興味が湧いてきている。</p>
+<p>そんなわけで、「Game
+Engines」がテーマの<a href="http://atnd.org/events/44622" title="第7回テックヒルズ">第7回テックヒルズ</a>に行ってきた。</p>
+<p>以下が公開されているスライドへのリンクだ(一部、公開が確認できていないものもある)。</p>
+<ol>
+<li><a href="http://www.slideshare.net/keigoando/unity2-dnew-gui" title="Unity2DとnewGUIについて">「Unity2DとnewGUIについて」</a>安藤
+    圭吾さん(ユニティ・テクノロジーズ・ジャパン)</li>
+<li><a href="http://www.slideshare.net/KatsutoshiMakino/aiming" title="Aiming開発ゲームの裏側">「Aiming開発ゲームの裏側」</a>牧野 克俊さん(Aiming)</li>
+<li><a href="http://www.slideshare.net/doraemonsss/cocos2d-x-28145813?ref=http://sssslide.com/www.slideshare.net/doraemonsss/cocos2d-x-28145813" title="cocos2d-xおよび開発ツールについて">「cocos2d-xおよび開発ツールについて」</a>清水 友晶さん(TKS2)</li>
+<li>「 enchant.jsの野望 9分コーディングライブ」 清水
+    亮さん(ユビキタスエンターテインメント)</li>
+<li><a href="http://www.slideshare.net/KeiNakazawa/131112-tech-hills-playground-introduction" title="Introduction">「イントロダクション」</a>
+    &amp;<a href="http://www.slideshare.net/RomainPiquois/playground-28101668" title="Playground内の描画仕組み">「Playgroundの描画仕組み」</a>＆<a href="http://www.slideshare.net/KeiNakazawa/playgroundandroid-pfandroid" title="&quot;Playground&quot;とAndroid">「マルチPF対応ゲームエンジン内のAndroid対応」</a>ロマン・ピコアさん(KLab)
+    ・中澤 慧さん(KLab)</li>
+<li>「次世代ゲームエンジンの比較 ...</li></ol>
+            </div>
+        </div>
+    </div>
+    <div class="article-item margin-yellow pure-g">
+        <div class="pure-u">
+            <img class="author-avatar" alt="nishiyama101" src="" height="64" width="64">
+        </div>
+
+        <div class="pure-u-3-4">
+            <h4 class="article-title">
+                <a href="/%e3%83%86%e3%83%bc%e3%83%9e%e3%82%92%e5%a4%89%e6%9b%b4%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%e3%80%82.html" rel='bookmark'>テーマを変更しました。</a>
+                <p class="pure-u-1 email-desc2">
+                    水 09 10月 2013
+                </p>
+            </h4>
+            <div class="article-summary">
+                <p>開発者のWordpressサイトがデフォルトのテーマだというのもなんとなく恥ずかしいので、テーマを作成してみた。とはいえ、Webの開発経験は全然ないので結構苦戦した。未だにあちこち粗が目立つ。しかし、「そのうち全部直して適応〜」とかいってると、一生デフォルトのを使い続けそうなので、先に本番環境に適応してから少しずつ修正することにした。</p>
+<p>レスポンシブデザインとかそういうことも考えだすと、自作するのを辞めたい衝動に駆られてしまうが・・・。</p>
+            </div>
+        </div>
+    </div>
+    <div class="article-item margin-yellow pure-g">
+        <div class="pure-u">
+            <img class="author-avatar" alt="nishiyama101" src="" height="64" width="64">
+        </div>
+
+        <div class="pure-u-3-4">
+            <h4 class="article-title">
+                <a href="/ios%e3%81%a7%e3%82%a2%e3%83%97%e3%83%aa%e3%81%ae%e6%9c%80%e6%96%b0%e3%83%90%e3%83%bc%e3%82%b8%e3%83%a7%e3%83%b3%e3%82%92%e5%8f%96%e5%be%97%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95%e3%80%82.html" rel='bookmark'>iOSでアプリの最新バージョンを取得する方法。</a>
+                <p class="pure-u-1 email-desc2">
+                    月 16 9月 2013
+                </p>
+            </h4>
+            <div class="article-summary">
+                <p>開発者であれば、ユーザーには自分の開発したアプリの最新版を使ってほしいと思うだろう。また、ユーザーのアプリバージョンにばらつきがないことは、ビジネス面のメリットも大きい。仕事として開発を行っている人であれば、「アプリのアップデートが行われた場合に通知する機能」の実装を要求されたことは多々あるだろう。</p>
+<p>そこで今回は、</p>
+<p>アプリの最新版を取得し、ユーザーが利用しているアプリが最新版より古ければ通知する機能</p>
+<p>の実装方法を紹介する。</p>
+<p>さて、まず考えなくてはいけないのは、どこからアプリの最新版を取得するか、ということである。これにはおおまかに言って、2通りの方法がある。「1.自前のサーバを利用する方法」、と「2.AppleのAPIを利用する方法」の2つだ。どちらが適切な方法であるか比較するために、それぞれのメリット、デメリットを挙げてみた。</p>
+<p>1.自前のサーバを利用する方法</p>
+<p>メリット</p>
+<ul>
+<li>テストが容易。</li>
+<li>更新のタイミングを自由に決めることができる。</li>
+<li>取得先が勝手に変更されることがない。</li>
+</ul>
+<p>デメリット</p>
+<ul>
+<li>運用者が必要。</li>
+<li>運用ミスが発生する可能性がある。</li>
+</ul>
+<p>2.AppleのAPIを利用する方法。</p>
+<p>メリット</p>
+<ul>
+<li>自分で運用しなくて良い。</li>
+<li>運用ミスが発生しない。</li>
+</ul>
+<p>デメリット</p>
+<ul>
+<li>テストが行えない。</li>
+<li>APIが変更された場合、機能が無効になる。</li>
+<li>APIから取得できるバージョンと、ストアへ反映されているバージョンとの間にタイムラグがあったりなどした場合、その間はどうすることもできない。</li>
+</ul>
+<p>結論から言うと、「AppleのAPIを使ったほうが楽だが ...</p>
+            </div>
+        </div>
+    </div>
+    <div class="article-item margin-yellow pure-g">
+        <div class="pure-u">
+            <img class="author-avatar" alt="nishiyama101" src="" height="64" width="64">
+        </div>
+
+        <div class="pure-u-3-4">
+            <h4 class="article-title">
+                <a href="/unity%e3%81%a7ios%e5%90%91%e3%81%91%e3%81%ae%e3%83%93%e3%83%ab%e3%83%89%e6%99%82%e3%81%ab%e3%80%81requireddevicecapability%e3%82%92%e8%bf%bd%e5%8a%a0%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95%e3%80%82.html" rel='bookmark'>UnityでiOS向けのビルド時に、RequiredDeviceCapabilityを追加する方法。</a>
+                <p class="pure-u-1 email-desc2">
+                    土 07 9月 2013
+                </p>
+            </h4>
+            <div class="article-summary">
+                <p><a href="https://developer.apple.com/library/ios/documentation/general/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html">RequiredDeviceCapability</a>を正しく設定していないと、Appleにリジェクトされてしまうことは、広く知られている。</p>
+<p>例えば、アプリに静止画を撮影する機能がある場合、このRequiredDeviceCapabilityに「still-camera」を追加してやらないといけない。</p>
+<p>RequiredDeviceCapabilityは正しく設定されていなくても、ビルドに失敗しないし、Validationも通過する。だからこそ、リジェクトされてから気づくわけで、こういう作業は特に自動化するメリットが大きいだろう。</p>
+<p>そこで、PostProcessBuildPlayerを利用し、Unityからのビルド時にInfo.plistを書き換えて、RequiredDeviceCapabilityを編集する関数を作成してみた。</p>
+<p>``` {.lang:python .decode:true title="PostProcessBuildPlayer"}
+def process_plist(plist_filepath):
+    pl = plistlib.readPlist(plist_filepath)
+    new_settings = {
+        "still-camera"
+    }
+    if "UIRequiredDeviceCapabilities" in pl:
+        pl["UIRequiredDeviceCapabilities"].extend(new_settings)
+    else:
+        pl["UIRequiredDeviceCapabilities"] = [new_settings]</p>
+<div class="highlight"><pre><span class="n">plistlib</span><span class="p">.</span><span class="n">writePlist</span><span class="p">(</span><span class="n">pl ...</span></pre></div>
+            </div>
+        </div>
+    </div>
+    <div class="article-item margin-yellow pure-g">
+        <div class="pure-u">
+            <img class="author-avatar" alt="nishiyama101" src="" height="64" width="64">
+        </div>
+
+        <div class="pure-u-3-4">
+            <h4 class="article-title">
+                <a href="/unity%e3%81%a7%e3%82%b9%e3%82%af%e3%83%aa%e3%83%bc%e3%83%b3%e3%82%b7%e3%83%a7%e3%83%83%e3%83%88%e3%82%92%e6%92%ae%e5%bd%b1%e3%81%97%e3%80%81iphone%e3%81%ae%e3%82%ab%e3%83%a1%e3%83%a9%e3%83%ad%e3%83%bc.html" rel='bookmark'>Unityでスクリーンショットを撮影し、iPhoneのカメラロールに保存する方法。</a>
+                <p class="pure-u-1 email-desc2">
+                    金 06 9月 2013
+                </p>
+            </h4>
+            <div class="article-summary">
+                <p>Unityでスクリーンショットを撮るのは非常に簡単である。</p>
+<p><a href="http://docs.unity3d.com/Documentation/ScriptReference/Application.CaptureScreenshot.html">Application.CaptureScreenshot</a>という関数が用意されているからだ。</p>
+<p>だが、この方法ではアプリのデータ領域に画像が保存されるだけなので、ユーザーが、その画像を閲覧できるようにはならない。アプリ内で画像を管理できるようにしてもいいかもしれないが、スクリーンショットを確認したいだけなのであれば、そこまでする必要はないだろう。</p>
+<p>そこで今回は、UnityからiOSのカメラロールにアクセスする方法を紹介する。</p>
+<p>``` {.lang:objc .decode:true}</p>
+<h1>import <Foundation/Foundation.h></h1>
+<h1>import <AssetsLibrary/AssetsLibrary.h></h1>
+<h1>import <AVFoundation/AVFoundation.h></h1>
+<p>/<em> 
+ スクリーンショット撮影時に利用するネイティブコード。
+ </em>/</p>
+<p>// 指定したパスの画像をカメラロールに保存する。
+extern "C" void _WriteImageToAlbum (const char<em> path)
+{
+    UIImage </em>image = [UIImage imageWithContentsOfFile:[NSString stringWithUTF8String:path]];
+    ALAssetsLibrary <em>library = [[[ALAssetsLibrary alloc] init] autorelease];
+    NSMutableDictionary </em>metadata = [[[NSMutableDictionary alloc] init] autorelease];
+    [library writeImageToSavedPhotosAlbum ...</p>
+            </div>
+        </div>
+    </div>
+    <div class="article-item margin-yellow pure-g">
+        <div class="pure-u">
+            <img class="author-avatar" alt="nishiyama101" src="" height="64" width="64">
+        </div>
+
+        <div class="pure-u-3-4">
+            <h4 class="article-title">
+                <a href="/raspberry-pi%e3%81%ae%e3%82%bb%e3%83%83%e3%83%88%e3%82%a2%e3%83%83%e3%83%97noobs%e3%80%82.html" rel='bookmark'>Raspberry Piのセットアップ(NOOBS)。</a>
+                <p class="pure-u-1 email-desc2">
+                    土 31 8月 2013
+                </p>
+            </h4>
+            <div class="article-summary">
+                <p>購入してからしばらく放置していたRaspberry Piをセットアップしてみる。</p>
+<p>今のところRaspberry
+Piでやりたいことはないから、セットアップするに足る目的もないけどなぁ、などと思いつつ作業を開始する。すると、どうしたことか全然上手くいかないので、セットアップすることが目的になって、Raspberry
+Piが起動した時には、なんとも言えない達成感が・・・。セットアップとは得てして、このような性質を持った作業である。</p>
+<p>さて、私の「セットアップ観」など何の役にも立たないので、私がセットアップの際に困った事を展開したい。</p>
+<p>まずインストールするOSをダウンロードするために、下記サイトを見る。</p>
+<p><a href="http://www.raspberrypi.org/downloads">http://www.raspberrypi.org/downloads</a></p>
+<p>「初心者はNOOBSを利用してOSをインストールするのが、おすすめ」ということなので、それに従う(ちなみにnoobは「新参者」という意味らしい)。「俺は利口だから中級者以上の扱いで頼むぜ」という感じで臨んで、マニュアルで色々やろうとしたら散々な結果になった、などということはぜひとも避けたい。</p>
+<p>さて、Transcendの8GB(Class10)のSDカードをフォーマットし、そこにNOOBSのファイルを突っ込み、Raspberry
+Piを起動した。</p>
+<p>しかし、画面に何も表示されない。よくみると「ACT」のLEDが消灯しているので、それを手がかりに調べてみる ...</p>
+            </div>
+        </div>
+    </div>
+    <div class="article-item margin-yellow pure-g">
+        <div class="pure-u">
+            <img class="author-avatar" alt="nishiyama101" src="" height="64" width="64">
+        </div>
+
+        <div class="pure-u-3-4">
+            <h4 class="article-title">
+                <a href="/%e8%bc%9d%e5%ba%a6%e3%81%ae%e8%a8%88%e7%ae%97.html" rel='bookmark'>輝度の計算</a>
+                <p class="pure-u-1 email-desc2">
+                    月 01 7月 2013
+                </p>
+            </h4>
+            <div class="article-summary">
+                <p>シェーダーでは、よくこんなコードを見かける。</p>
+<p>``` {.lang:c .decode:true title="Luminance"}
+const mediump vec3 Perception = vec3(0.299, 0.587, 0.114);</p>
+<p>void main(void)
+{
+    mediump vec3 color = texture2D(Sampler, TextureCoord).xyz;
+    mediump float luminance = dot(Perception, color);
+    gl_FragColor = (luminance &gt; Threshold) ? vec4(color, 1) : vec4(0);
+}
+```</p>
+<p>輝度がThresholdを上回れば、テクスチャの色を使い、そうでなければ黒にするということは分かる。それにしても、luminanceを取得するときにテクスチャの色と内積をとっているPerceptionとはなんだろうか。謎めいた値がハードコードされている。</p>
+<p>どうも人間の光受容体の特性を考慮するための値らしい ...</p>
+            </div>
+        </div>
+    </div>
+    <div class="article-item margin-yellow pure-g">
+        <div class="pure-u">
+            <img class="author-avatar" alt="nishiyama101" src="" height="64" width="64">
+        </div>
+
+        <div class="pure-u-3-4">
+            <h4 class="article-title">
+                <a href="/iphone%e3%81%a7%e3%81%ae%e5%90%8c%e6%99%82%e5%8b%95%e7%94%bb%e5%86%8d%e7%94%9f%e6%95%b0%e3%81%ae%e4%b8%8a%e9%99%90%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6.html" rel='bookmark'>iPhoneでの同時動画再生数の上限について</a>
+                <p class="pure-u-1 email-desc2">
+                    木 13 6月 2013
+                </p>
+            </h4>
+            <div class="article-summary">
+                <p>現在動画編集アプリを作っている。<br />
+動画にエフェクトとかBGMとかなんやらの設定をしていくわけだが、  </p>
+<p>画面上部にプレビュー画面を持ち、その下に編集用のOutletがいくつか存在するような見た目のViewControllerがNavigationControllerでいくつか続いていくというような作りだ。</p>
+<p>ここで奇妙な問題が発生した。<br />
+MPMoviePlayerControllerを使用して、動画を再生しようとしたところ</p>
+<p>``` {.lang:objc .decode:true}
+Error Domain=AVFoundationErrorDomain Code=-11839 "Cannot Decode"</p>
+<div class="highlight"><pre><span class="err">こんなエラーがでた。デコードできない？動画の形式が悪いのだろうか？</span>  
+
+<span class="err">だが、試しにその</span><span class="n">ViewController</span><span class="err">だけにして実行してみたところ問題なく再生できた。</span>  
+<span class="err">ということは、特定のコンテキストにおいてのみデコードが失敗するわけだ。</span>
+
+<span class="p">[</span><span class="err">先日の記事</span><span class="p">][]</span><span class="err">にもある通り、いざ実装を始めると全く予期しないところで躓くことが多々ある。</span>  
+
+<span class="err">特にこういうロジックの問題でない箇所は原因の特定が難しく、心が折れそうになる。</span>
+
+<span class="err">とにかくググるしかないので、上記のログをそのまま検索バーに貼り付けた。</span>  
+<span class="err">すると同じ様な現象で困っている人を発見することが出来た。</span>
+
+<span class="p">[</span><span class="n">http</span><span class="o">:</span><span class="c1">//stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decode][]</span>
+
+<span class="o">&gt;</span> <span class="n">There</span> <span class="n">is</span> <span class="n">a</span> <span class="n">limit</span> <span class="n">on</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">concurrent ...</span></pre></div>
+            </div>
+        </div>
+    </div>
+    <div class="article-item margin-yellow pure-g">
+        <div class="pure-u">
+            <img class="author-avatar" alt="nishiyama101" src="" height="64" width="64">
+        </div>
+
+        <div class="pure-u-3-4">
+            <h4 class="article-title">
+                <a href="/objective-c%e3%81%a7%e6%96%87%e5%ad%97%e5%88%97%e5%ae%9a%e6%95%b0.html" rel='bookmark'>Objective-Cで文字列定数</a>
+                <p class="pure-u-1 email-desc2">
+                    日 02 6月 2013
+                </p>
+            </h4>
+            <div class="article-summary">
+                <p>Objective-Cで文字列定数の宣言をする方法について考えてみた。<br />
+最も手っ取り早いのは当然マクロだろう。</p>
+<p>``` {.lang:objc .decode:true title="SomeClass.m"}</p>
+<h1>define CONST_STR @"Const Str"</h1>
+<div class="highlight"><pre><span class="err">だが、当然二重定義の問題があるので好ましいとは言えない。</span>  
+<span class="err">より好ましいのは以下の方法だろう。</span>
+
+<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">objc</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;SomeClass.m&quot;</span><span class="p">}</span>
+<span class="k">static</span> <span class="n">NSString</span> <span class="o">*</span> <span class="k">const</span> <span class="n">kConstStr</span> <span class="o">=</span> <span class="s">@&quot;Const Str&quot;</span><span class="p">;</span>
+</pre></div>
+
+
+<p>constの位置に注意。<br />
+文字列に対するポインタにconstを指定している。  </p>
+<p>（ちなみにObective-Cではメンバ変数のプレフィックは「_」が完全に推奨されている一方で、定数にこうしたハンガリアン記法を使うかどうか迷いどころだが、たいがいのフレームワークでは定数はこの形で書かれているし、実際しっくりくる。）</p>
+<p>さてこの定数を外部に公開したいとする。<br />
+ここでこんな風にやってしまうと間違いだ。</p>
+<p>``` {.lang:objc .decode:true title="SomeClass.h"}
+static NSString * const kConstStr ...</p>
+            </div>
+        </div>
+    </div>
+<div class="pagination-wrapper">
+    <div class="pagination">
+        <div class="pagination-left">
+                &nbsp;
+        </div>
+        <span>Page 1 / 1</span>
+        <div class="pagination-right">
+        </div>
+    </div>
+</div></div>
+
+        <div class="pure-u-3-4">
+            <footer class="footer">
+                <p>&copy; だからといって、このままでいいはずがない。 &ndash;
+                    Built with <a href="https://github.com/danclaudiupop/pure">Pure Theme</a>
+                    for <a href="http://blog.getpelican.com/">Pelican</a>
+                </p>
+                <p>Licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_GB">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</p>
+                <a href="#" class="go-top">Go Top</a>
+            </footer>
+        </div>
+
+    <script src="http://yui.yahooapis.com/3.10.1/build/yui/yui-min.js"></script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+
+            var menuButton = Y.one('.nav-menu-button'),
+                nav        = Y.one('#nav');
+
+            // Setting the active class name expands the menu vertically on small screens.
+            menuButton.on('click', function (e) {
+                nav.toggleClass('active');
+            });
+
+            // Your application code goes here...
+
+        });
+    </script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+            // This just makes sure that the href="#" attached to the <a> elements
+            // don't scroll you back up the page.
+            Y.one('body').delegate('click', function (e) {
+                e.preventDefault();
+            }, 'a[href="#"]');
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Show or hide the sticky footer button
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 200) {
+                    $('.go-top').fadeIn(200);
+                } else {
+                    $('.go-top').fadeOut(200);
+                }
+            });
+
+            // Animate the scroll to top
+            $('.go-top').click(function(event) {
+                event.preventDefault();
+
+                $('html, body').animate({scrollTop: 0}, 300);
+            })
+        });
+    </script>
+
+</body>
+</html>

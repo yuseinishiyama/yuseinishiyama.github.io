@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="だからといって、このままでいいはずがない。, ">
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+    <link rel="stylesheet" href="/theme/pure.css">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="http://use.typekit.net/ajf8ggy.js"></script>
+    <script>
+        try { Typekit.load(); } catch (e) {}
+    </script>
+
+
+        <title>プログラマにとって〈できる〉とは何か。 // だからといって、このままでいいはずがない。 // </title>
+</head>
+
+<body>
+    <div class="pure-g-r content" id="layout">
+        <div class="pure-u" id="nav">
+            <a href="#" class="nav-menu-button">Menu</a>
+
+            <div class="nav-inner">
+                <h1>
+                    <a class="logo" href=""><img id="profileimg" src="" alt="だからといって、このままでいいはずがない。"></a>
+                </h1>
+                <div class="pure-menu pure-menu-open">
+                    <ul>
+                        <span class="pure-menu-heading">だからといって、このままでいいはずがない。</span>
+                            <li><a href="/pages/about-me.html">About Me</a></li>
+                        <li class="pure-menu-heading">Categories</li>
+                            <li><a href="/category/impressions.html"><span class="cat-label-blue"></span>Impressions</a></li>
+                            <li><a href="/category/impressions-music.html"><span class="cat-label-blue"></span>Impressions, Music</a></li>
+                            <li><a href="/category/impressions-music-programming.html"><span class="cat-label-blue"></span>Impressions, Music, Programming</a></li>
+                            <li><a href="/category/impressions-programming.html"><span class="cat-label-yellow"<span class="cat-label-blue"></span>Impressions, Programming</a></li>
+                            <li><a href="/category/impressions-programming-sicp.html"><span class="cat-label-blue"></span>Impressions, Programming, SICP</a></li>
+                            <li><a href="/category/misc.html"><span class="cat-label-blue"></span>misc</a></li>
+                            <li><a href="/category/programming.html"><span class="cat-label-blue"></span>Programming</a></li>
+                            <li><a href="/category/programming-sicp.html"><span class="cat-label-blue"></span>Programming, SICP</a></li>
+                            <li><a href="/category/programming-sicp-patahene.html"><span class="cat-label-blue"></span>Programming, SICP, パタヘネ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    <div class="pure-u-3-4">
+        <div class="article-content margin-blue">
+            <div class="article-content-header pure-g">
+                <div class="pure-u-1">
+                    <h1 class="article-content-title">プログラマにとって〈できる〉とは何か。</h1>
+                    <p class="article-content-subtitle">
+                        by <a href="/author/nishiyama101.html">nishiyama101</a> on <span>金 07 6月 2013</span>
+                        // Posted in <a href="/category/impressions-programming.html">Impressions, Programming</a>
+                    </p>
+                </div>
+            </div>
+            <div class="article-content-body">
+                <p>
+                    <p>プログラマとして働いていると、特に非プログラマの人から</p>
+<p>「hogehogeをfugafugaするようなことって（プログラムで）できるんですか？」</p>
+<p>という類の質問をされることが良くある。当然そういうことを聞かれたら</p>
+<p>「できると思いますよ。」</p>
+<p>と答えるしかない。まともな思考な人が考えるような要求、つまり「iPhoneの画面をダブルタップすると、口やかましい上司を遠隔地へと転送できる」とか「母親をカメラで撮影すると、実家への仕送りを強要しなくなる」とか、そういうのではない要求、というものはたいていの場合、理論上実現可能だからだ。</p>
+<p>コンピュータサイエンスに明るいわけではないが、「<a href="http://ja.wikipedia.org/wiki/%E3%83%81%E3%83%A5%E3%83%BC%E3%83%AA%E3%83%B3%E3%82%B0%E5%AE%8C%E5%85%A8" title="チューリング完全">チューリング完全</a>」という言葉ぐらいなら知っている。コンピュータの世界における「やればできる」に相当する概念といったところか。  </p>
+<p>つまり、「できますか」という問に「やればできる」と答えていて、さらに、「やればできる」のことを「できる」という言葉で表してしまっているわけだ。</p>
+<p>物質世界にくらべて、「やればできる」のが当たり前のソフトウェアの世界だからこそ、その当たり前の答えを使ってしまうと厄介なことが起きる。まず、</p>
+<p>「Aさんがhogehogeをfugafugaできるらしいから、やってもらおう。」</p>
+<p>という風に自分が頼まれてしまう。そして、自分自身も判断力が鈍っていると</p>
+<p>「まぁ、やればできるはずだからやってみるか。」</p>
+<p>と安易に引き受けてしまうわけである。プログラムの世界以外なら「やればできる」と「できる」の間にある大きな溝を認識できるのにも関わらず、だ。<br />
+こうして、バカな私はその溝に落ちることになる。</p>
+<p>パフォーマンスが・・・<br />
+このAPIを使用するとメモリリークが・・・<br />
+ドキュメントにはそう書いてあるんですけど・・・  </p>
+<p>オープンソースのライブラリを使おうと思ったんですけど、ライセンスが・・・</p>
+<p>様々な問題との果てしない戦いが始まり、終いにはコレを言われるわけだ。</p>
+<p>「できるって言ったよね？」</p>
+<p>悲しいかな、当初は物腰が柔らかかった人でさえ、冷ややかなタメ口になっていたりする。</p>
+<p>とはいえ、「できない」はどうも使いたくない。「やればできる」わけだからそれはそれで論理的ではない。それに、「できない」と言うと仕事が無くなるわけで、そうなるぐらいだったら茨の道を歩んだほうがマシだ。そもそも「できないということを証明する」ことは「できるということを証明する」ことよりはるかに困難で、だからこそ「できない」という答えが正解になることは少なく、非論理的だと考えている。だから、簡単に「できない」などという開発者は現実主義者でもなんでもなく、ただただ信用出来ない。</p>
+<p>結論としては、これからも「できる」と言っていこうと思う。<br />
+ただし、自分の中で「できる」という結論を出すのは、「できた」後だ。<br />
+プログラマにとっての「できる」は「したことがある」であるべきだ。  </p>
+<p>だからこそ、手を動かすべきだし、なにか作ってみるべきだ。実践から学ぶことは非常に多い。  </p>
+<p>（実践から全てを学べるという意味ではない。そういう考えの人は得てして、「動けばオーケープログラマ」だったり「フラグ大好きコールバックもループとフラグで実現するよプログラマ」だったりする。）</p>
+<p>本当は「できることはできるのですが、僕のスキルでは途中で挫折するか、もしくは時間がかかりすぎるかもしれません、調査期間をNヶ月いただければ・・・」とかなんとか言いたいところだが、そんなやつには誰も何も任せてくれない。自分の成長のために大風呂敷を広げ、一方で自分が「できる」状態ではないことを認識し内心は謙虚でなければいけない。<br />
+そうすれば他所様が開発したものを見て</p>
+<p>「これくらいなら俺も\&lt;できる>けどなぁ」</p>
+<p>というようなことを言わなくなるだろう。<br />
+ここでも、「やればできる==できる」の間違えが犯されている。</p>
+                </p>
+ 
+            </div>
+        </div>
+    </div>
+
+        <div class="pure-u-3-4">
+            <footer class="footer">
+                <p>&copy; だからといって、このままでいいはずがない。 &ndash;
+                    Built with <a href="https://github.com/danclaudiupop/pure">Pure Theme</a>
+                    for <a href="http://blog.getpelican.com/">Pelican</a>
+                </p>
+                <p>Licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_GB">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</p>
+                <a href="#" class="go-top">Go Top</a>
+            </footer>
+        </div>
+
+    <script src="http://yui.yahooapis.com/3.10.1/build/yui/yui-min.js"></script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+
+            var menuButton = Y.one('.nav-menu-button'),
+                nav        = Y.one('#nav');
+
+            // Setting the active class name expands the menu vertically on small screens.
+            menuButton.on('click', function (e) {
+                nav.toggleClass('active');
+            });
+
+            // Your application code goes here...
+
+        });
+    </script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+            // This just makes sure that the href="#" attached to the <a> elements
+            // don't scroll you back up the page.
+            Y.one('body').delegate('click', function (e) {
+                e.preventDefault();
+            }, 'a[href="#"]');
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Show or hide the sticky footer button
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 200) {
+                    $('.go-top').fadeIn(200);
+                } else {
+                    $('.go-top').fadeOut(200);
+                }
+            });
+
+            // Animate the scroll to top
+            $('.go-top').click(function(event) {
+                event.preventDefault();
+
+                $('html, body').animate({scrollTop: 0}, 300);
+            })
+        });
+    </script>
+
+</body>
+</html>
