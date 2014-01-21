@@ -1,72 +1,908 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+Name       : Brown Stone  
+Description: A two-column, fixed-width design with dark color scheme.
+Version    : 1.0
+Released   : 20100928
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="だからといって、このままでいいはずがない。, ">
-
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
-    <link rel="stylesheet" href="/theme/pure.css">
-
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="http://use.typekit.net/ajf8ggy.js"></script>
-    <script>
-        try { Typekit.load(); } catch (e) {}
-    </script>
-
-
-        <title>だからといって、このままでいいはずがない。 // </title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>だからといって、このままでいいはずがない。</title>
+<link href="/theme/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="/" type="application/atom+xml" rel="alternate" title="だからといって、このままでいいはずがない。 ATOM Feed" />
 </head>
-
 <body>
-    <div class="pure-g-r content" id="layout">
-        <div class="pure-u" id="nav">
-            <a href="#" class="nav-menu-button">Menu</a>
+<div id="wrapper">
+	<div id="page">
+		<div id="page-bgtop">
+			<div id="page-bgbtm">
+ 
+        
+				<div id="content">
+					<div class="post">
+						<h2 class="title"><a href="/%e5%8b%95%e7%94%bb%e3%81%ab%e5%af%be%e3%81%99%e3%82%8b%e9%a1%94%e6%a4%9c%e5%87%ba.html">動画に対する顔検出</a></h2>
+						<p class="meta"><span class="date">Le  </span><span class="posted">Par <a href="#">nishiyama101</a></span><span>&nbsp; | Catégorie : <a href="/category/programming.html">Programming</a></span></p>
+					<p class="meta">Tags : </p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>(この投稿はQiitaの<a href="http://qiita.com/advent-calendar/2013/ios-2">iOS Second Stage Advent Calendar
+2013</a>の25日目の記事です)</p>
+<p>もはや非常に一般的となった、CIDetectorによる顔検出。  </p>
+<p>ただ、よく見るサンプルはほとんどカメラの入力に対するリアルタイム検出ばかりだったので、</p>
+<p>試しに動画に対して顔を検出するサンプルを作成してみた。</p>
+<p><a href="https://github.com/yuseinishiyama/VideoFaceDetection">https://github.com/yuseinishiyama/VideoFaceDetection</a></p>
+<p>CIDetectorとAVAssetReaderを組み合わせるだけで簡単にできる。</p>
+<p>``` {.lang:objc .decode:true title="VFDVideoFaceDetector.h"}</p>
+<h1>import <Foundation/Foundation.h></h1>
+<p>typedef void(^VFDVideoReaderCompletionHandler)(NSArray *allFeatures);</p>
+<p>@interface VFDVideoFaceDetector : NSObject
+- (void)readFromURL:(NSURL *)targetURL
+  complitionHandler:(VFDVideoReaderCompletionHandler)completionHandler;
+@end</p>
+<div class="highlight"><pre><span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">objc</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;VFDVideoFaceDetector.m&quot;</span><span class="p">}</span>
+<span class="cp">#import &quot;VFDVideoFaceDetector.h&quot;</span>
 
-            <div class="nav-inner">
-                <h1>
-                    <a class="logo" href=""><img id="profileimg" src="" alt="だからといって、このままでいいはずがない。"></a>
-                </h1>
-                <div class="pure-menu pure-menu-open">
-                    <ul>
-                        <span class="pure-menu-heading">だからといって、このままでいいはずがない。</span>
-                            <li><a href="/pages/about-me.html">About Me</a></li>
-                        <li class="pure-menu-heading">Categories</li>
-                            <li><a href="/category/impressions.html"><span class="cat-label-blue"></span>Impressions</a></li>
-                            <li><a href="/category/impressions-music.html"><span class="cat-label-blue"></span>Impressions, Music</a></li>
-                            <li><a href="/category/impressions-music-programming.html"><span class="cat-label-blue"></span>Impressions, Music, Programming</a></li>
-                            <li><a href="/category/impressions-programming.html"><span class="cat-label-blue"></span>Impressions, Programming</a></li>
-                            <li><a href="/category/impressions-programming-sicp.html"><span class="cat-label-blue"></span>Impressions, Programming, SICP</a></li>
-                            <li><a href="/category/misc.html"><span class="cat-label-blue"></span>misc</a></li>
-                            <li><a href="/category/programming.html"><span class="cat-label-blue"></span>Programming</a></li>
-                            <li><a href="/category/programming-sicp.html"><span class="cat-label-blue"></span>Programming, SICP</a></li>
-                            <li><a href="/category/programming-sicp-patahene.html"><span class="cat-label-blue"></span>Programming, SICP, パタヘネ</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+<span class="cp">#import &lt;AVFoundation/AVFoundation.h&gt;</span>
 
-<div class="pure-u-3-4 margin-blue">
-    <h1 class="h1-pad">
-                Posts
-            &ndash; Page&nbsp;4
-    </h1>
-</div>
-<div class="pure-u-3-4">
-    <div class="article-item margin-blue pure-g">
-        <div class="pure-u">
-            <img class="author-avatar" alt="nishiyama101" src="" height="64" width="64">
-        </div>
+<span class="k">@interface</span> <span class="nc">VFDVideoFaceDetector</span> <span class="p">()</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">nonatomic</span><span class="p">,</span> <span class="n">copy</span><span class="p">)</span> <span class="n">VFDVideoReaderCompletionHandler</span> <span class="n">completionHandler</span><span class="p">;</span>
+<span class="k">@end</span>
 
-        <div class="pure-u-3-4">
-            <h4 class="article-title">
-                <a href="/hello-world.html" rel='bookmark'>それほどまでに言論は自由であるべきだろうか。</a>
-                <p class="pure-u-1 email-desc2">
-                    水 24 4月 2013
-                </p>
-            </h4>
-            <div class="article-summary">
-                <p>試しに「ブログ始めました」をGoogleで検索してみたところ、<br />
+<span class="k">@implementation</span> <span class="nc">VFDVideoFaceDetector</span> <span class="p">{</span>
+    <span class="n">AVAsset</span> <span class="o">*</span><span class="n">_asset</span><span class="p">;</span>
+    <span class="n">CIDetector</span> <span class="o">*</span><span class="n">_detector</span><span class="p">;</span>
+    <span class="n">NSMutableArray</span> <span class="o">*</span><span class="n">_allFeatures</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="o">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="n">init</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="n">init</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">_allFeatures</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSMutableArray</span> <span class="n">arrayWithCapacity</span><span class="o">:</span><span class="mi">0</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">readFromURL</span><span class="o">:</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="n">targetURL</span>
+  <span class="nl">complitionHandler:</span><span class="p">(</span><span class="n">VFDVideoReaderCompletionHandler</span><span class="p">)</span><span class="n">completionHandler</span>
+<span class="p">{</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">completionHandler</span> <span class="o">=</span> <span class="n">completionHandler</span><span class="p">;</span>
+    <span class="p">[</span><span class="n">self</span> <span class="n">_setupDetector</span><span class="p">];</span>
+    <span class="n">__weak</span> <span class="n">VFDVideoFaceDetector</span> <span class="o">*</span><span class="n">weakSelf</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+    <span class="n">_asset</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVAsset</span> <span class="n">assetWithURL</span><span class="o">:</span><span class="n">targetURL</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">_asset</span> <span class="n">loadValuesAsynchronouslyForKeys</span><span class="o">:</span><span class="err">@</span><span class="p">[</span><span class="s">@&quot;tracks&quot;</span><span class="p">]</span> <span class="n">completionHandler</span><span class="o">:^</span><span class="p">{</span>
+        <span class="p">[</span><span class="n">weakSelf</span> <span class="n">_startReading</span><span class="p">];</span>
+    <span class="p">}];</span>
+<span class="p">}</span>
+
+<span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">_setupDetector</span>
+<span class="p">{</span>
+    <span class="n">CIContext</span> <span class="o">*</span><span class="n">context</span> <span class="o">=</span> <span class="p">[</span><span class="n">CIContext</span> <span class="n">contextWithOptions</span><span class="o">:</span><span class="nb">nil</span><span class="p">];</span>
+    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">detectorOptions</span> <span class="o">=</span> <span class="err">@</span><span class="p">{</span><span class="n">CIDetectorAccuracy</span> <span class="o">:</span> <span class="n">CIDetectorAccuracyHigh</span><span class="p">};</span>
+    <span class="n">_detector</span> <span class="o">=</span> <span class="p">[</span><span class="n">CIDetector</span> <span class="n">detectorOfType</span><span class="o">:</span><span class="n">CIDetectorTypeFace</span> <span class="n">context</span><span class="o">:</span><span class="n">context</span> <span class="n">options</span><span class="o">:</span><span class="n">detectorOptions</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">_startReading</span>
+<span class="p">{</span>
+    <span class="n">AVAssetReader</span> <span class="o">*</span><span class="n">reader</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVAssetReader</span> <span class="n">assetReaderWithAsset</span><span class="o">:</span><span class="n">_asset</span> <span class="n">error</span><span class="o">:</span><span class="nb">nil</span><span class="p">];</span>
+    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">outputSettings</span> <span class="o">=</span> <span class="err">@</span><span class="p">{(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">kCVPixelBufferPixelFormatTypeKey</span><span class="o">:</span><span class="p">[</span><span class="n">NSNumber</span> <span class="n">numberWithInt</span><span class="o">:</span><span class="n">kCVPixelFormatType_32BGRA</span><span class="p">]};</span>
+    <span class="n">AVAssetReaderTrackOutput</span> <span class="o">*</span><span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVAssetReaderTrackOutput</span> <span class="n">assetReaderTrackOutputWithTrack</span><span class="o">:</span><span class="p">[</span><span class="n">_asset</span> <span class="n">tracksWithMediaType</span><span class="o">:</span><span class="n">AVMediaTypeVideo</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                                                                                  <span class="nl">outputSettings:</span><span class="n">outputSettings</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">reader</span> <span class="n">addOutput</span><span class="o">:</span><span class="n">output</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">reader</span> <span class="n">startReading</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">([</span><span class="n">reader</span> <span class="n">status</span><span class="p">]</span> <span class="o">==</span> <span class="n">AVAssetReaderStatusReading</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">[</span><span class="n">self</span> <span class="n">_readNextVideoFrame</span><span class="o">:</span><span class="p">[</span><span class="n">output</span> <span class="n">copyNextSampleBuffer</span><span class="p">]];</span>
+    <span class="p">}</span>
+    <span class="p">[</span><span class="n">self</span> <span class="n">_endReading</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">_endReading</span>
+<span class="p">{</span>
+    <span class="n">_completionHandler</span><span class="p">(</span><span class="n">_allFeatures</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">_readNextVideoFrame</span><span class="o">:</span><span class="p">(</span><span class="n">CMSampleBufferRef</span><span class="p">)</span><span class="n">sampleBuffer</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">sampleBuffer</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="n">CVPixelBufferRef</span> <span class="n">pixelBuffer</span> <span class="o">=</span> <span class="n">CMSampleBufferGetImageBuffer</span><span class="p">(</span><span class="n">sampleBuffer</span><span class="p">);</span>
+    <span class="n">CFDictionaryRef</span> <span class="n">attachments</span> <span class="o">=</span> <span class="n">CMCopyDictionaryOfAttachments</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="n">sampleBuffer</span><span class="p">,</span> <span class="n">kCMAttachmentMode_ShouldPropagate</span><span class="p">);</span>
+    <span class="n">CIImage</span> <span class="o">*</span><span class="n">convertedImage</span> <span class="o">=</span> <span class="p">[[</span><span class="n">CIImage</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithCVPixelBuffer</span><span class="o">:</span><span class="n">pixelBuffer</span> <span class="n">options</span><span class="o">:</span><span class="p">(</span><span class="n">__bridge</span> <span class="n">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="n">attachments</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">attachments</span><span class="p">)</span>
+       <span class="n">CFRelease</span><span class="p">(</span><span class="n">attachments</span><span class="p">);</span>
+
+    <span class="k">enum</span> <span class="p">{</span>
+        <span class="n">PHOTOS_EXIF_0ROW_TOP_0COL_LEFT</span>          <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">//   1  =  0th row is at the top, and 0th column is on the left (THE DEFAULT).</span>
+        <span class="n">PHOTOS_EXIF_0ROW_TOP_0COL_RIGHT</span>         <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="c1">//   2  =  0th row is at the top, and 0th column is on the right.</span>
+        <span class="n">PHOTOS_EXIF_0ROW_BOTTOM_0COL_RIGHT</span>      <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="c1">//   3  =  0th row is at the bottom, and 0th column is on the right.</span>
+        <span class="n">PHOTOS_EXIF_0ROW_BOTTOM_0COL_LEFT</span>       <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="c1">//   4  =  0th row is at the bottom, and 0th column is on the left.</span>
+        <span class="n">PHOTOS_EXIF_0ROW_LEFT_0COL_TOP</span>          <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="c1">//   5  =  0th row is on the left, and 0th column is the top.</span>
+        <span class="n">PHOTOS_EXIF_0ROW_RIGHT_0COL_TOP</span>         <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="c1">//   6  =  0th row is on the right, and 0th column is the top.</span>
+        <span class="n">PHOTOS_EXIF_0ROW_RIGHT_0COL_BOTTOM</span>      <span class="o">=</span> <span class="mi">7</span><span class="p">,</span> <span class="c1">//   7  =  0th row is on the right, and 0th column is the bottom.</span>
+        <span class="n">PHOTOS_EXIF_0ROW_LEFT_0COL_BOTTOM</span>       <span class="o">=</span> <span class="mi">8</span>  <span class="c1">//   8  =  0th row is on the left, and 0th column is the bottom.</span>
+    <span class="p">};</span>
+
+    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">options</span> <span class="o">=</span> <span class="err">@</span><span class="p">{</span><span class="n">CIDetectorImageOrientation</span> <span class="o">:</span> <span class="p">[</span><span class="n">NSNumber</span> <span class="n">numberWithInt</span><span class="o">:</span><span class="n">PHOTOS_EXIF_0ROW_RIGHT_0COL_TOP</span><span class="p">]};</span>
+    <span class="n">NSArray</span> <span class="o">*</span><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">_detector</span> <span class="n">featuresInImage</span><span class="o">:</span><span class="n">convertedImage</span> <span class="n">options</span><span class="o">:</span><span class="n">options</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">features</span> <span class="n">enumerateObjectsUsingBlock</span><span class="o">:^</span><span class="p">(</span><span class="n">CIFaceFeature</span> <span class="o">*</span><span class="n">feature</span><span class="p">,</span> <span class="n">NSUInteger</span> <span class="n">idx</span><span class="p">,</span> <span class="kt">BOOL</span> <span class="o">*</span><span class="n">stop</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span> <span class="n">NSStringFromCGRect</span><span class="p">([</span><span class="n">feature</span> <span class="n">bounds</span><span class="p">]));</span>
+    <span class="p">}];</span>
+    <span class="p">[</span><span class="n">_allFeatures</span> <span class="n">addObject</span><span class="o">:</span><span class="n">features</span><span class="p">];</span>
+    <span class="n">CFRelease</span><span class="p">(</span><span class="n">sampleBuffer</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">@end</span>
+</pre></div>
+
+
+<p>AVAssetReaderから取得できるCMSampleBufferをCIImageに変換してCIDetectorに渡す。  </p>
+<p>とりあえず、Portraitの動画に対応するように、CIDetectorImageOrientationを設定している。  </p>
+<p>試しに、自分の顔が真ん中に写った動画をインカメラで撮影したもの(3秒程度)を読み込んでみた結果が以下。</p>
+<p><code>{.lang:objc .decode:true title="出力"}
+2013-12-24 21:41:57.503 VideoFaceDetection[9455:3e07] {{627.5, 63.75}, {565, 565}}
+2013-12-24 21:41:57.771 VideoFaceDetection[9455:3e07] {{623.75, 67.5}, {567.5, 567.5}}
+2013-12-24 21:41:58.049 VideoFaceDetection[9455:3e07] {{630, 87.5}, {537.5, 537.5}}
+2013-12-24 21:41:58.329 VideoFaceDetection[9455:3e07] {{602.5, 76.25}, {572.5, 572.5}}
+2013-12-24 21:41:58.611 VideoFaceDetection[9455:3e07] {{567.5, 68.75}, {600, 600}}
+2013-12-24 21:41:58.883 VideoFaceDetection[9455:3e07] {{575, 93.75}, {570, 570}}
+2013-12-24 21:41:59.158 VideoFaceDetection[9455:3e07] {{542.5, 86.25}, {595, 595}}
+2013-12-24 21:41:59.443 VideoFaceDetection[9455:3e07] {{545, 125}, {552.5, 552.5}}
+2013-12-24 21:41:59.725 VideoFaceDetection[9455:3e07] {{532.5, 127.5}, {570, 570}}
+2013-12-24 21:42:00.013 VideoFaceDetection[9455:3e07] {{512.5, 125}, {587.5, 587.5}}
+2013-12-24 21:42:00.294 VideoFaceDetection[9455:3e07] {{508.75, 132.5}, {582.5, 582.5}}
+2013-12-24 21:42:00.583 VideoFaceDetection[9455:3e07] {{511.25, 130}, {575, 575}}
+2013-12-24 21:42:00.866 VideoFaceDetection[9455:3e07] {{510, 118.75}, {575, 575}}
+2013-12-24 21:42:01.149 VideoFaceDetection[9455:3e07] {{511.25, 112.5}, {567.5, 567.5}}
+2013-12-24 21:42:01.435 VideoFaceDetection[9455:3e07] {{511.25, 110}, {570, 570}}
+2013-12-24 21:42:01.725 VideoFaceDetection[9455:3e07] {{515, 112.5}, {562.5, 562.5}}
+2013-12-24 21:42:02.009 VideoFaceDetection[9455:3e07] {{515, 115}, {557.5, 557.5}}
+2013-12-24 21:42:02.293 VideoFaceDetection[9455:3e07] {{512.5, 118.75}, {567.5, 567.5}}
+2013-12-24 21:42:02.578 VideoFaceDetection[9455:3e07] {{507.5, 112.5}, {585, 585}}
+2013-12-24 21:42:02.861 VideoFaceDetection[9455:3e07] {{515, 98.75}, {585, 585}}
+2013-12-24 21:42:03.133 VideoFaceDetection[9455:3e07] {{532.5, 98.75}, {585, 585}}
+2013-12-24 21:42:03.400 VideoFaceDetection[9455:3e07] {{533.75, 70}, {615, 615}}
+2013-12-24 21:42:03.656 VideoFaceDetection[9455:3e07] {{566.25, 46.25}, {592.5, 592.5}}
+2013-12-24 21:42:03.911 VideoFaceDetection[9455:3e07] {{597.5, 26.25}, {580, 580}}
+2013-12-24 21:42:04.171 VideoFaceDetection[9455:3e07] {{621.25, 23.75}, {565, 565}}
+2013-12-24 21:42:04.431 VideoFaceDetection[9455:3e07] {{641.25, 32.5}, {547.5, 547.5}}
+2013-12-24 21:42:04.694 VideoFaceDetection[9455:3e07] {{653.75, 43.75}, {545, 545}}
+2013-12-24 21:42:04.959 VideoFaceDetection[9455:3e07] {{657.5, 56.25}, {545, 545}}
+2013-12-24 21:42:05.221 VideoFaceDetection[9455:3e07] {{653.75, 62.5}, {557.5, 557.5}}
+2013-12-24 21:42:05.484 VideoFaceDetection[9455:3e07] {{641.25, 66.25}, {582.5, 582.5}}
+2013-12-24 21:42:05.748 VideoFaceDetection[9455:3e07] {{666.25, 97.5}, {545, 545}}
+2013-12-24 21:42:06.017 VideoFaceDetection[9455:3e07] {{660, 101.25}, {555, 555}}
+2013-12-24 21:42:06.282 VideoFaceDetection[9455:3e07] {{650, 108.75}, {572.5, 572.5}}
+2013-12-24 21:42:06.543 VideoFaceDetection[9455:3e07] {{683.75, 95}, {552.5, 552.5}}
+2013-12-24 21:42:06.797 VideoFaceDetection[9455:3e07] {{691.25, 87.5}, {545, 545}}
+2013-12-24 21:42:07.062 VideoFaceDetection[9455:3e07] {{692.5, 68.75}, {540, 540}}
+2013-12-24 21:42:07.327 VideoFaceDetection[9455:3e07] {{675, 52.5}, {557.5, 557.5}}
+2013-12-24 21:42:07.592 VideoFaceDetection[9455:3e07] {{687.5, 57.5}, {540, 540}}
+2013-12-24 21:42:07.854 VideoFaceDetection[9455:3e07] {{700, 70}, {527.5, 527.5}}
+2013-12-24 21:42:08.144 VideoFaceDetection[9455:3e07] {{703.75, 87.5}, {517.5, 517.5}}
+2013-12-24 21:42:08.401 VideoFaceDetection[9455:3e07] {{701.25, 87.5}, {537.5, 537.5}}
+2013-12-24 21:42:08.662 VideoFaceDetection[9455:3e07] {{712.5, 93.75}, {527.5, 527.5}}
+2013-12-24 21:42:08.917 VideoFaceDetection[9455:3e07] {{708.75, 102.5}, {517.5, 517.5}}
+2013-12-24 21:42:09.184 VideoFaceDetection[9455:3e07] {{708.75, 115}, {510, 510}}
+2013-12-24 21:42:09.440 VideoFaceDetection[9455:3e07] {{695, 111.25}, {527.5, 527.5}}
+2013-12-24 21:42:09.677 VideoFaceDetection[9455:3e07] {{670, 107.5}, {552.5, 552.5}}
+2013-12-24 21:42:09.935 VideoFaceDetection[9455:3e07] {{653.75, 122.5}, {562.5, 562.5}}
+2013-12-24 21:42:10.198 VideoFaceDetection[9455:3e07] {{635, 146.25}, {560, 560}}
+2013-12-24 21:42:11.997 VideoFaceDetection[9455:3e07] {{591.25, 117.5}, {595, 595}}
+2013-12-24 21:42:12.268 VideoFaceDetection[9455:3e07] {{598.75, 111.25}, {580, 580}}
+2013-12-24 21:42:12.539 VideoFaceDetection[9455:3e07] {{598.75, 98.75}, {592.5, 592.5}}
+2013-12-24 21:42:12.805 VideoFaceDetection[9455:3e07] {{607.5, 106.25}, {577.5, 577.5}}
+2013-12-24 21:42:13.079 VideoFaceDetection[9455:3e07] {{596.25, 110}, {590, 590}}
+2013-12-24 21:42:13.354 VideoFaceDetection[9455:3e07] {{600, 105}, {595, 595}}
+2013-12-24 21:42:13.623 VideoFaceDetection[9455:3e07] {{607.5, 121.25}, {582.5, 582.5}}
+2013-12-24 21:42:13.896 VideoFaceDetection[9455:3e07] {{605, 121.25}, {587.5, 587.5}}
+2013-12-24 21:42:14.172 VideoFaceDetection[9455:3e07] {{610, 127.5}, {575, 575}}
+2013-12-24 21:42:14.438 VideoFaceDetection[9455:3e07] {{612.5, 127.5}, {582.5, 582.5}}
+2013-12-24 21:42:14.708 VideoFaceDetection[9455:3e07] {{606.25, 121.25}, {587.5, 587.5}}
+2013-12-24 21:42:14.977 VideoFaceDetection[9455:3e07] {{608.75, 117.5}, {592.5, 592.5}}
+2013-12-24 21:42:15.246 VideoFaceDetection[9455:3e07] {{608.75, 110}, {600, 600}}
+2013-12-24 21:42:15.512 VideoFaceDetection[9455:3e07] {{622.5, 113.75}, {575, 575}}
+2013-12-24 21:42:15.779 VideoFaceDetection[9455:3e07] {{615, 112.5}, {585, 585}}
+2013-12-24 21:42:16.050 VideoFaceDetection[9455:3e07] {{618.75, 118.75}, {580, 580}}
+2013-12-24 21:42:16.316 VideoFaceDetection[9455:3e07] {{615, 115}, {585, 585}}
+2013-12-24 21:42:16.584 VideoFaceDetection[9455:3e07] {{617.5, 115}, {585, 585}}
+2013-12-24 21:42:16.851 VideoFaceDetection[9455:3e07] {{620, 117.5}, {582.5, 582.5}}
+2013-12-24 21:42:17.119 VideoFaceDetection[9455:3e07] {{618.75, 117.5}, {580, 580}}
+2013-12-24 21:42:17.394 VideoFaceDetection[9455:3e07] {{621.25, 120}, {585, 585}}
+2013-12-24 21:42:17.666 VideoFaceDetection[9455:3e07] {{622.5, 126.25}, {580, 580}}</code></p>
+<p>この座標を使って、動画にアニメーションをマージしたものを作成してみたかったのだが、今回はここまで。</p>	
+						</div>
+					</div>
+	
+			                <div class="post">
+			                        <h2 class="title">Autres articles</h2>
+			                </div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/sicp-3-1-2-the-benefits-of-introducing-assignment.html">SICP 3.1.2 The Benefits of Introducing Assignment</a></h2>
+						<p class="meta"><span class="date">Le 木 19 12月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>代入の効用について説明するだけにしては、Ex 3.5.
+はちょっとやり過ぎな気もするが、なかなか興味深い内容ではある。</p>
+<blockquote>
+<p>Monte Carlo integration is a method of estimating definite integrals
+by means of Monte Carlo simulation. Consider computing the area of a
+region of space described by a predicate P(x, y) that is true for
+points (x, y) in the region and false ...</p></blockquote>	
+						 <a class="readmore" href="/sicp-3-1-2-the-benefits-of-introducing-assignment.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/%e7%ac%ac2%e5%9b%9epotatotips%e3%81%ab%e5%8f%82%e5%8a%a0%e3%81%97%e3%81%a6%e3%81%8d%e3%81%9f%e3%80%82.html">第2回potatotipsに参加してきた。</a></h2>
+						<p class="meta"><span class="date">Le 木 12 12月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p><a href="https://github.com/potatotips/potatotips/wiki/potatotips-2#potatotips-iosandroid%E9%96%8B%E7%99%BAtips%E5%85%B1%E6%9C%89%E4%BC%9A-%E7%AC%AC2%E5%9B%9E" title="potatotips (iOS/Android開発Tips共有会) 第2回">第2回potatotipsに</a>参加し、発表してきた。  </p>
+<p>主にAVFoundationを利用した、iOSでの動画編集の話をした。使用したスライドは以下のものである。</p>
+<p>[slideshare id=29084610&amp;doc=potatotips2-131210141939-phpapp02]</p>
+<p>噂通りのハイレベルさで、1人持ち時間5分という短さながらも、濃い内容の発表ばかりであった。<br />
+特に珍しい意見でもないと思うが、</p>
+<ul>
+<li>調べたらすぐに発見できるわけではないが、</li>
+<li>かといってニッチすぎず、普段の業務に活かせて、</li>
+<li>しかも、ユーモアがあって面白い内容</li>
+</ul>
+<p>これらが揃うと、「良い発表」だったなと感じる。<br />
+とはいえ、普通は1つ満たすだけでも難しい。  </p>
+<p>それぞれのトレードオフもあるので、全部揃えるとなると、これは並大抵のことではない。</p>
+<p>まだまだ、先は長い。</p>	
+						 <a class="readmore" href="/%e7%ac%ac2%e5%9b%9epotatotips%e3%81%ab%e5%8f%82%e5%8a%a0%e3%81%97%e3%81%a6%e3%81%8d%e3%81%9f%e3%80%82.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/sicp-%e7%ac%ac2%e7%ab%a0%e3%80%8cbuilding-abstractions-with-data%e3%80%8d%e3%80%90%e5%be%8c%e7%b7%a8%e3%80%91.html">SICP 第2章「Building Abstractions with Data」【後編】</a></h2>
+						<p class="meta"><span class="date">Le 日 08 12月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>後半はGeneric Procedure関する解説。</p>
+<p>オブジェクト指向の言語で開発を行っていると、「そもそも型とは」というようなことを考える機会がほとんどない。言語のプリミティブな機能を利用して、型の仕組みを実装してみるのはなかなか貴重な経験だ。</p>
+<p>ここでは、Generic Procedureを実現するための戦略が3つ紹介される。</p>
+<ul>
+<li>
+<p>explicit dispatch  </p>
+<p>総称関数側(「たす」、「ひく」など)が、データの型(「実数」、「複素数」など)を見て、実際に実行される函数を決定する。  </p>
+<p>型が追加されるたびに、総称関数側の分岐を追加する必要がある。既存のコードを修正する必要があるので、余り得策とはいえない？</p>
+</li>
+<li>
+<p>data-directed  </p>
+<p>「総称函数名」、「型」、「実際に実行される函数」の結びつきを管理するテーブルを作成する。  </p>
+<p>総称関数内での分岐を作る必要はないが、新しい函数や型が追加されるたびにグローバルなテーブルを更新する必要がある。</p>
+</li>
+<li>
+<p>message-passing<br />
+    "intelligent operation"ではなく、"intelligent data
+    object"。つまり、型に応じた処理を行う「賢い処理」の代わりに、処理に応じて動作を変える「賢いデータ」を作るという方針。</p>
+</li>
+</ul>
+<p>message-passingは非常にオブジェクト指向的だ。直交座標系で複素数を表現する ...</p>	
+						 <a class="readmore" href="/sicp-%e7%ac%ac2%e7%ab%a0%e3%80%8cbuilding-abstractions-with-data%e3%80%8d%e3%80%90%e5%be%8c%e7%b7%a8%e3%80%91.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/emacs%e3%81%a7scheme%e3%81%ae%e8%87%aa%e5%8b%95%e8%a3%9c%e5%ae%8c%e3%82%92%e8%a1%8c%e3%81%86%e3%80%82.html">EmacsでSchemeの自動補完を行う。</a></h2>
+						<p class="meta"><span class="date">Le 日 01 12月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>環境構築に手間をかけたくない質なので、最初はDrRacketを利用してSchemeのコードを書いていた。</p>
+<p><a href="http://www.atmarkit.co.jp/ait/articles/0812/17/news149_3.html" title="Gaucheでメタプログラミング">Gaucheでメタプログラミング</a></p>
+<p>しかし、上記のサイトなどから、Emacsでも「別ウインドウで評価しながら、ソースを書けること」が分った。<br />
+その結果、結局Emacs+Gaucheの環境に落ち着いた。</p>
+<p>しばらくはこれで満足していたし、新しい言語であれば、全て手で打つことも、理解を早めるという点では無駄ではないだろう。  </p>
+<p>しかし、SICPの分量・難易度を考えると、あまりゆっくりコーディングしている暇はない。さすがに、最低限の自動補完が欲しくなった。</p>
+<p>ところが、「scheme emacs
+補完」とかで検索すると、結構面倒臭そうな方法が多い。  </p>
+<p>結局、emacsのパッケージ管理システムを使ってauto-completeをインストールする方法が一番楽そうだ、という結論に達した。  </p>
+<p>その方法を備忘録も兼ねて記載しておく。ちなみにEmacsのバージョンは24.2だ。</p>
+<p>まず、パッケージ管理システムを利用したことのない人はリポジトリを設定しよう。</p>
+<p>``` {.lang:lisp .decode:true title="リポジトリの設定。"}
+;;;;;;;;;;;;;;;;;;;;Package;;;;;;;;;;;;;;;;;;;;</p>
+<p>(require 'package)
+(add-to-list 'package-archives
+         '("marmalade" . "http://marmalade-repo ...</p>	
+						 <a class="readmore" href="/emacs%e3%81%a7scheme%e3%81%ae%e8%87%aa%e5%8b%95%e8%a3%9c%e5%ae%8c%e3%82%92%e8%a1%8c%e3%81%86%e3%80%82.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/sicp-%e7%ac%ac2%e7%ab%a0%e3%80%8cbuilding-abstractions-with-data%e3%80%8d%e3%80%90%e5%89%8d%e7%b7%a8%e3%80%91.html">SICP 第2章「Building Abstractions with Data」【前編】</a></h2>
+						<p class="meta"><span class="date">Le 月 25 11月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>1章が割りとすんなり終わったものだから、少し油断していた。2章からは分量も問題数も随分多くなりなかなか終わりそうにない。大体2章の60%ぐらいが終わったから、備忘録も兼ねてこの辺りで感想をまとめておこう。</p>
+<p>ところで、Edsgar Dijkstraの言葉にこのようなものがある</p>
+<blockquote>
+<p>Being abstract is something profoundly different from being vague…<br />
+ The purpose of abstraction is not to be vague, but to create a new
+semantic level in which one can be absolutely precise.   (<a href="http://www.linfo.org/q_programming.html" title="Best Programming Quotations">「Best
+Programming Quotations」</a>より)</p>
+<p>抽象的であることと曖昧であることは全く違う。<br />
+ 抽象化の目的は、曖昧にすることではない。<br />
+ 抽象化は、新たなセマンティックレベルを創出し ...</p></blockquote>	
+						 <a class="readmore" href="/sicp-%e7%ac%ac2%e7%ab%a0%e3%80%8cbuilding-abstractions-with-data%e3%80%8d%e3%80%90%e5%89%8d%e7%b7%a8%e3%80%91.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/%e7%ac%ac7%e5%9b%9e%e3%83%86%e3%83%83%e3%82%af%e3%83%92%e3%83%ab%e3%82%ba%e3%81%ab%e3%81%84%e3%81%a3%e3%81%a6%e3%81%8d%e3%81%be%e3%81%97%e3%81%9f%e3%80%82.html">第7回テックヒルズにいってきました。</a></h2>
+						<p class="meta"><span class="date">Le 水 13 11月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>Unityを触ったり、簡単なシェーダー書いたりしてるうちに描画処理への関心が高まってきた。ゲームとかグラフィックスの分野は、一定以上のものを作るために比較的コアな知識がいる一方で、結果がキャッチーで分かりやすい。ゲームにはあまり興味がない私だが、ゲームエンジンブームである。先日、<a href="http://d.hatena.ne.jp/hdk_embedded/20131106/1383681073">「Playgroundハッカソン」</a>に参加してからというもの、ますます興味が湧いてきている。</p>
+<p>そんなわけで、「Game
+Engines」がテーマの<a href="http://atnd.org/events/44622" title="第7回テックヒルズ">第7回テックヒルズ</a>に行ってきた。</p>
+<p>以下が公開されているスライドへのリンクだ(一部、公開が確認できていないものもある)。</p>
+<ol>
+<li><a href="http://www.slideshare.net/keigoando/unity2-dnew-gui" title="Unity2DとnewGUIについて">「Unity2DとnewGUIについて」</a>安藤
+    圭吾さん(ユニティ・テクノロジーズ・ジャパン)</li>
+<li><a href="http://www.slideshare.net/KatsutoshiMakino/aiming" title="Aiming開発ゲームの裏側">「Aiming開発ゲームの裏側」</a>牧野 克俊さん(Aiming)</li>
+<li><a href="http://www.slideshare.net/doraemonsss/cocos2d-x-28145813?ref=http://sssslide.com/www.slideshare.net/doraemonsss/cocos2d-x-28145813" title="cocos2d-xおよび開発ツールについて">「cocos2d-xおよび開発ツールについて」</a>清水 友晶さん(TKS2)</li>
+<li>「 enchant.jsの野望 9分コーディングライブ」 清水
+    亮さん(ユビキタスエンターテインメント)</li>
+<li><a href="http://www.slideshare.net/KeiNakazawa/131112-tech-hills-playground-introduction" title="Introduction">「イントロダクション」</a>
+    &amp;<a href="http://www.slideshare.net/RomainPiquois/playground-28101668" title="Playground内の描画仕組み">「Playgroundの描画仕組み」</a>＆<a href="http://www.slideshare.net/KeiNakazawa/playgroundandroid-pfandroid" title="&quot;Playground&quot;とAndroid">「マルチPF対応ゲームエンジン内のAndroid対応」</a>ロマン・ピコアさん(KLab)
+    ・中澤 慧さん(KLab)</li>
+<li>「次世代ゲームエンジンの比較 ...</li></ol>	
+						 <a class="readmore" href="/%e7%ac%ac7%e5%9b%9e%e3%83%86%e3%83%83%e3%82%af%e3%83%92%e3%83%ab%e3%82%ba%e3%81%ab%e3%81%84%e3%81%a3%e3%81%a6%e3%81%8d%e3%81%be%e3%81%97%e3%81%9f%e3%80%82.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/aor%e3%83%bb%e3%82%a2%e3%83%bc%e3%83%90%e3%83%8b%e3%83%86%e3%82%a3%e3%83%bc%e3%83%bb%e7%9b%b8%e5%af%be%e4%b8%bb%e7%be%a9%e3%80%82%e3%82%a2%e3%83%b3%e3%83%81%e3%83%a4%e3%83%b3%e3%82%ad%e3%83%bc.html">AOR・アーバニティー・相対主義。アンチヤンキー。</a></h2>
+						<p class="meta"><span class="date">Le 水 06 11月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>私は感性が完全に都会的だと思う。</p>
+<p>かなり傲慢な物言いに聞こえるかもしれないが、優劣ではなく、あくまで気質について述べているのである。それに、これからの文章を読めば、私が「都会的」なことを誇っていないということがよく分かるだろう。</p>
+<p>都会には人が多い。<br />
+人が多いと、価値観が多様になる。<br />
+価値観が多様的になると、特定の価値観の優位性を認めなくなる。<br />
+特定の価値観の優位性を認めない人は、「正しさ」を諦める。</p>
+<p>この感性は、AORやシティ・ポップという言葉に代表される都会的な音楽の特徴と一致する。AORの特徴は何かというと、本質的にはジャズの影響を強く受けた複雑なハーモニーである(当然、ドラムスをジェフ・ポーカロにするとより効果的であるのは言うまでもない)。『After
+The Love is Gone』や『Nothin' You Can Do About
+It』などがAORの代表曲とされるのは、それらが今までのポップスではありえない、技巧的で複雑なハーモニーワークを駆使しているからに他ならない。</p>
+<iframe width="420" height="315" src="//www.youtube.com/embed/0RtjatjyeQQ" allowfullscreen frameborder="0"></iframe>
+
+<iframe width="420" height="315" src="//www.youtube.com/embed/mzfDfh_8_gs" allowfullscreen frameborder="0"></iframe>
+
+<p>3和音のメジャー/マイナーの世界は二項対立の世界だ。そこには明確な明暗の境がある。しかし、モダンジャズ、そしてその影響下にあるAORは基本的に4和音以上の世界である。4和音のメジャー/マイナーは主音を変えれば明暗が裏返る。Imaj7にはIIImがあるし、IIIm7にはVがある ...</p>	
+						 <a class="readmore" href="/aor%e3%83%bb%e3%82%a2%e3%83%bc%e3%83%90%e3%83%8b%e3%83%86%e3%82%a3%e3%83%bc%e3%83%bb%e7%9b%b8%e5%af%be%e4%b8%bb%e7%be%a9%e3%80%82%e3%82%a2%e3%83%b3%e3%83%81%e3%83%a4%e3%83%b3%e3%82%ad%e3%83%bc.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/sicp-%e7%ac%ac1%e7%ab%a0%e3%80%8cbuilding-abstractions-with-procedures%e3%80%8d%e3%82%92%e8%aa%ad%e3%81%bf%e7%b5%82%e3%81%88%e3%81%a6%e3%80%82%e5%be%8c%e7%b7%a8.html">SICP 第1章「Building Abstractions with Procedures」を読み終えて。(後編)</a></h2>
+						<p class="meta"><span class="date">Le 日 27 10月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p><a href="http://yuseinishiyama.com/archives/184" title="SICP 第1章「Building Abstractions with Procedures」を読み終えて。(前編)">(前編はこちら)</a></p>
+<p>1章から学べたことを列挙する。</p>
+<p>・Schemeに慣れた。  </p>
+<p>if、cond、define、let、lambdaなどを用いてプログラミングできるようになった。例の「カッコ」にもだいぶ慣れてきた。</p>
+<p>・linear recursionとiterationの違いが分かるようになった。  </p>
+<p>今以上に不慣れな時のコードではあるが、以下のようにrecursionとiterationで再帰が書けるようになった。後者のほうが遥かに効率が良い。</p>
+<p>``` {.lang:scheme .decode:true title="Exercise 1.11. "}
+;recursion
+(define (f n)
+  (cond ((&lt; n 3) n)
+        (else (+ (f (- n 1))
+                 (<em> 2 (f (- n 2)))
+                 (</em> 3 (f (- n 3)))))))</p>
+<p>;iteration
+(define (f-iter product product-1 product-2 ...</p>	
+						 <a class="readmore" href="/sicp-%e7%ac%ac1%e7%ab%a0%e3%80%8cbuilding-abstractions-with-procedures%e3%80%8d%e3%82%92%e8%aa%ad%e3%81%bf%e7%b5%82%e3%81%88%e3%81%a6%e3%80%82%e5%be%8c%e7%b7%a8.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/sicp-%e7%ac%ac1%e7%ab%a0%e3%80%8cbuilding-abstractions-with-procedures%e3%80%8d%e3%82%92%e8%aa%ad%e3%81%bf%e7%b5%82%e3%81%88%e3%81%a6%e3%80%82%e5%89%8d%e7%b7%a8.html">SICP 第1章「Building Abstractions with Procedures」を読み終えて。(前編)</a></h2>
+						<p class="meta"><span class="date">Le 日 27 10月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p><a href="http://yuseinishiyama.com/archives/179" title="代替不可能なプログラマとは。">先日の投稿「代替不可能なプログラマとは。」</a>にある通り、SICPを読み始め、先日第1章「Building
+Abstractions with
+Procedures」を読み終えた。実際には<a href="http://yuseinishiyama.com/archives/179" title="代替不可能なプログラマとは。">先日の投稿</a>より少し前から読み始めていて、1章読み終えるのに3週間ほどかかったことになる。(さらに言うと、3ヶ月ほど前に、ビデオ講義を3時間分ほど鑑賞した。この時は、テキストが存在することを知らなかったのと、当たり前だが偉大なるハル・アベルソン氏とジェラルド・ジェイ・サスマン氏の早口の英語が聞き取れるはずもなく、あえなく挫折した。)</p>
+<p>学習環境は以下。</p>
+<p>・テキストは原著で。  </p>
+<p>テキストは原著がオンラインで閲覧できるので、原著で読むことにした。日本語訳に対する酷評を聞き過ぎたせいで、理解できなかった場合に翻訳のせいにしてしまいそうだからだ。それと、語学能力の訓練にもなればと思っている。英語だけをやっている時間がないので、英語とプログラミングを一緒に効率良く学びたい。</p>
+<p>・開発環境にはDrRacketを使用。  </p>
+<p>コマンドラインとかEmacsとかも試してみたが、結局一番楽そうなものに落ち着いた。</p>
+<p>SICPを読んだ結果できるようになること、得られる知識というのははっきりしていなくて、ただただ今よりプログラミングを深く理解できるに違いないという予感だけがモチベーションになっている。SICPに関して「<a href="http://www.cs.berkeley.edu/~bh/sicp.html" title="Why Structure and Interpretation of Computer Programs matters">Why
+Structure and Interpretation of Computer Programs
+matters</a>」という記事を見つけた ...</p>	
+						 <a class="readmore" href="/sicp-%e7%ac%ac1%e7%ab%a0%e3%80%8cbuilding-abstractions-with-procedures%e3%80%8d%e3%82%92%e8%aa%ad%e3%81%bf%e7%b5%82%e3%81%88%e3%81%a6%e3%80%82%e5%89%8d%e7%b7%a8.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/a.html">代替不可能なプログラマとは。</a></h2>
+						<p class="meta"><span class="date">Le 水 23 10月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>果たしてプログラマという職業はクリエイティブな職業だろうか。</p>
+<p>そもそも、クリエイティブとはどういうことだろうか。<a href="http://yuseinishiyama.com/archives/75" title="センスについて">以前の投稿</a>にもあるように、私は「センス」なるものは一切信用していない。クリエイティブとて同じことで、検証不可能な「センス」によって計られるべきではない。おそらく、クリエイティブとは「代替不可能な価値をもたらす、実証可能な能力そのもの」だ。私なりのクリエイティブを定義したところで、改めて問うてみる。</p>
+<p>果たしてプログラマという職業はクリエイティブな職業だろうか。</p>
+<p>残念ながらほとんどの場合はそうではない。世の中にある大半のコードは代替可能な能力によって生産されている。ほぼ全ての実現したいことに関する情報は、インターネットのどこかに存在する。私が日々の仕事で行っていることも、もちろんそうだ。また、これは非常に大事なことだが、目新しいことができるかどうかでプログラマの能力を計るべきでもない。誰もやりたがらないことを確実に行うプログラマの価値は非常に高い。一般的なプロダクトの完成に寄与する割合で言えば、目新しさは1割ぐらいで、残りの9割は能力的には誰でも出来る作業だろう。だから、デヴィッド・カトラーは優秀なのである。</p>
+<blockquote>
+<p>カトラーは、プログラマーがいつも新しいコードだけを書きたがり、ミスは忘れたいと考えているとみると、うるさく小言を言った。(G・パスカル・ザカリー著『闘うプログラマ』より)</p>
+</blockquote>
+<p>こうした理由から、代替可能な作業の精度を挙げて、その精度が代替不可能になることを目指すという手段で代替不可能になることも考えられる。だが、頭では分かっていても ...</p>	
+						 <a class="readmore" href="/a.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/%e3%83%86%e3%83%bc%e3%83%9e%e3%82%92%e5%a4%89%e6%9b%b4%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%e3%80%82.html">テーマを変更しました。</a></h2>
+						<p class="meta"><span class="date">Le 水 09 10月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>開発者のWordpressサイトがデフォルトのテーマだというのもなんとなく恥ずかしいので、テーマを作成してみた。とはいえ、Webの開発経験は全然ないので結構苦戦した。未だにあちこち粗が目立つ。しかし、「そのうち全部直して適応〜」とかいってると、一生デフォルトのを使い続けそうなので、先に本番環境に適応してから少しずつ修正することにした。</p>
+<p>レスポンシブデザインとかそういうことも考えだすと、自作するのを辞めたい衝動に駆られてしまうが・・・。</p>	
+						 <a class="readmore" href="/%e3%83%86%e3%83%bc%e3%83%9e%e3%82%92%e5%a4%89%e6%9b%b4%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%e3%80%82.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/%e3%83%9b%e3%83%bc%e3%83%a0.html">HOME</a></h2>
+						<p class="meta"><span class="date">Le 日 29 9月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 	
+						 <a class="readmore" href="/%e3%83%9b%e3%83%bc%e3%83%a0.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/163.html">ABOUT</a></h2>
+						<p class="meta"><span class="date">Le 日 29 9月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 	
+						 <a class="readmore" href="/163.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/ios%e3%81%a7%e3%82%a2%e3%83%97%e3%83%aa%e3%81%ae%e6%9c%80%e6%96%b0%e3%83%90%e3%83%bc%e3%82%b8%e3%83%a7%e3%83%b3%e3%82%92%e5%8f%96%e5%be%97%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95%e3%80%82.html">iOSでアプリの最新バージョンを取得する方法。</a></h2>
+						<p class="meta"><span class="date">Le 月 16 9月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>開発者であれば、ユーザーには自分の開発したアプリの最新版を使ってほしいと思うだろう。また、ユーザーのアプリバージョンにばらつきがないことは、ビジネス面のメリットも大きい。仕事として開発を行っている人であれば、「アプリのアップデートが行われた場合に通知する機能」の実装を要求されたことは多々あるだろう。</p>
+<p>そこで今回は、</p>
+<p>アプリの最新版を取得し、ユーザーが利用しているアプリが最新版より古ければ通知する機能</p>
+<p>の実装方法を紹介する。</p>
+<p>さて、まず考えなくてはいけないのは、どこからアプリの最新版を取得するか、ということである。これにはおおまかに言って、2通りの方法がある。「1.自前のサーバを利用する方法」、と「2.AppleのAPIを利用する方法」の2つだ。どちらが適切な方法であるか比較するために、それぞれのメリット、デメリットを挙げてみた。</p>
+<p>1.自前のサーバを利用する方法</p>
+<p>メリット</p>
+<ul>
+<li>テストが容易。</li>
+<li>更新のタイミングを自由に決めることができる。</li>
+<li>取得先が勝手に変更されることがない。</li>
+</ul>
+<p>デメリット</p>
+<ul>
+<li>運用者が必要。</li>
+<li>運用ミスが発生する可能性がある。</li>
+</ul>
+<p>2.AppleのAPIを利用する方法。</p>
+<p>メリット</p>
+<ul>
+<li>自分で運用しなくて良い。</li>
+<li>運用ミスが発生しない。</li>
+</ul>
+<p>デメリット</p>
+<ul>
+<li>テストが行えない。</li>
+<li>APIが変更された場合、機能が無効になる。</li>
+<li>APIから取得できるバージョンと、ストアへ反映されているバージョンとの間にタイムラグがあったりなどした場合、その間はどうすることもできない。</li>
+</ul>
+<p>結論から言うと、「AppleのAPIを使ったほうが楽だが ...</p>	
+						 <a class="readmore" href="/ios%e3%81%a7%e3%82%a2%e3%83%97%e3%83%aa%e3%81%ae%e6%9c%80%e6%96%b0%e3%83%90%e3%83%bc%e3%82%b8%e3%83%a7%e3%83%b3%e3%82%92%e5%8f%96%e5%be%97%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95%e3%80%82.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/unity%e3%81%a7ios%e5%90%91%e3%81%91%e3%81%ae%e3%83%93%e3%83%ab%e3%83%89%e6%99%82%e3%81%ab%e3%80%81requireddevicecapability%e3%82%92%e8%bf%bd%e5%8a%a0%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95%e3%80%82.html">UnityでiOS向けのビルド時に、RequiredDeviceCapabilityを追加する方法。</a></h2>
+						<p class="meta"><span class="date">Le 土 07 9月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p><a href="https://developer.apple.com/library/ios/documentation/general/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html">RequiredDeviceCapability</a>を正しく設定していないと、Appleにリジェクトされてしまうことは、広く知られている。</p>
+<p>例えば、アプリに静止画を撮影する機能がある場合、このRequiredDeviceCapabilityに「still-camera」を追加してやらないといけない。</p>
+<p>RequiredDeviceCapabilityは正しく設定されていなくても、ビルドに失敗しないし、Validationも通過する。だからこそ、リジェクトされてから気づくわけで、こういう作業は特に自動化するメリットが大きいだろう。</p>
+<p>そこで、PostProcessBuildPlayerを利用し、Unityからのビルド時にInfo.plistを書き換えて、RequiredDeviceCapabilityを編集する関数を作成してみた。</p>
+<p>``` {.lang:python .decode:true title="PostProcessBuildPlayer"}
+def process_plist(plist_filepath):
+    pl = plistlib.readPlist(plist_filepath)
+    new_settings = {
+        "still-camera"
+    }
+    if "UIRequiredDeviceCapabilities" in pl:
+        pl["UIRequiredDeviceCapabilities"].extend(new_settings)
+    else:
+        pl["UIRequiredDeviceCapabilities"] = [new_settings]</p>
+<div class="highlight"><pre><span class="n">plistlib</span><span class="p">.</span><span class="n">writePlist</span><span class="p">(</span><span class="n">pl ...</span></pre></div>	
+						 <a class="readmore" href="/unity%e3%81%a7ios%e5%90%91%e3%81%91%e3%81%ae%e3%83%93%e3%83%ab%e3%83%89%e6%99%82%e3%81%ab%e3%80%81requireddevicecapability%e3%82%92%e8%bf%bd%e5%8a%a0%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95%e3%80%82.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/unity%e3%81%a7%e3%82%b9%e3%82%af%e3%83%aa%e3%83%bc%e3%83%b3%e3%82%b7%e3%83%a7%e3%83%83%e3%83%88%e3%82%92%e6%92%ae%e5%bd%b1%e3%81%97%e3%80%81iphone%e3%81%ae%e3%82%ab%e3%83%a1%e3%83%a9%e3%83%ad%e3%83%bc.html">Unityでスクリーンショットを撮影し、iPhoneのカメラロールに保存する方法。</a></h2>
+						<p class="meta"><span class="date">Le 金 06 9月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>Unityでスクリーンショットを撮るのは非常に簡単である。</p>
+<p><a href="http://docs.unity3d.com/Documentation/ScriptReference/Application.CaptureScreenshot.html">Application.CaptureScreenshot</a>という関数が用意されているからだ。</p>
+<p>だが、この方法ではアプリのデータ領域に画像が保存されるだけなので、ユーザーが、その画像を閲覧できるようにはならない。アプリ内で画像を管理できるようにしてもいいかもしれないが、スクリーンショットを確認したいだけなのであれば、そこまでする必要はないだろう。</p>
+<p>そこで今回は、UnityからiOSのカメラロールにアクセスする方法を紹介する。</p>
+<p>``` {.lang:objc .decode:true}</p>
+<h1>import <Foundation/Foundation.h></h1>
+<h1>import <AssetsLibrary/AssetsLibrary.h></h1>
+<h1>import <AVFoundation/AVFoundation.h></h1>
+<p>/<em> 
+ スクリーンショット撮影時に利用するネイティブコード。
+ </em>/</p>
+<p>// 指定したパスの画像をカメラロールに保存する。
+extern "C" void _WriteImageToAlbum (const char<em> path)
+{
+    UIImage </em>image = [UIImage imageWithContentsOfFile:[NSString stringWithUTF8String:path]];
+    ALAssetsLibrary <em>library = [[[ALAssetsLibrary alloc] init] autorelease];
+    NSMutableDictionary </em>metadata = [[[NSMutableDictionary alloc] init] autorelease];
+    [library writeImageToSavedPhotosAlbum ...</p>	
+						 <a class="readmore" href="/unity%e3%81%a7%e3%82%b9%e3%82%af%e3%83%aa%e3%83%bc%e3%83%b3%e3%82%b7%e3%83%a7%e3%83%83%e3%83%88%e3%82%92%e6%92%ae%e5%bd%b1%e3%81%97%e3%80%81iphone%e3%81%ae%e3%82%ab%e3%83%a1%e3%83%a9%e3%83%ad%e3%83%bc.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/raspberry-pi%e3%81%ae%e3%82%bb%e3%83%83%e3%83%88%e3%82%a2%e3%83%83%e3%83%97noobs%e3%80%82.html">Raspberry Piのセットアップ(NOOBS)。</a></h2>
+						<p class="meta"><span class="date">Le 土 31 8月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>購入してからしばらく放置していたRaspberry Piをセットアップしてみる。</p>
+<p>今のところRaspberry
+Piでやりたいことはないから、セットアップするに足る目的もないけどなぁ、などと思いつつ作業を開始する。すると、どうしたことか全然上手くいかないので、セットアップすることが目的になって、Raspberry
+Piが起動した時には、なんとも言えない達成感が・・・。セットアップとは得てして、このような性質を持った作業である。</p>
+<p>さて、私の「セットアップ観」など何の役にも立たないので、私がセットアップの際に困った事を展開したい。</p>
+<p>まずインストールするOSをダウンロードするために、下記サイトを見る。</p>
+<p><a href="http://www.raspberrypi.org/downloads">http://www.raspberrypi.org/downloads</a></p>
+<p>「初心者はNOOBSを利用してOSをインストールするのが、おすすめ」ということなので、それに従う(ちなみにnoobは「新参者」という意味らしい)。「俺は利口だから中級者以上の扱いで頼むぜ」という感じで臨んで、マニュアルで色々やろうとしたら散々な結果になった、などということはぜひとも避けたい。</p>
+<p>さて、Transcendの8GB(Class10)のSDカードをフォーマットし、そこにNOOBSのファイルを突っ込み、Raspberry
+Piを起動した。</p>
+<p>しかし、画面に何も表示されない。よくみると「ACT」のLEDが消灯しているので、それを手がかりに調べてみる ...</p>	
+						 <a class="readmore" href="/raspberry-pi%e3%81%ae%e3%82%bb%e3%83%83%e3%83%88%e3%82%a2%e3%83%83%e3%83%97noobs%e3%80%82.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/ios%e5%90%91%e3%81%91%e5%8b%95%e7%94%bb%e7%b7%a8%e9%9b%86%e3%82%a2%e3%83%97%e3%83%aa%e3%80%8cfindays%e3%80%8d%e3%82%92%e3%83%aa%e3%83%aa%e3%83%bc%e3%82%b9%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%e3%80%82.html">iOS向け動画編集アプリ「Findays」をリリースしました。</a></h2>
+						<p class="meta"><span class="date">Le 土 31 8月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>[![findays_icon][]][]</p>
+<p>今月16日(金)に、開発を1人で担当したiOS向けアプリ「Findays」がリリースされました。以下、App
+Storeに記載されている内容の一部転載です。</p>
+<hr />
+<p>【Findaysとは】  </p>
+<p>Findays（ファインデイズ）は30秒の動画を撮影して、オープニング／エンディングアニメを付けたり、フィルター、
+音楽を選択して、PVのような作品を作ってくれるアプリです。BGMを提供してくれたのは。日本を代表するミュージシャン、
+mito(clammbon)、toe、mouse on the keys、Kazuhide Takamoto(Comeback My
+Daughters)の４組。日常の瞬間を切り取って特別な思い出に変えよう！</p>
+<ul>
+<li>最新の情報はFacebookでゲットしよう -  </li>
+</ul>
+<p>撮影した動画をアップするとプレゼントがもらえるキャンペーンなどが開催されたり<br />
+ミュージシャンが曲のコンセプトなどを語ったメッセージビデオも観れます。<br />
+Official Facebook Page<br />
+<a href="https://www.facebook.com/FindaysApp">https://www.facebook.com/FindaysApp</a></p>
+<ul>
+<li>Findaysの使い方はYoutubeでチェック -<br />
+Official Youtube Page ...</li></ul>	
+						 <a class="readmore" href="/ios%e5%90%91%e3%81%91%e5%8b%95%e7%94%bb%e7%b7%a8%e9%9b%86%e3%82%a2%e3%83%97%e3%83%aa%e3%80%8cfindays%e3%80%8d%e3%82%92%e3%83%aa%e3%83%aa%e3%83%bc%e3%82%b9%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%e3%80%82.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/%e3%81%8d%e3%81%a3%e3%81%a8%e3%81%86%e3%81%be%e3%81%8f%e3%81%84%e3%81%8f-%e2%80%95%e8%87%aa%e7%94%b1%e3%81%ae%e4%bb%a3%e5%84%9f%e2%80%95.html">きっと、うまくいく</a></h2>
+						<p class="meta"><span class="date">Le 月 19 8月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>映画『きっと、うまくいく(3idiots)』を見た。</p>
+<p>序盤は、ボリウッド特有の唐突なミュージカルシーンと、とてつもなく大味の筋書きに慣れなかった。しかし、終わってみると、伏線もきれいに回収され、結末もすがすがしく、前評判通りの快作だったといえよう。</p>
+<p>ランチョーという主人公を通して明らかにされる、この作品のメッセージは「誠実さ」に尽きる。彼は納得のいかないことをそのまま放置することが出来ず、しがらみに縛られて不誠実な行動をとる人間にひたすら突っかかる。この彼のお節介が、様々の愉快な事件を巻き起こし、また周囲の人々を変えていく。</p>
+<p>勇気をもらえた一方で、どうしても違和感が拭い去れなかった。</p>
+<p>主人公ランチョーはの人間像は理想的だ。彼は、このようにありたいと思うと同時に、そのようにあろうとできる。一方で、ランチョーの周りの人々はとても現実的だ。彼らはインドという国に住みながらも、抱えている問題は我々日本人とほとんど変わらない。彼らの抱える問題は、</p>
+<p>親の希望と自分の希望が乖離していること<br />
+宗教を盲信してしまうこと<br />
+貧乏な家族の生活を背負っていること<br />
+他人の期待に必要以上に答えようとしてしまうこと</p>
+<p>など、万国共通の問題である。ランチョーはこうした問題を抱える人間に、自分に正直に生きるように勧める。ではなぜランチョ―はしがらみから開放され、自由に振る舞うことができるのか。それは、「本当に」彼にしがらみがないからに他ならない。</p>
+<p>ランチョーには家族がいない。また、彼は家庭を持とうとしない ...</p>	
+						 <a class="readmore" href="/%e3%81%8d%e3%81%a3%e3%81%a8%e3%81%86%e3%81%be%e3%81%8f%e3%81%84%e3%81%8f-%e2%80%95%e8%87%aa%e7%94%b1%e3%81%ae%e4%bb%a3%e5%84%9f%e2%80%95.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/%e3%82%af%e3%82%a4%e3%83%b3%e3%82%b7%e3%83%bc%e3%83%bb%e3%82%b8%e3%83%a7%e3%83%bc%e3%83%b3%e3%82%ba%e6%9d%a5%e6%97%a5-%e2%80%95this-is-how-i-feel-about-jazz%e2%80%95.html">クインシー・ジョーンズ来日</a></h2>
+						<p class="meta"><span class="date">Le 木 08 8月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>クインシー・ジョーンズ生誕80年を記念して、<span
+style="line-height: 1.5;">32年ぶりにQが日本のステージに立った。</span>そんな訳で、私も去る7月31日、東京国際フォーラムに赴いた。</p>
+<p>どういう訳か、日本人アーティストの演奏が全体の半分ぐらいを占めている。トリビュートパートと呼ばれており、亀田誠治がプロデュースしているらしい。<br />
+その出演者は</p>
+<p>綾香・小曽根真・小野リサ・K・ゴスペラーズ・BoA・三浦大知・土岐麻子</p>
+<p>という混迷っぷりだから、見る前から少し不安であった。</p>
+<p><span
+style="line-height: 1.5;">ちなみに、メインであるクインシー・ジョーンズのパートは、</span>いわゆる「クインシーの秘蔵っ子」が次々と出演するという構成。しかも超若手の、見聴きしたことのない出演者ばかりで、こちらも同じく不安であった。</p>
+<p>ライブレポートを書くのであれば、司会のクリスペプラーの登場から<span
+style="line-height: 1.5;">時系列順に内容を追っていくべきなのだろうが、そういうつもりもないので</span><span ...</p>	
+						 <a class="readmore" href="/%e3%82%af%e3%82%a4%e3%83%b3%e3%82%b7%e3%83%bc%e3%83%bb%e3%82%b8%e3%83%a7%e3%83%bc%e3%83%b3%e3%82%ba%e6%9d%a5%e6%97%a5-%e2%80%95this-is-how-i-feel-about-jazz%e2%80%95.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/%e8%87%aa%e5%b7%b1%e7%9f%9b%e7%9b%be%e3%81%a8%e3%81%ae%e4%bb%98%e3%81%8d%e5%90%88%e3%81%84%e6%96%b9-%e2%80%95-%e5%b2%a1%e6%9c%ac%e5%a4%aa%e9%83%8e%e3%81%a8%e3%82%a2%e3%83%ab%e3%83%99%e3%83%bc%e3%83%ab.html">自己矛盾との付き合い方</a></h2>
+						<p class="meta"><span class="date">Le 日 21 7月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>先日、岡本太郎美術館へ行った。</p>
+<p>正直なところ絵には疎い。全くのデタラメを抽象画といわれて、納得してしまうことは充分ありえる。そして、仮にそれが美術館に置いてあったとして、その絵の前で手を組んで頷いたりしてしまったら、これほど滑稽なことはない。だから、岡本太郎が描くような抽象画にもある程度距離をおいて対峙したところ、次々と矛盾した感想が頭をもたげてきた。</p>
+<p>やっぱりこんなのはデタラメだ。  </p>
+<p>⇔デタラメに見えるが、一貫したモチーフがあるように思う。解説によると、考えぬかれた構図があるらしい。</p>
+<p>親も金持ちで、パリに留学している。結局、金か。  </p>
+<p>⇔岡本太郎がフランス語でしゃべっている映像が展示されていた。かなり努力したのでは。</p>
+<p>もし、これが適当だとしたら、全く無価値だ。  </p>
+<p>⇔これだけバカでかくて派手な色の作品だとどうしても気になってしまう。気になるということはそれだけで価値があるのでは。</p>
+<p>アバンギャルドな人だ。<br />
+⇔TVに出演し、大衆に迎合した人だ。</p>
+<p>画の練習などしなくてもこんな画は描けそうだ。<br />
+⇔かなり立派な肖像画も描いている。</p>
+<p>いったいどうしてこれほど評価を定めることが出来ないのかと困惑していると、それに答えるかのように、岡本太郎の芸術理論を紹介している動画の中で、こんな言葉にぶつかった。</p>
+<p>「矛盾を矛盾のまま書きだすのだ。」</p>
+<p>ああ、そうか。と、これで全てが納得いった。なんてことはない、私が最も大事だと思っている考えを岡本太郎は体現したわけだ。</p>
+<p>私は同じ考えを「自己矛盾を解消してはならない」というポリシーとして所持していた。</p>
+<p>自分を割り切るというのは魅力的な考えだ。例えば、こんなふうに ...</p>	
+						 <a class="readmore" href="/%e8%87%aa%e5%b7%b1%e7%9f%9b%e7%9b%be%e3%81%a8%e3%81%ae%e4%bb%98%e3%81%8d%e5%90%88%e3%81%84%e6%96%b9-%e2%80%95-%e5%b2%a1%e6%9c%ac%e5%a4%aa%e9%83%8e%e3%81%a8%e3%82%a2%e3%83%ab%e3%83%99%e3%83%bc%e3%83%ab.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/%e8%bc%9d%e5%ba%a6%e3%81%ae%e8%a8%88%e7%ae%97.html">輝度の計算</a></h2>
+						<p class="meta"><span class="date">Le 月 01 7月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>シェーダーでは、よくこんなコードを見かける。</p>
+<p>``` {.lang:c .decode:true title="Luminance"}
+const mediump vec3 Perception = vec3(0.299, 0.587, 0.114);</p>
+<p>void main(void)
+{
+    mediump vec3 color = texture2D(Sampler, TextureCoord).xyz;
+    mediump float luminance = dot(Perception, color);
+    gl_FragColor = (luminance &gt; Threshold) ? vec4(color, 1) : vec4(0);
+}
+```</p>
+<p>輝度がThresholdを上回れば、テクスチャの色を使い、そうでなければ黒にするということは分かる。それにしても、luminanceを取得するときにテクスチャの色と内積をとっているPerceptionとはなんだろうか。謎めいた値がハードコードされている。</p>
+<p>どうも人間の光受容体の特性を考慮するための値らしい ...</p>	
+						 <a class="readmore" href="/%e8%bc%9d%e5%ba%a6%e3%81%ae%e8%a8%88%e7%ae%97.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/%e3%82%bb%e3%83%b3%e3%82%b9%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6%e3%83%bc%e3%81%9d%e3%81%ae%e8%a8%b1%e5%ae%b9%e3%81%a7%e3%81%8d%e3%81%aa%e3%81%84%e7%84%a1%e7%a4%bc%e3%81%95%e3%83%bc.html">センスについて</a></h2>
+						<p class="meta"><span class="date">Le 月 17 6月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>私はよほど気心の知れた人とでないと、芸術の話をしたくない。<br />
+ましてや、親しくもない人からそういう話を聞かされるのは耐え難い。</p>
+<p>芸術の価値というのは受容者にとって全く異なってくる。ある人にとって価値のあるものが他の人にとっても価値があるとは限らない。だから「自分が良いと思っているものを他人も良いと思うだろう」と考えることは大変浅はかである。すぐに宗教や政治の話をする人が愚かであるのと同じ理由で、すぐに芸術の話をする人間は愚かなわけである。</p>
+<p>私のことを芸術嫌いと考える人もいるかも知れないが、こんな私も大学では美学を専攻し、ほとんど毎日ピアノを演奏するような生活を送った。だが、こうした「批判」と「実践」の毎日は、結果として自己矛盾を産むばかりであった。</p>
+<p><em>どうして、作者不在の中で作品の価値について述べることができるのだ。</em></p>
+<p><em>ある作品が、ある作品より重要だと言うことができるのだろうか。</em></p>
+<p><em>一度も演者、作り手になったことない大学教授が、「彼らが最も価値を認めていない作品」に対してさえ語る権利があるのだろうか。</em></p>
+<p>こんなことを考えるうちに、「芸術の価値」に関して自ら語ることはほとんど辞めてしまった。できないと考えたのだ。根拠のあるものが全てだと考えて、職業にはプログラマを選んだ。芸術についてとやかく口をはさみたがる人から見ると、私は「芸術への関心が薄い人」という風に見えるかもしれない。</p>
+<p>確かに、自分にとって価値のあるものが、他人にとっても価値あるものである「可能性は高い」。その可能性を考慮した上で行われる、芸術について語る活動というのは意味があるだろう。しかし、「物事そのものを宣伝する行為」というのは中々に難しい。どうしても「その物事を知っている自分を宣伝する行為 ...</p>	
+						 <a class="readmore" href="/%e3%82%bb%e3%83%b3%e3%82%b9%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6%e3%83%bc%e3%81%9d%e3%81%ae%e8%a8%b1%e5%ae%b9%e3%81%a7%e3%81%8d%e3%81%aa%e3%81%84%e7%84%a1%e7%a4%bc%e3%81%95%e3%83%bc.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/iphone%e3%81%a7%e3%81%ae%e5%90%8c%e6%99%82%e5%8b%95%e7%94%bb%e5%86%8d%e7%94%9f%e6%95%b0%e3%81%ae%e4%b8%8a%e9%99%90%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6.html">iPhoneでの同時動画再生数の上限について</a></h2>
+						<p class="meta"><span class="date">Le 木 13 6月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>現在動画編集アプリを作っている。<br />
+動画にエフェクトとかBGMとかなんやらの設定をしていくわけだが、  </p>
+<p>画面上部にプレビュー画面を持ち、その下に編集用のOutletがいくつか存在するような見た目のViewControllerがNavigationControllerでいくつか続いていくというような作りだ。</p>
+<p>ここで奇妙な問題が発生した。<br />
+MPMoviePlayerControllerを使用して、動画を再生しようとしたところ</p>
+<p>``` {.lang:objc .decode:true}
+Error Domain=AVFoundationErrorDomain Code=-11839 "Cannot Decode"</p>
+<div class="highlight"><pre><span class="err">こんなエラーがでた。デコードできない？動画の形式が悪いのだろうか？</span>  
+
+<span class="err">だが、試しにその</span><span class="n">ViewController</span><span class="err">だけにして実行してみたところ問題なく再生できた。</span>  
+<span class="err">ということは、特定のコンテキストにおいてのみデコードが失敗するわけだ。</span>
+
+<span class="p">[</span><span class="err">先日の記事</span><span class="p">][]</span><span class="err">にもある通り、いざ実装を始めると全く予期しないところで躓くことが多々ある。</span>  
+
+<span class="err">特にこういうロジックの問題でない箇所は原因の特定が難しく、心が折れそうになる。</span>
+
+<span class="err">とにかくググるしかないので、上記のログをそのまま検索バーに貼り付けた。</span>  
+<span class="err">すると同じ様な現象で困っている人を発見することが出来た。</span>
+
+<span class="p">[</span><span class="n">http</span><span class="o">:</span><span class="c1">//stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decode][]</span>
+
+<span class="o">&gt;</span> <span class="n">There</span> <span class="n">is</span> <span class="n">a</span> <span class="n">limit</span> <span class="n">on</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">concurrent ...</span></pre></div>	
+						 <a class="readmore" href="/iphone%e3%81%a7%e3%81%ae%e5%90%8c%e6%99%82%e5%8b%95%e7%94%bb%e5%86%8d%e7%94%9f%e6%95%b0%e3%81%ae%e4%b8%8a%e9%99%90%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/%e3%83%90%e3%82%ab%e3%83%bb%e3%82%a2%e3%83%9b%e8%b3%9b%e7%be%8e%e3%81%af%e3%82%82%e3%81%86%e7%b5%90%e6%a7%8b%e3%80%82.html">バカ・アホ賛美はもう結構。</a></h2>
+						<p class="meta"><span class="date">Le 月 10 6月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>何かに対して、バカだとかアホだとか言うと、「お前はどうなんだ」という議論に持ち込まれることがある。だからはじめに言っておくが、</p>
+<p>私もバカ・アホの部類である。</p>
+<p>だが、「バカ・アホでもいい」と思うほどはバカ・アホではないし、ましてや、「バカ・アホが世界を制する」みたいな仰天思想の持ち主のようなバカ・アホでもない。</p>
+<p>筒井康隆の『アホの壁』の冒頭にこんな文がある。</p>
+<blockquote>
+<p>むろんアホの壁を乗り越えて彼方へ行かぬ限りは成り立たない仕事もある。言うまでもなく芸術という仕事である。芸術的狂気というものは一旦良識から離れてアホの側に身を置かねばならない。それが単なるアホと異なるのは、壁の存在、壁の所在、壁の位置、壁の高さ、壁を乗り越える方法などを熟知していることだ。そのためには冷静な正気を保ちながら壁を認識しなければならない。これができていない芸術は、常識に囚われたつまらないものにならざるを得ないだろう。<br />
+ \&lt;筒井康隆(2010)『アホの壁』新潮社 p7></p>
+</blockquote>
+<p>あれほど無茶苦茶なスラップスティックを書ける作家の芸術感がこのようなものであるということは、とても印象的だ（『アホの壁』は、この常識さゆえに、筒井康隆特有の痛快さにはかけるので物足りないのだが）。</p>
+<p>私は、個性というのはとても大事だと思っている。過去の財産にアクセスしやすい時代に過去の再生産を行なっても大した価値にはならないからだ。それに、今までに無かったものの見方・考え方や歴史観を生むような個性が、現代日本を覆う民族的な不安を乗り越えるためには必要不可欠だとも思う ...</p>	
+						 <a class="readmore" href="/%e3%83%90%e3%82%ab%e3%83%bb%e3%82%a2%e3%83%9b%e8%b3%9b%e7%be%8e%e3%81%af%e3%82%82%e3%81%86%e7%b5%90%e6%a7%8b%e3%80%82.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%9e%e3%81%ab%e3%81%a8%e3%81%a3%e3%81%a6%e3%80%88%e3%81%a7%e3%81%8d%e3%82%8b%e3%80%89%e3%81%a8%e3%81%af%e4%bd%95%e3%81%8b%e3%80%82%e3%83%bc%e3%80%8c%e3%81%a7.html">プログラマにとって〈できる〉とは何か。</a></h2>
+						<p class="meta"><span class="date">Le 金 07 6月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>プログラマとして働いていると、特に非プログラマの人から</p>
+<p>「hogehogeをfugafugaするようなことって（プログラムで）できるんですか？」</p>
+<p>という類の質問をされることが良くある。当然そういうことを聞かれたら</p>
+<p>「できると思いますよ。」</p>
+<p>と答えるしかない。まともな思考な人が考えるような要求、つまり「iPhoneの画面をダブルタップすると、口やかましい上司を遠隔地へと転送できる」とか「母親をカメラで撮影すると、実家への仕送りを強要しなくなる」とか、そういうのではない要求、というものはたいていの場合、理論上実現可能だからだ。</p>
+<p>コンピュータサイエンスに明るいわけではないが、「<a href="http://ja.wikipedia.org/wiki/%E3%83%81%E3%83%A5%E3%83%BC%E3%83%AA%E3%83%B3%E3%82%B0%E5%AE%8C%E5%85%A8" title="チューリング完全">チューリング完全</a>」という言葉ぐらいなら知っている。コンピュータの世界における「やればできる」に相当する概念といったところか。  </p>
+<p>つまり、「できますか」という問に「やればできる」と答えていて、さらに、「やればできる」のことを「できる」という言葉で表してしまっているわけだ。</p>
+<p>物質世界にくらべて、「やればできる」のが当たり前のソフトウェアの世界だからこそ、その当たり前の答えを使ってしまうと厄介なことが起きる。まず、</p>
+<p>「Aさんがhogehogeをfugafugaできるらしいから、やってもらおう。」</p>
+<p>という風に自分が頼まれてしまう。そして、自分自身も判断力が鈍っていると</p>
+<p>「まぁ、やればできるはずだからやってみるか。」</p>
+<p>と安易に引き受けてしまうわけである。プログラムの世界以外なら ...</p>	
+						 <a class="readmore" href="/%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%9e%e3%81%ab%e3%81%a8%e3%81%a3%e3%81%a6%e3%80%88%e3%81%a7%e3%81%8d%e3%82%8b%e3%80%89%e3%81%a8%e3%81%af%e4%bd%95%e3%81%8b%e3%80%82%e3%83%bc%e3%80%8c%e3%81%a7.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/objective-c%e3%81%a7%e6%96%87%e5%ad%97%e5%88%97%e5%ae%9a%e6%95%b0.html">Objective-Cで文字列定数</a></h2>
+						<p class="meta"><span class="date">Le 日 02 6月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>Objective-Cで文字列定数の宣言をする方法について考えてみた。<br />
+最も手っ取り早いのは当然マクロだろう。</p>
+<p>``` {.lang:objc .decode:true title="SomeClass.m"}</p>
+<h1>define CONST_STR @"Const Str"</h1>
+<div class="highlight"><pre><span class="err">だが、当然二重定義の問題があるので好ましいとは言えない。</span>  
+<span class="err">より好ましいのは以下の方法だろう。</span>
+
+<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">objc</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;SomeClass.m&quot;</span><span class="p">}</span>
+<span class="k">static</span> <span class="n">NSString</span> <span class="o">*</span> <span class="k">const</span> <span class="n">kConstStr</span> <span class="o">=</span> <span class="s">@&quot;Const Str&quot;</span><span class="p">;</span>
+</pre></div>
+
+
+<p>constの位置に注意。<br />
+文字列に対するポインタにconstを指定している。  </p>
+<p>（ちなみにObective-Cではメンバ変数のプレフィックは「_」が完全に推奨されている一方で、定数にこうしたハンガリアン記法を使うかどうか迷いどころだが、たいがいのフレームワークでは定数はこの形で書かれているし、実際しっくりくる。）</p>
+<p>さてこの定数を外部に公開したいとする。<br />
+ここでこんな風にやってしまうと間違いだ。</p>
+<p>``` {.lang:objc .decode:true title="SomeClass.h"}
+static NSString * const kConstStr ...</p>	
+						 <a class="readmore" href="/objective-c%e3%81%a7%e6%96%87%e5%ad%97%e5%88%97%e5%ae%9a%e6%95%b0.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/simpleisbes.html">Simple is best.</a></h2>
+						<p class="meta"><span class="date">Le 火 21 5月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>特別飾らず、<br />
+特別奇抜でもなく、<br />
+それでも見ているだけで、格好いい、と思えるアーティストがいる。</p>
+<p>たとえば、Caetano Velosoや、<br />
+http://www.youtube.com/watch?v=4OOa_Ffv0wg</p>
+<p>Peter Gabrielや<br />
+http://www.youtube.com/watch?v=3_Q79lls1f0</p>
+<p>David Bowieなんかがそうだ。<br />
+http://www.youtube.com/watch?v=YYjBQKIOb-w</p>
+<p>視覚的にも、聴覚的にも無駄が少なく、<br />
+どのようにすれば、「どう見えるか」「どう聴こえるか」分かっている。<br />
+そんなベテランミュージシャンだからこそ、なせる技であろう。</p>
+<p>だが、シンプルにすれば格好良く見えるだろうか。<br />
+当たり前だが、そうではない。<br />
+素人のシンプルさなど、つまらないものでしかないし、<br />
+無数の「俺でもできる」の一言で片付けられてしまう ...</p>	
+						 <a class="readmore" href="/simpleisbes.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/%e8%87%aa%e5%b7%b1%e6%a4%9c%e9%96%b2%e3%81%ae%e9%87%8d%e8%a6%81%e3%81%95%e3%80%80%e3%83%bc%e5%af%a1%e9%bb%99%e3%81%aa%e4%ba%ba%e3%81%8c%e4%be%a1%e5%80%a4%e3%81%82%e3%82%8b%e3%81%93%e3%81%a8%e3%82%92.html">自己検閲の重要さ</a></h2>
+						<p class="meta"><span class="date">Le 金 17 5月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>文章表現に関する、興味深い記事を発見した。</p>
+<p><a id="685" name="685"></a><a href="">「自分の書く文章は価値がない」を抜け出すライティング・マラソンという方法←自己検閲を振り切って書きなぐるために</a></p>
+<blockquote>
+<p>書くことは、ほとんど必ず落胆を伴う（仕様だと思っていいくらいだ）。</p>
+</blockquote>
+<p>文章を書く上でかならず障壁となるであろう「自己検閲の壁」をいかにして乗り越えるか、という内容である。まさに今ブログを書いている私にとって、こうした</p>
+<p>「書くことによって、書くようになる論」</p>
+<p>というのは、当然実感がある。</p>
+<p>そもそも、あらゆる作業で、行動が動機を先んじることは珍しくない。  </p>
+<p>こうした「作業興奮」をものにできるかどうかで、何かを成し遂げれるかどうかが決まる、といっても過言ではないだろう。  </p>
+<p>ところで、この記事で何よりも興味深いのが〈「作文のつまずき」の現れ方〉という図だ。</p>
+<p><a href="http://yuseinishiyama.com/wp-content/uploads/2013/05/sakubunno-tsumazuki.png"><img alt="作文のつまずき" src="http://yuseinishiyama.com/wp-content/uploads/2013/05/sakubunno-tsumazuki.png" /></a></p>
+<p>（出典：『<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4183513081/readingmonkey-22/ref=nosim/">国語科授業の常識を疑う〈3〉作文
+(市毛勝雄模擬授業の記録と分析)</a>』p.60）</p>
+<p>この図から導き出される結論の中で、最も妥当であるものは、ここで紹介している記事のような、</p>
+<p>「自分の文章が無価値に感じる、というつまずきを克服することで、平明達意の文章を書こう。」</p>
+<p>というものであろう。だが、同時に私は、この図から別の重大な点を読み取った。それは ...</p>	
+						 <a class="readmore" href="/%e8%87%aa%e5%b7%b1%e6%a4%9c%e9%96%b2%e3%81%ae%e9%87%8d%e8%a6%81%e3%81%95%e3%80%80%e3%83%bc%e5%af%a1%e9%bb%99%e3%81%aa%e4%ba%ba%e3%81%8c%e4%be%a1%e5%80%a4%e3%81%82%e3%82%8b%e3%81%93%e3%81%a8%e3%82%92.html">Lire la suite …</a>
+						</div>
+					</div>
+        
+ 
+			                <div class="post summary">
+						<h2 class="title"><a href="/hello-world.html">それほどまでに言論は自由であるべきだろうか。</a></h2>
+						<p class="meta"><span class="date">Le 水 24 4月 2013</span><span class="posted">Par <a href="#">nishiyama101</a></span></p>
+						<div style="clear: both;">&nbsp;</div>
+						<div class="entry">
+						 <p>試しに「ブログ始めました」をGoogleで検索してみたところ、<br />
 約 220,000,000 件の検索結果がヒットした。</p>
 <p>無数のブログには、無数の「ブログを書く理由」があるだろうが、<br />
 私の場合、その理由は「自分自身のプロフィールを作成すること」にある。  </p>
@@ -89,77 +925,76 @@
 <p>それほど当たり前だと考えていいものではないし、これらの権利があるからと言って<br />
 自分の行動がもたらす結果を考慮しないのは、あまりに無責任だ。</p>
 <p>行動力が悪だといいたいわけではない。<br />
-行動力はエンジンであって ...</p>
-            </div>
-        </div>
-    </div>
-<div class="pagination-wrapper">
-    <div class="pagination">
-        <div class="pagination-left">
-                    <a href="/index3.html">
-                <span>&larr; Newer posts</span></a>
-        </div>
-        <span>Page 4 / 4</span>
-        <div class="pagination-right">
-        </div>
-    </div>
-</div></div>
+行動力はエンジンであって ...</p>	
+						 <a class="readmore" href="/hello-world.html">Lire la suite …</a>
+						</div>
+					</div>
+					<div style="clear: both;">&nbsp;</div>
+				</div>
+				<div id="sidebar">
+					<div id="logo">
+						<h1><a href="">だからといって、このままでいいはずがない。</h1>
+					</div>
+					<div id="menu">
+						<ul>
+							<li class="current_page_item"><a href="">Home</a></li>
+							<li><a href="/archives.html">Archives</a></li>
+                                                            <li><a href="/pages/about-me.html">About Me</a></li>
+						</ul>
+					</div>
+					<ul>
+						<li>
+							<h2>Catégories</h2>
+							<ul>
+								 <li ><a href="/category/impressions.html">Impressions</a></li>
+								 <li ><a href="/category/impressions-music.html">Impressions, Music</a></li>
+								 <li ><a href="/category/impressions-music-programming.html">Impressions, Music, Programming</a></li>
+								 <li ><a href="/category/impressions-programming.html">Impressions, Programming</a></li>
+								 <li ><a href="/category/impressions-programming-sicp.html">Impressions, Programming, SICP</a></li>
+								 <li ><a href="/category/misc.html">misc</a></li>
+								 <li ><a href="/category/programming.html">Programming</a></li>
+								 <li ><a href="/category/programming-sicp.html">Programming, SICP</a></li>
+								 <li ><a href="/category/programming-sicp-patahene.html">Programming, SICP, パタヘネ</a></li>
+							</ul>
+						</li>
+						<li>
+							<h2>Blogroll</h2>
+							<ul>
+                                                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                                                            <li><a href="http://python.org/">Python.org</a></li>
+                                                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                                                            <li><a href="#">You can modify those links in your config file</a></li>
+							</ul>
+						</li>
+                                                <li>
+                                                        <h2>Social</h2>
+                                                        <ul>
+                                                            <li><a href="/" rel="alternate">Flux Atom</a></li>
+                                                            <li><a href="#">You can add links in your config file</a></li>
+                                                            <li><a href="#">Another social link</a></li>
+                                                        </ul>
+                                                </li><!-- /.social -->
+						<li>
+						        <h2>Tags</h2>
+						        <ul>
+						        </ul>
+						</li>
+						
+						
+					</ul>
+				</div>
+				<!-- end #sidebar -->
+				<div style="clear: both;">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	<!-- end #page -->
 
-        <div class="pure-u-3-4">
-            <footer class="footer">
-                <p>&copy; だからといって、このままでいいはずがない。 &ndash;
-                    Built with <a href="https://github.com/danclaudiupop/pure">Pure Theme</a>
-                    for <a href="http://blog.getpelican.com/">Pelican</a>
-                </p>
-                <p>Licensed under <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_GB">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</p>
-                <a href="#" class="go-top">Go Top</a>
-            </footer>
-        </div>
-
-    <script src="http://yui.yahooapis.com/3.10.1/build/yui/yui-min.js"></script>
-    <script>
-        YUI().use('node-base', 'node-event-delegate', function (Y) {
-
-            var menuButton = Y.one('.nav-menu-button'),
-                nav        = Y.one('#nav');
-
-            // Setting the active class name expands the menu vertically on small screens.
-            menuButton.on('click', function (e) {
-                nav.toggleClass('active');
-            });
-
-            // Your application code goes here...
-
-        });
-    </script>
-    <script>
-        YUI().use('node-base', 'node-event-delegate', function (Y) {
-            // This just makes sure that the href="#" attached to the <a> elements
-            // don't scroll you back up the page.
-            Y.one('body').delegate('click', function (e) {
-                e.preventDefault();
-            }, 'a[href="#"]');
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            // Show or hide the sticky footer button
-            $(window).scroll(function() {
-                if ($(this).scrollTop() > 200) {
-                    $('.go-top').fadeIn(200);
-                } else {
-                    $('.go-top').fadeOut(200);
-                }
-            });
-
-            // Animate the scroll to top
-            $('.go-top').click(function(event) {
-                event.preventDefault();
-
-                $('html, body').animate({scrollTop: 0}, 300);
-            })
-        });
-    </script>
-
+<div id="footer">
+	<p>Copyright (c) 2008 Sitename.com. All rights reserved. Design by <a href="http://www.freecsstemplates.org/">CSS Templates</a>.</p>
+	<p>Proudly powered by <a href="http://alexis.notmyidea.org/pelican/">pelican</a>, which takes great advantages of <a href="http://python.org">python</a>.
+</p>
+</div>
+<!-- end #footer -->
 </body>
 </html>
