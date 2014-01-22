@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>だからといって、このままでいいはずがない。</title><link href="http://yuseinishiyama.github.io/" rel="alternate"></link><link href="http://yuseinishiyama.github.io/feeds/impressions-programming-sicp.atom.xml" rel="self"></link><id>http://yuseinishiyama.github.io/</id><updated>2013-11-25T04:18:00+01:00</updated><entry><title>SICP 第2章「Building Abstractions with Data」【前編】</title><link href="http://yuseinishiyama.github.io/posts/2013/11/25/sicp3/" rel="alternate"></link><updated>2013-11-25T04:18:00+01:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-11-25:posts/2013/11/25/sicp3/</id><summary type="html">&lt;p&gt;1章が割りとすんなり終わったものだから、少し油断していた。2章からは分量も問題数も随分多くなりなかなか終わりそうにない。大体2章の60%ぐらいが終わったから、備忘録も兼ねてこの辺りで感想をまとめておこう。&lt;/p&gt;
+&lt;p&gt;ところで、Edsgar Dijkstraの言葉にこのようなものがある&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Being abstract is something profoundly different from being vague…&lt;br /&gt;
+ The purpose of abstraction is not to be vague, but to create a new
+semantic level in which one can be absolutely precise.   (&lt;a href="http://www.linfo.org/q_programming.html" title="Best Programming Quotations"&gt;「Best
+Programming Quotations」&lt;/a&gt;より)&lt;/p&gt;
+&lt;p&gt;抽象的であることと曖昧であることは全く違う。&lt;br /&gt;
+ 抽象化の目的は、曖昧にすることではない。&lt;br /&gt;
+ 抽象化は、新たなセマンティックレベルを創出し、&lt;br /&gt;
+ そのレベルにおいて人は非常に正確で有り得る。(拙訳)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;(ここでいうセマンティックレベルとは、抽象化の結果生まれる新しいレイヤーのことであろう。SICPではAbstraction
+Barrierという言葉で述べられている概念だ。)&lt;/p&gt;
+&lt;p&gt;プログラミングをはじめた頃は、自分の頭の悪さを度々嘆いたものだ。特に深い再帰処理では、すぐにコールスタックを追うことができなくなる。こういうとき、自分のメモリがプログラミングをするには少なすぎる、そういう風に考えてしまうことが多かった。&lt;/p&gt;
+&lt;p&gt;だが、SICPをやり始めて一番身に沁みたことは、「抽象化&gt;記憶力」であるということだ。難しい問題を抽象化し、抽象化した部分をどんどんとモジュール化していけば、記憶力が良くなくても問題が解ける。つまり、モジュールの動作が保証されているのであれば、全体が把握しきれなくても良いのである。これは当然、単体テスト・自動テストなどが有用であることの理由にもなり得る。こんなことは当たり前かと思うかもしれない。しかし、いざやってみると、抽象化能力が不十分であることが露呈する。少なくとも私の場合はそうだった。&lt;/p&gt;
+&lt;p&gt;例えば、&lt;/p&gt;
+&lt;p&gt;listの長さを求める函数(length)&lt;br /&gt;
+list同士を連結する函数(append)&lt;br /&gt;
+listの全要素に任意の処理を行う函数(map)&lt;/p&gt;
+&lt;p&gt;を実装するとして、list構造に慣れていなければappendぐらいでも結構混乱してしまうものだ。だがそれは、これら3つ処理に共通する処理、つまり抽象化可能な処理が見えていないということに他ならない。その抽象化されるべき処理とは&lt;/p&gt;
+&lt;p&gt;「先頭の要素」と、「後述の要素に再帰的処理を行ったもの」との間の演算&lt;/p&gt;
+&lt;p&gt;である。この抽象化を実装すると、&lt;/p&gt;
+&lt;p&gt;``` {.lang:scheme .decode:true title="accumulate"}
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence)
+          (accumulate op initial (cdr sequence)))))&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;というようになるわけだ&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;それにしても、高次の概念であるほど、英語で名前をつけるのが難しい。この処理に&lt;/span&gt;&lt;span class="nx"&gt;accumulate&lt;/span&gt;&lt;span class="err"&gt;という動詞を当て嵌めることは今の英語能力では到底出来ない…&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="err"&gt;。そして、これを用いれば、簡単に上記&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="err"&gt;つの問題に対処できるということが&lt;/span&gt;&lt;span class="nx"&gt;Ex&lt;/span&gt;
+&lt;span class="mf"&gt;2.33&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="err"&gt;によって示される。&lt;/span&gt;
+
+&lt;span class="err"&gt;```&lt;/span&gt; &lt;span class="p"&gt;{.&lt;/span&gt;&lt;span class="nx"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nx"&gt;scheme&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;decode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="nx"&gt;Exercise&lt;/span&gt; &lt;span class="mf"&gt;2.33&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;  &lt;span class="nx"&gt;Fill&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="nx"&gt;the&lt;/span&gt; &lt;span class="nx"&gt;missing&lt;/span&gt; &lt;span class="nx"&gt;expressions&lt;/span&gt; &lt;span class="nx"&gt;to&lt;/span&gt; &lt;span class="nx"&gt;complete&lt;/span&gt; &lt;span class="nx"&gt;the&lt;/span&gt; &lt;span class="nx"&gt;following&lt;/span&gt; &lt;span class="nx"&gt;definitions&lt;/span&gt; &lt;span class="nx"&gt;of&lt;/span&gt; &lt;span class="nx"&gt;some&lt;/span&gt; &lt;span class="nx"&gt;basic&lt;/span&gt; &lt;span class="nx"&gt;list&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nx"&gt;manipulation&lt;/span&gt; &lt;span class="nx"&gt;operations&lt;/span&gt; &lt;span class="nx"&gt;as&lt;/span&gt; &lt;span class="nx"&gt;accumulations&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;define&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;map&lt;/span&gt; &lt;span class="nx"&gt;p&lt;/span&gt; &lt;span class="nx"&gt;sequence&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt;   &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;accumulate&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;lambda&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;x&lt;/span&gt; &lt;span class="nx"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="cp"&gt;&amp;lt;??&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="nx"&gt;nil&lt;/span&gt; &lt;span class="nx"&gt;sequence&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;define&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;append&lt;/span&gt; &lt;span class="nx"&gt;seq1&lt;/span&gt; &lt;span class="nx"&gt;seq2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt;   &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;accumulate&lt;/span&gt; &lt;span class="nx"&gt;cons&lt;/span&gt; &lt;span class="cp"&gt;&amp;lt;??&amp;gt;&lt;/span&gt; &lt;span class="cp"&gt;&amp;lt;??&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;define&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;length&lt;/span&gt; &lt;span class="nx"&gt;sequence&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;;;&lt;/span&gt;   &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;accumulate&lt;/span&gt; &lt;span class="cp"&gt;&amp;lt;??&amp;gt;&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="nx"&gt;sequence&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;define&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;map&lt;/span&gt; &lt;span class="nx"&gt;p&lt;/span&gt; &lt;span class="nx"&gt;sequences&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;accumulate&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;lambda&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;x&lt;/span&gt; &lt;span class="nx"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;cons&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;p&lt;/span&gt; &lt;span class="nx"&gt;x&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="nx"&gt;y&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;() sequences))&lt;/span&gt;
+&lt;span class="s1"&gt;(define (append seq1 seq2)&lt;/span&gt;
+&lt;span class="s1"&gt;  (accumulate cons (accumulate cons &amp;#39;&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="nx"&gt;seq2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="nx"&gt;seq1&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;define&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;length&lt;/span&gt; &lt;span class="nx"&gt;sequence&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;accumulate&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;lambda&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;x&lt;/span&gt; &lt;span class="nx"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="nx"&gt;y&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="nx"&gt;sequence&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;ところで、記憶力の補完物として抽象化があるということは、プログラミング以外でも変わらない(人間の記憶力の弱さは、&lt;a href="http://ja.wikipedia.org/wiki/%E3%82%B8%E3%83%A7%E3%83%BC%E3%82%B8%E3%83%BB%E3%83%9F%E3%83%A9%E3%83%BC" title="ジョージ・ミラー"&gt;ジョージ・ミラーのマジカルナンバー&lt;/a&gt;を考えれば明らかだ)。&lt;/p&gt;
+&lt;p&gt;例えば、「1ヶ月で300ページの本を読む」という目標は「昨日読んだ最後のページから10ページ読むことを1ヶ月間続ける」ということであるし、あらゆる目標の究極的な抽象化は「過去より現在のほうが進んでいる」ということである。そういう意味で、自己管理指標は、過去と現在の短い差分で計れるべきものでなくてはならない。&lt;/p&gt;
+&lt;p&gt;複雑な処理を抽象化し分解することで、対処すべき問題が明確になる。そういう意味でDijkstraは「precise」になれると言っているのであろう。人生も同じで、時に全体を見渡す必要があるが、「近視眼になれる仕組み作り」がなにより重要なのではないだろうか。&lt;/p&gt;</summary></entry></feed>

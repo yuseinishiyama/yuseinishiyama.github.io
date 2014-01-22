@@ -1,0 +1,1246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>だからといって、このままでいいはずがない。</title><link href="http://yuseinishiyama.github.io/" rel="alternate"></link><link href="http://yuseinishiyama.github.io/feeds/programming.atom.xml" rel="self"></link><id>http://yuseinishiyama.github.io/</id><updated>2013-12-24T22:32:00+01:00</updated><entry><title>動画に対する顔検出</title><link href="http://yuseinishiyama.github.io/posts/2013/12/24/face-detection-from-movie/" rel="alternate"></link><updated>2013-12-24T22:32:00+01:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-12-24:posts/2013/12/24/face-detection-from-movie/</id><summary type="html">&lt;p&gt;(この投稿はQiitaの&lt;a href="http://qiita.com/advent-calendar/2013/ios-2"&gt;iOS Second Stage Advent Calendar
+2013&lt;/a&gt;の25日目の記事です)&lt;/p&gt;
+&lt;p&gt;もはや非常に一般的となった、CIDetectorによる顔検出。  &lt;/p&gt;
+&lt;p&gt;ただ、よく見るサンプルはほとんどカメラの入力に対するリアルタイム検出ばかりだったので、&lt;/p&gt;
+&lt;p&gt;試しに動画に対して顔を検出するサンプルを作成してみた。&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com/yuseinishiyama/VideoFaceDetection"&gt;https://github.com/yuseinishiyama/VideoFaceDetection&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;CIDetectorとAVAssetReaderを組み合わせるだけで簡単にできる。&lt;/p&gt;
+&lt;p&gt;``` {.lang:objc .decode:true title="VFDVideoFaceDetector.h"}&lt;/p&gt;
+&lt;h1&gt;import &lt;Foundation/Foundation.h&gt;&lt;/h1&gt;
+&lt;p&gt;typedef void(^VFDVideoReaderCompletionHandler)(NSArray *allFeatures);&lt;/p&gt;
+&lt;p&gt;@interface VFDVideoFaceDetector : NSObject
+- (void)readFromURL:(NSURL *)targetURL
+  complitionHandler:(VFDVideoReaderCompletionHandler)completionHandler;
+@end&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;```&lt;/span&gt; &lt;span class="p"&gt;{.&lt;/span&gt;&lt;span class="n"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;objc&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;VFDVideoFaceDetector.m&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="cp"&gt;#import &amp;quot;VFDVideoFaceDetector.h&amp;quot;&lt;/span&gt;
+
+&lt;span class="cp"&gt;#import &amp;lt;AVFoundation/AVFoundation.h&amp;gt;&lt;/span&gt;
+
+&lt;span class="k"&gt;@interface&lt;/span&gt; &lt;span class="nc"&gt;VFDVideoFaceDetector&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="k"&gt;@property&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;nonatomic&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;copy&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;VFDVideoReaderCompletionHandler&lt;/span&gt; &lt;span class="n"&gt;completionHandler&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;@end&lt;/span&gt;
+
+&lt;span class="k"&gt;@implementation&lt;/span&gt; &lt;span class="nc"&gt;VFDVideoFaceDetector&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;AVAsset&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;_asset&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;CIDetector&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;_detector&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;NSMutableArray&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;_allFeatures&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;id&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;init&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;super&lt;/span&gt; &lt;span class="n"&gt;init&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;_allFeatures&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSMutableArray&lt;/span&gt; &lt;span class="n"&gt;arrayWithCapacity&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;readFromURL&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSURL&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;targetURL&lt;/span&gt;
+  &lt;span class="nl"&gt;complitionHandler:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;VFDVideoReaderCompletionHandler&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;completionHandler&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;completionHandler&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;completionHandler&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;_setupDetector&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="n"&gt;__weak&lt;/span&gt; &lt;span class="n"&gt;VFDVideoFaceDetector&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;weakSelf&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;self&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;_asset&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;AVAsset&lt;/span&gt; &lt;span class="n"&gt;assetWithURL&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;targetURL&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;_asset&lt;/span&gt; &lt;span class="n"&gt;loadValuesAsynchronouslyForKeys&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;tracks&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;completionHandler&lt;/span&gt;&lt;span class="o"&gt;:^&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;weakSelf&lt;/span&gt; &lt;span class="n"&gt;_startReading&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="p"&gt;}];&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;_setupDetector&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;CIContext&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;CIContext&lt;/span&gt; &lt;span class="n"&gt;contextWithOptions&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;nil&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="n"&gt;NSDictionary&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;detectorOptions&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;CIDetectorAccuracy&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;CIDetectorAccuracyHigh&lt;/span&gt;&lt;span class="p"&gt;};&lt;/span&gt;
+    &lt;span class="n"&gt;_detector&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;CIDetector&lt;/span&gt; &lt;span class="n"&gt;detectorOfType&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;CIDetectorTypeFace&lt;/span&gt; &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt; &lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;detectorOptions&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;_startReading&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;AVAssetReader&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;reader&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;AVAssetReader&lt;/span&gt; &lt;span class="n"&gt;assetReaderWithAsset&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;_asset&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;nil&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="n"&gt;NSDictionary&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;outputSettings&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="p"&gt;{(&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;kCVPixelBufferPixelFormatTypeKey&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSNumber&lt;/span&gt; &lt;span class="n"&gt;numberWithInt&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;kCVPixelFormatType_32BGRA&lt;/span&gt;&lt;span class="p"&gt;]};&lt;/span&gt;
+    &lt;span class="n"&gt;AVAssetReaderTrackOutput&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;AVAssetReaderTrackOutput&lt;/span&gt; &lt;span class="n"&gt;assetReaderTrackOutputWithTrack&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;_asset&lt;/span&gt; &lt;span class="n"&gt;tracksWithMediaType&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;AVMediaTypeVideo&lt;/span&gt;&lt;span class="p"&gt;][&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+                                                                                  &lt;span class="nl"&gt;outputSettings:&lt;/span&gt;&lt;span class="n"&gt;outputSettings&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;reader&lt;/span&gt; &lt;span class="n"&gt;addOutput&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;reader&lt;/span&gt; &lt;span class="n"&gt;startReading&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;reader&lt;/span&gt; &lt;span class="n"&gt;status&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;AVAssetReaderStatusReading&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;_readNextVideoFrame&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="n"&gt;copyNextSampleBuffer&lt;/span&gt;&lt;span class="p"&gt;]];&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;_endReading&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;_endReading&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;_completionHandler&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;_allFeatures&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;_readNextVideoFrame&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;CMSampleBufferRef&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;sampleBuffer&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="n"&gt;sampleBuffer&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="n"&gt;CVPixelBufferRef&lt;/span&gt; &lt;span class="n"&gt;pixelBuffer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;CMSampleBufferGetImageBuffer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sampleBuffer&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;CFDictionaryRef&lt;/span&gt; &lt;span class="n"&gt;attachments&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;CMCopyDictionaryOfAttachments&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;kCFAllocatorDefault&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sampleBuffer&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;kCMAttachmentMode_ShouldPropagate&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;CIImage&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;convertedImage&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;CIImage&lt;/span&gt; &lt;span class="n"&gt;alloc&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;initWithCVPixelBuffer&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;pixelBuffer&lt;/span&gt; &lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;__bridge&lt;/span&gt; &lt;span class="n"&gt;NSDictionary&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="n"&gt;attachments&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;attachments&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+       &lt;span class="n"&gt;CFRelease&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;attachments&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+    &lt;span class="k"&gt;enum&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;PHOTOS_EXIF_0ROW_TOP_0COL_LEFT&lt;/span&gt;          &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;//   1  =  0th row is at the top, and 0th column is on the left (THE DEFAULT).&lt;/span&gt;
+        &lt;span class="n"&gt;PHOTOS_EXIF_0ROW_TOP_0COL_RIGHT&lt;/span&gt;         &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;//   2  =  0th row is at the top, and 0th column is on the right.&lt;/span&gt;
+        &lt;span class="n"&gt;PHOTOS_EXIF_0ROW_BOTTOM_0COL_RIGHT&lt;/span&gt;      &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;//   3  =  0th row is at the bottom, and 0th column is on the right.&lt;/span&gt;
+        &lt;span class="n"&gt;PHOTOS_EXIF_0ROW_BOTTOM_0COL_LEFT&lt;/span&gt;       &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;//   4  =  0th row is at the bottom, and 0th column is on the left.&lt;/span&gt;
+        &lt;span class="n"&gt;PHOTOS_EXIF_0ROW_LEFT_0COL_TOP&lt;/span&gt;          &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;//   5  =  0th row is on the left, and 0th column is the top.&lt;/span&gt;
+        &lt;span class="n"&gt;PHOTOS_EXIF_0ROW_RIGHT_0COL_TOP&lt;/span&gt;         &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;//   6  =  0th row is on the right, and 0th column is the top.&lt;/span&gt;
+        &lt;span class="n"&gt;PHOTOS_EXIF_0ROW_RIGHT_0COL_BOTTOM&lt;/span&gt;      &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="c1"&gt;//   7  =  0th row is on the right, and 0th column is the bottom.&lt;/span&gt;
+        &lt;span class="n"&gt;PHOTOS_EXIF_0ROW_LEFT_0COL_BOTTOM&lt;/span&gt;       &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;  &lt;span class="c1"&gt;//   8  =  0th row is on the left, and 0th column is the bottom.&lt;/span&gt;
+    &lt;span class="p"&gt;};&lt;/span&gt;
+
+    &lt;span class="n"&gt;NSDictionary&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;options&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;CIDetectorImageOrientation&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSNumber&lt;/span&gt; &lt;span class="n"&gt;numberWithInt&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;PHOTOS_EXIF_0ROW_RIGHT_0COL_TOP&lt;/span&gt;&lt;span class="p"&gt;]};&lt;/span&gt;
+    &lt;span class="n"&gt;NSArray&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;features&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;_detector&lt;/span&gt; &lt;span class="n"&gt;featuresInImage&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;convertedImage&lt;/span&gt; &lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;features&lt;/span&gt; &lt;span class="n"&gt;enumerateObjectsUsingBlock&lt;/span&gt;&lt;span class="o"&gt;:^&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;CIFaceFeature&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;feature&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;NSUInteger&lt;/span&gt; &lt;span class="n"&gt;idx&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;BOOL&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;stop&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;%@&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;NSStringFromCGRect&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;feature&lt;/span&gt; &lt;span class="n"&gt;bounds&lt;/span&gt;&lt;span class="p"&gt;]));&lt;/span&gt;
+    &lt;span class="p"&gt;}];&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;_allFeatures&lt;/span&gt; &lt;span class="n"&gt;addObject&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;features&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="n"&gt;CFRelease&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sampleBuffer&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;@end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;AVAssetReaderから取得できるCMSampleBufferをCIImageに変換してCIDetectorに渡す。  &lt;/p&gt;
+&lt;p&gt;とりあえず、Portraitの動画に対応するように、CIDetectorImageOrientationを設定している。  &lt;/p&gt;
+&lt;p&gt;試しに、自分の顔が真ん中に写った動画をインカメラで撮影したもの(3秒程度)を読み込んでみた結果が以下。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;{.lang:objc .decode:true title="出力"}
+2013-12-24 21:41:57.503 VideoFaceDetection[9455:3e07] {{627.5, 63.75}, {565, 565}}
+2013-12-24 21:41:57.771 VideoFaceDetection[9455:3e07] {{623.75, 67.5}, {567.5, 567.5}}
+2013-12-24 21:41:58.049 VideoFaceDetection[9455:3e07] {{630, 87.5}, {537.5, 537.5}}
+2013-12-24 21:41:58.329 VideoFaceDetection[9455:3e07] {{602.5, 76.25}, {572.5, 572.5}}
+2013-12-24 21:41:58.611 VideoFaceDetection[9455:3e07] {{567.5, 68.75}, {600, 600}}
+2013-12-24 21:41:58.883 VideoFaceDetection[9455:3e07] {{575, 93.75}, {570, 570}}
+2013-12-24 21:41:59.158 VideoFaceDetection[9455:3e07] {{542.5, 86.25}, {595, 595}}
+2013-12-24 21:41:59.443 VideoFaceDetection[9455:3e07] {{545, 125}, {552.5, 552.5}}
+2013-12-24 21:41:59.725 VideoFaceDetection[9455:3e07] {{532.5, 127.5}, {570, 570}}
+2013-12-24 21:42:00.013 VideoFaceDetection[9455:3e07] {{512.5, 125}, {587.5, 587.5}}
+2013-12-24 21:42:00.294 VideoFaceDetection[9455:3e07] {{508.75, 132.5}, {582.5, 582.5}}
+2013-12-24 21:42:00.583 VideoFaceDetection[9455:3e07] {{511.25, 130}, {575, 575}}
+2013-12-24 21:42:00.866 VideoFaceDetection[9455:3e07] {{510, 118.75}, {575, 575}}
+2013-12-24 21:42:01.149 VideoFaceDetection[9455:3e07] {{511.25, 112.5}, {567.5, 567.5}}
+2013-12-24 21:42:01.435 VideoFaceDetection[9455:3e07] {{511.25, 110}, {570, 570}}
+2013-12-24 21:42:01.725 VideoFaceDetection[9455:3e07] {{515, 112.5}, {562.5, 562.5}}
+2013-12-24 21:42:02.009 VideoFaceDetection[9455:3e07] {{515, 115}, {557.5, 557.5}}
+2013-12-24 21:42:02.293 VideoFaceDetection[9455:3e07] {{512.5, 118.75}, {567.5, 567.5}}
+2013-12-24 21:42:02.578 VideoFaceDetection[9455:3e07] {{507.5, 112.5}, {585, 585}}
+2013-12-24 21:42:02.861 VideoFaceDetection[9455:3e07] {{515, 98.75}, {585, 585}}
+2013-12-24 21:42:03.133 VideoFaceDetection[9455:3e07] {{532.5, 98.75}, {585, 585}}
+2013-12-24 21:42:03.400 VideoFaceDetection[9455:3e07] {{533.75, 70}, {615, 615}}
+2013-12-24 21:42:03.656 VideoFaceDetection[9455:3e07] {{566.25, 46.25}, {592.5, 592.5}}
+2013-12-24 21:42:03.911 VideoFaceDetection[9455:3e07] {{597.5, 26.25}, {580, 580}}
+2013-12-24 21:42:04.171 VideoFaceDetection[9455:3e07] {{621.25, 23.75}, {565, 565}}
+2013-12-24 21:42:04.431 VideoFaceDetection[9455:3e07] {{641.25, 32.5}, {547.5, 547.5}}
+2013-12-24 21:42:04.694 VideoFaceDetection[9455:3e07] {{653.75, 43.75}, {545, 545}}
+2013-12-24 21:42:04.959 VideoFaceDetection[9455:3e07] {{657.5, 56.25}, {545, 545}}
+2013-12-24 21:42:05.221 VideoFaceDetection[9455:3e07] {{653.75, 62.5}, {557.5, 557.5}}
+2013-12-24 21:42:05.484 VideoFaceDetection[9455:3e07] {{641.25, 66.25}, {582.5, 582.5}}
+2013-12-24 21:42:05.748 VideoFaceDetection[9455:3e07] {{666.25, 97.5}, {545, 545}}
+2013-12-24 21:42:06.017 VideoFaceDetection[9455:3e07] {{660, 101.25}, {555, 555}}
+2013-12-24 21:42:06.282 VideoFaceDetection[9455:3e07] {{650, 108.75}, {572.5, 572.5}}
+2013-12-24 21:42:06.543 VideoFaceDetection[9455:3e07] {{683.75, 95}, {552.5, 552.5}}
+2013-12-24 21:42:06.797 VideoFaceDetection[9455:3e07] {{691.25, 87.5}, {545, 545}}
+2013-12-24 21:42:07.062 VideoFaceDetection[9455:3e07] {{692.5, 68.75}, {540, 540}}
+2013-12-24 21:42:07.327 VideoFaceDetection[9455:3e07] {{675, 52.5}, {557.5, 557.5}}
+2013-12-24 21:42:07.592 VideoFaceDetection[9455:3e07] {{687.5, 57.5}, {540, 540}}
+2013-12-24 21:42:07.854 VideoFaceDetection[9455:3e07] {{700, 70}, {527.5, 527.5}}
+2013-12-24 21:42:08.144 VideoFaceDetection[9455:3e07] {{703.75, 87.5}, {517.5, 517.5}}
+2013-12-24 21:42:08.401 VideoFaceDetection[9455:3e07] {{701.25, 87.5}, {537.5, 537.5}}
+2013-12-24 21:42:08.662 VideoFaceDetection[9455:3e07] {{712.5, 93.75}, {527.5, 527.5}}
+2013-12-24 21:42:08.917 VideoFaceDetection[9455:3e07] {{708.75, 102.5}, {517.5, 517.5}}
+2013-12-24 21:42:09.184 VideoFaceDetection[9455:3e07] {{708.75, 115}, {510, 510}}
+2013-12-24 21:42:09.440 VideoFaceDetection[9455:3e07] {{695, 111.25}, {527.5, 527.5}}
+2013-12-24 21:42:09.677 VideoFaceDetection[9455:3e07] {{670, 107.5}, {552.5, 552.5}}
+2013-12-24 21:42:09.935 VideoFaceDetection[9455:3e07] {{653.75, 122.5}, {562.5, 562.5}}
+2013-12-24 21:42:10.198 VideoFaceDetection[9455:3e07] {{635, 146.25}, {560, 560}}
+2013-12-24 21:42:11.997 VideoFaceDetection[9455:3e07] {{591.25, 117.5}, {595, 595}}
+2013-12-24 21:42:12.268 VideoFaceDetection[9455:3e07] {{598.75, 111.25}, {580, 580}}
+2013-12-24 21:42:12.539 VideoFaceDetection[9455:3e07] {{598.75, 98.75}, {592.5, 592.5}}
+2013-12-24 21:42:12.805 VideoFaceDetection[9455:3e07] {{607.5, 106.25}, {577.5, 577.5}}
+2013-12-24 21:42:13.079 VideoFaceDetection[9455:3e07] {{596.25, 110}, {590, 590}}
+2013-12-24 21:42:13.354 VideoFaceDetection[9455:3e07] {{600, 105}, {595, 595}}
+2013-12-24 21:42:13.623 VideoFaceDetection[9455:3e07] {{607.5, 121.25}, {582.5, 582.5}}
+2013-12-24 21:42:13.896 VideoFaceDetection[9455:3e07] {{605, 121.25}, {587.5, 587.5}}
+2013-12-24 21:42:14.172 VideoFaceDetection[9455:3e07] {{610, 127.5}, {575, 575}}
+2013-12-24 21:42:14.438 VideoFaceDetection[9455:3e07] {{612.5, 127.5}, {582.5, 582.5}}
+2013-12-24 21:42:14.708 VideoFaceDetection[9455:3e07] {{606.25, 121.25}, {587.5, 587.5}}
+2013-12-24 21:42:14.977 VideoFaceDetection[9455:3e07] {{608.75, 117.5}, {592.5, 592.5}}
+2013-12-24 21:42:15.246 VideoFaceDetection[9455:3e07] {{608.75, 110}, {600, 600}}
+2013-12-24 21:42:15.512 VideoFaceDetection[9455:3e07] {{622.5, 113.75}, {575, 575}}
+2013-12-24 21:42:15.779 VideoFaceDetection[9455:3e07] {{615, 112.5}, {585, 585}}
+2013-12-24 21:42:16.050 VideoFaceDetection[9455:3e07] {{618.75, 118.75}, {580, 580}}
+2013-12-24 21:42:16.316 VideoFaceDetection[9455:3e07] {{615, 115}, {585, 585}}
+2013-12-24 21:42:16.584 VideoFaceDetection[9455:3e07] {{617.5, 115}, {585, 585}}
+2013-12-24 21:42:16.851 VideoFaceDetection[9455:3e07] {{620, 117.5}, {582.5, 582.5}}
+2013-12-24 21:42:17.119 VideoFaceDetection[9455:3e07] {{618.75, 117.5}, {580, 580}}
+2013-12-24 21:42:17.394 VideoFaceDetection[9455:3e07] {{621.25, 120}, {585, 585}}
+2013-12-24 21:42:17.666 VideoFaceDetection[9455:3e07] {{622.5, 126.25}, {580, 580}}&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;この座標を使って、動画にアニメーションをマージしたものを作成してみたかったのだが、今回はここまで。&lt;/p&gt;</summary></entry><entry><title>第7回テックヒルズにいってきました。</title><link href="http://yuseinishiyama.github.io/posts/2013/11/13/tech-hills7/" rel="alternate"></link><updated>2013-11-13T02:27:00+01:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-11-13:posts/2013/11/13/tech-hills7/</id><summary type="html">&lt;p&gt;Unityを触ったり、簡単なシェーダー書いたりしてるうちに描画処理への関心が高まってきた。ゲームとかグラフィックスの分野は、一定以上のものを作るために比較的コアな知識がいる一方で、結果がキャッチーで分かりやすい。ゲームにはあまり興味がない私だが、ゲームエンジンブームである。先日、&lt;a href="http://d.hatena.ne.jp/hdk_embedded/20131106/1383681073"&gt;「Playgroundハッカソン」&lt;/a&gt;に参加してからというもの、ますます興味が湧いてきている。&lt;/p&gt;
+&lt;p&gt;そんなわけで、「Game
+Engines」がテーマの&lt;a href="http://atnd.org/events/44622" title="第7回テックヒルズ"&gt;第7回テックヒルズ&lt;/a&gt;に行ってきた。&lt;/p&gt;
+&lt;p&gt;以下が公開されているスライドへのリンクだ(一部、公開が確認できていないものもある)。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="http://www.slideshare.net/keigoando/unity2-dnew-gui" title="Unity2DとnewGUIについて"&gt;「Unity2DとnewGUIについて」&lt;/a&gt;安藤
+    圭吾さん(ユニティ・テクノロジーズ・ジャパン)&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.slideshare.net/KatsutoshiMakino/aiming" title="Aiming開発ゲームの裏側"&gt;「Aiming開発ゲームの裏側」&lt;/a&gt;牧野 克俊さん(Aiming)&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.slideshare.net/doraemonsss/cocos2d-x-28145813?ref=http://sssslide.com/www.slideshare.net/doraemonsss/cocos2d-x-28145813" title="cocos2d-xおよび開発ツールについて"&gt;「cocos2d-xおよび開発ツールについて」&lt;/a&gt;清水 友晶さん(TKS2)&lt;/li&gt;
+&lt;li&gt;「 enchant.jsの野望 9分コーディングライブ」 清水
+    亮さん(ユビキタスエンターテインメント)&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.slideshare.net/KeiNakazawa/131112-tech-hills-playground-introduction" title="Introduction"&gt;「イントロダクション」&lt;/a&gt;
+    &amp;amp;&lt;a href="http://www.slideshare.net/RomainPiquois/playground-28101668" title="Playground内の描画仕組み"&gt;「Playgroundの描画仕組み」&lt;/a&gt;＆&lt;a href="http://www.slideshare.net/KeiNakazawa/playgroundandroid-pfandroid" title="&amp;quot;Playground&amp;quot;とAndroid"&gt;「マルチPF対応ゲームエンジン内のAndroid対応」&lt;/a&gt;ロマン・ピコアさん(KLab)
+    ・中澤 慧さん(KLab)&lt;/li&gt;
+&lt;li&gt;「次世代ゲームエンジンの比較」浦田 祐輝さん(CROOZ)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;内容をまとめようかと思ったが、とりあえずはEmacsのorg-modeで殴り書き(殴り打ち?)したメモを貼っておく。&lt;/p&gt;
+&lt;p&gt;* 2013年11月12日 第７回テックヒルズ&lt;/p&gt;
+&lt;p&gt;** オープニングトーク&lt;br /&gt;
+*** What is Techhills&lt;/p&gt;
+&lt;p&gt;** 「Unity2DとnewGUIについて」安藤
+圭吾さん(ユニティ・テクノロジーズ・ジャパン)&lt;br /&gt;
+*** Unity4.3&lt;br /&gt;
+**** 今週から来週に公開。&lt;br /&gt;
+**** 日本語リリースノートはもう少し先。&lt;br /&gt;
+*** Unity2D&lt;br /&gt;
+**** New 2D Workflows&lt;br /&gt;
+**** 2D Platformer&lt;br /&gt;
+**** 2D Tool Kit&lt;br /&gt;
+**** 物理エンジン「Box2D」&lt;br /&gt;
+**** Rigidbody2D&lt;br /&gt;
+**** コライダー&lt;br /&gt;
+**** 3Dと同時に使用できるが、互いに影響しない。&lt;br /&gt;
+**** SpriteEditor、TexturePacker完備。&lt;br /&gt;
+**** Spriteのアニメーション。&lt;br /&gt;
+**** アニメーションイベント、状態遷移も利用可能。&lt;br /&gt;
+**** 自動でバッチングされる。&lt;br /&gt;
+**** メカニムも利用できる。&lt;br /&gt;
+*** まとめ&lt;br /&gt;
+**** Box2D&lt;br /&gt;
+**** Sprite&lt;br /&gt;
+****
+現在のフレームワークが2Dシステムに対応するのを待つか、2Dシステムを使うか。&lt;br /&gt;
+*** Unity New GUI&lt;br /&gt;
+**** 現在α版。2-4ヶ月後にリリースか？&lt;br /&gt;
+**** Unity2DでGUIを作成していいのか。&lt;br /&gt;
+***** おすすめしない！&lt;br /&gt;
+***** NGUI等従来の方法がおすすめ。&lt;br /&gt;
+***** Spriteは「ゲームに特化した」コンポーネント。&lt;br /&gt;
+****** GUIのための設定項目はない。&lt;br /&gt;
+***** uGUIのヒエラルキーはNGUIをほぼ同じ。&lt;/p&gt;
+&lt;p&gt;** 「Aiming開発ゲームの裏側」牧野 克俊さん(Aiming)&lt;br /&gt;
+*** 幻塔戦記グリフォン&lt;br /&gt;
+**** プロジェクト概要&lt;br /&gt;
+***** オンラインアクション&lt;br /&gt;
+***** iOS、Android。iPhone4Sでの動作が目安。&lt;br /&gt;
+***** 開発期間は約1年2ヶ月。&lt;br /&gt;
+***** MMORPGやブラウザゲーの開発経験者が中心。&lt;br /&gt;
+***** 企画6人、クライアント5人、サーバ4人、グラフィク10+α&lt;br /&gt;
+**** グラフィック&lt;br /&gt;
+***** 方針&lt;br /&gt;
+****** Drawcallは50が目安。&lt;br /&gt;
+****** リアルタイムライティングなし。&lt;br /&gt;
+****** テクスチャは可能な限り小さく。&lt;br /&gt;
+***** キャラクタ&lt;br /&gt;
+****** パーツをプログラムで結合。着せ替え可能にするため。&lt;br /&gt;
+****** テクスチャは1024が1枚。&lt;br /&gt;
+****** ポリゴン数は約2000。&lt;br /&gt;
+***** ボス&lt;br /&gt;
+****** テクスチャ512が1枚。&lt;br /&gt;
+****** ポリゴン約3000。&lt;br /&gt;
+***** ザコ&lt;br /&gt;
+****** テクスチャ128が1枚。&lt;br /&gt;
+****** ポリゴン&lt;br /&gt;
+***** 背景&lt;br /&gt;
+****** 1024が2枚。&lt;br /&gt;
+****** ライトマップ1024が1枚。&lt;br /&gt;
+****** マップ上のオブジェクト用に512が1枚。&lt;br /&gt;
+****** ポリゴン数1000程度。&lt;br /&gt;
+****** アルファで抜かず、適切な形のポリゴンにする。&lt;br /&gt;
+***** エフェクト&lt;br /&gt;
+****** パーティクル&lt;br /&gt;
+****** テクスチャは複数エフェクトで使いまわす。&lt;br /&gt;
+****** 半透明、加算がきつい。&lt;br /&gt;
+***** ふりかえり&lt;br /&gt;
+****** 描画速度は良好。&lt;br /&gt;
+****** キャクター構築負荷高い。&lt;br /&gt;
+****** スキニング負荷高い。&lt;br /&gt;
+****** エフェクト負荷高い。カリングした。&lt;br /&gt;
+****** エフェクトのロードタイミングはあまりよくない。&lt;br /&gt;
+*******
+はじめてエフェクトが発生するときに読み込んでいるがいまいち。&lt;br /&gt;
+******* プリロードすべきかもしれない。&lt;br /&gt;
+**** メモリ使用量&lt;br /&gt;
+***** 全体の使用量200M程度。200M以下に抑えておかないと危険。&lt;br /&gt;
+*****
+かなり大まかな内訳は、メッシュ3M、テクスチャ40M、アニメーション10M、サウンド10M。&lt;br /&gt;
+***** GC&lt;br /&gt;
+****** ほぼ問題になっていない。&lt;br /&gt;
+****** シーン切替時・大量のリソースアンロードは時間がかかる。&lt;br /&gt;
+****** Animation.AddClipがかなりメモリを使用する。&lt;br /&gt;
+**** UI&lt;br /&gt;
+***** NGUI&lt;br /&gt;
+****** 位置はアンカーで指定。&lt;br /&gt;
+***** ワークフロー&lt;br /&gt;
+****** プログラマがモックを作成。&lt;br /&gt;
+****** グラフィッカーが見た目、位置を調整。&lt;br /&gt;
+******
+日本語はビットマップフォントを使用(開始時はUnity3.5だったので)。&lt;br /&gt;
+***** ふりかえり&lt;br /&gt;
+****** NGUIはまあまあよい。&lt;br /&gt;
+****** パネル間の優先順位づけ。&lt;br /&gt;
+****** ビットマップフォントでは字数が足りない。&lt;br /&gt;
+******* チャット、掲示板等自由入力以外は問題ない。&lt;br /&gt;
+****** ダイナミックフォントにかえたい。&lt;br /&gt;
+**** リソースのダウンロード&lt;br /&gt;
+***** アセットバンドルを使用。ファイル数約2000!&lt;br /&gt;
+***** LoadFromCacheOrDownloadを使用。&lt;br /&gt;
+***** 設定ファイルはアセットバンドル化していない。&lt;br /&gt;
+***** Editor上ではResources.LoadAssetAtPathを使うようにしている。&lt;br /&gt;
+***** 分け方&lt;br /&gt;
+***** 振り返り&lt;br /&gt;
+****** ダウンロード時間長い。&lt;br /&gt;
+*******
+エリア解放等のタイミングに合わせる形で分割するようにはしている。&lt;br /&gt;
+****** 更新判断。&lt;br /&gt;
+******* 限りなく自己申告に近い。&lt;br /&gt;
+*******
+テクスチャからどのプレハブが使用されているかを確認するよい方法がない。&lt;br /&gt;
+**** Unityへの要望&lt;br /&gt;
+***** Monoのバージョン上げて。&lt;br /&gt;
+***** アセットバンドル再設計してほしい。&lt;br /&gt;
+****** バージョンごとの互換性。&lt;br /&gt;
+****** キャッシュの仕組み。&lt;br /&gt;
+****** もともとあくまでWebPlayer用。&lt;/p&gt;
+&lt;p&gt;** 「cocos2d-xおよび開発ツールについて」清水 友晶さん(TKS2)&lt;br /&gt;
+*** 日本cocos2d-xユーザ会代表。&lt;br /&gt;
+*** cocos2d-x開発。&lt;br /&gt;
+*** cocos2d-xとは&lt;br /&gt;
+****
+2Dゲームフレームワーク。あくまでフレームワークでツールなどはない。&lt;br /&gt;
+**** オープンソース。MITライセンス。&lt;br /&gt;
+**** マルチプラットフォーム開発。10数種類。&lt;br /&gt;
+**** 開発言語。C++、Lua、JavaScript。&lt;br /&gt;
+****
+Zynga、Wooga、Gameevil、Glu、GREE、Konami、TinyCo、HandyGames、IGG、Disney
+Mobileなどが採用。&lt;br /&gt;
+**** 公式コミュニティでは、Chukong、Google、MS、ARM、Intelなど。&lt;br /&gt;
+*** 開発手順&lt;br /&gt;
+**** XcodeでiOSメインに開発。&lt;br /&gt;
+**** たまにEclipseでAndroidの確認。&lt;br /&gt;
+****
+Androidでもこまめにチェックして、並行して開発することがおすすめ。&lt;br /&gt;
+*** メリット&lt;br /&gt;
+**** オープンソース&lt;br /&gt;
+**** クロスプラットフォーム&lt;br /&gt;
+****
+効率化。OpenGLを知らなくてもパフォーマンスの高い画像処理を行える。&lt;br /&gt;
+**** cocos2d for iPhoneからの移行が容易。クラス名が同じ。&lt;br /&gt;
+**** 基本的なことであれば、そこまでメモリを気にしなくても良い。&lt;br /&gt;
+*** デメリット&lt;br /&gt;
+**** ネイティブ間の連携が面倒。課金など。&lt;br /&gt;
+***** Android&lt;br /&gt;
+****** C++からAndroid SDKへアクセス。JNIを使用する必要がある。&lt;br /&gt;
+***** iOS&lt;br /&gt;
+****** Objective-C++があるのでまだ容易。&lt;br /&gt;
+****
+フレームワークでしか無いので、画面構成やアニメーションの作成に時間が掛かる。&lt;br /&gt;
+*** 別途エディタを利用する。&lt;br /&gt;
+**** CocosBuilder&lt;br /&gt;
+***** レイアウトやアニメーションをGUIで調整可能。&lt;br /&gt;
+***** Mac上で動作可能。&lt;br /&gt;
+***** 多くの企業で利用されている。&lt;br /&gt;
+***** 最新版CocosBuilder 3.0 Alpha 5&lt;br /&gt;
+****** JSBの機能が大幅追加。&lt;br /&gt;
+****** CocosPlayer&lt;br /&gt;
+***** UIエディタ。&lt;br /&gt;
+***** アニメーションエディタ。&lt;br /&gt;
+***** ブラウザ上で実行。&lt;br /&gt;
+***** Javascriptエディタ。&lt;br /&gt;
+***** テクスチャアトラス。&lt;br /&gt;
+***** 開発が止まっている&lt;br /&gt;
+**** SpriteBuilder&lt;br /&gt;
+***** CocosBuilderの後継。&lt;br /&gt;
+***** CocosBuilderとの違い。&lt;br /&gt;
+****** ノードにPhysics Nodeが追加。&lt;br /&gt;
+****** CC Menuクラスによるノードが削除。&lt;br /&gt;
+****** Skewアニメーションが追加。&lt;br /&gt;
+****** JavaScriptエディタ機能がない。&lt;br /&gt;
+****** アプリの言語設定。現在英語のみ。&lt;br /&gt;
+****** 現在はiPhone用。&lt;br /&gt;
+**** CocosStudio&lt;br /&gt;
+***** 開発はクローズド。&lt;br /&gt;
+**** Cocosino&lt;br /&gt;
+***** JavaScriptエディタ。&lt;br /&gt;
+***** 起動が速いシュミレータ。&lt;br /&gt;
+***** KickStarterでの寄付に失敗。&lt;br /&gt;
+***** その後、ソース公開。&lt;br /&gt;
+**** CocoMoon Studio&lt;br /&gt;
+***** UIエディタ。&lt;br /&gt;
+***** Luaエディタ。&lt;br /&gt;
+***** 9ドル。(条件により半額)&lt;/p&gt;
+&lt;p&gt;** 「 enchant.jsの野望 9分コーディングライブ」 清水
+亮さん(ユビキタスエンターテインメント)&lt;br /&gt;
+*** enchant.js&lt;br /&gt;
+**** 3000以上のゲームが開発された。&lt;br /&gt;
+**** アバターが作れる。&lt;br /&gt;
+**** HTML5はOS。&lt;br /&gt;
+**** (ここで高橋諒さんによるライブコーディング)&lt;br /&gt;
+***** エディタとかはない。コーディングする楽しさを重視。&lt;br /&gt;
+***** javascriptで柔軟にかける。&lt;br /&gt;
+**** 教育、公演&lt;br /&gt;
+***** カリフォルニア工芸大学でenchant.js必修。&lt;br /&gt;
+***** スウェーデンのウプサラで講演。&lt;br /&gt;
+***** code gleap&lt;br /&gt;
+**** 哲学&lt;br /&gt;
+***** とにかく簡単。&lt;br /&gt;
+***** 手早く作れる。&lt;br /&gt;
+***** 楽しく作れる。&lt;br /&gt;
+***** コード中心主義。&lt;br /&gt;
+**** 任天堂&lt;br /&gt;
+***** 公式サードパーティ向けに配布。&lt;br /&gt;
+***** Wiiリモコン/WiiUゲームパッド対応。&lt;br /&gt;
+***** Millverse対応。&lt;br /&gt;
+**** enchantMoon&lt;br /&gt;
+***** enchant.jsベース。&lt;br /&gt;
+**** 目的&lt;br /&gt;
+***** 人類総プログラマー計画。&lt;br /&gt;
+***** 小学生でもプログラミング。&lt;br /&gt;
+***** ラブレターにプログラミング。&lt;br /&gt;
+***** 親子でプログラミング。&lt;br /&gt;
+***** お葬式にもプログラミング。&lt;br /&gt;
+***** 若い才能を伸ばす。&lt;/p&gt;
+&lt;p&gt;** 「Playgroundの描画ロジック」 ロマン・ピコアさん(KLab) 
+＆「マルチPF対応ゲームエンジン内のAndroid対応」中澤 慧さん(KLab)&lt;br /&gt;
+*** What is (not) Playground.&lt;br /&gt;
+**** 2011年秋、開発のきっかけ。&lt;br /&gt;
+*****
+モバイル向けの有力なクロスプラットフォームエンジンが無かった。&lt;br /&gt;
+***** cocos2d-xが初期リリースされた頃。&lt;br /&gt;
+***** 少人数で開発。2Dに特化。&lt;br /&gt;
+*****
+Win32/iOS/Android対応のエンジン+テクスチャアトラス/UI他作成ツール。&lt;br /&gt;
+***** プロジェクトの要望に合わせて機能追加。&lt;br /&gt;
+**** 描画の仕組み&lt;br /&gt;
+***** 古い端末でも60fpsを維持する方法。&lt;br /&gt;
+****** まったく描画しない（カリング)&lt;br /&gt;
+****** ピクセル毎の負担を減らす又ステート変更を減らす&lt;br /&gt;
+******* 透明でないオブジェクトを「近くから遠く」にソート。&lt;br /&gt;
+******* 透明なオブジェクトを「遠くから近く」にソート。&lt;br /&gt;
+***** モバイル、2Dの場合の特徴。&lt;br /&gt;
+****** Shaderが少ない。&lt;br /&gt;
+****** 透明でないものはほとんどない。背景のみ。&lt;br /&gt;
+******* Z-Bufferのトリックは無意味。&lt;br /&gt;
+****** 3Dに比べてベクタデータ、頂点データ少ない。&lt;br /&gt;
+****** ドローコールを減らす。&lt;br /&gt;
+******* ステートが同じならバッチする。&lt;br /&gt;
+****** 速度を保つためにCache and Flag。&lt;br /&gt;
+******* 変わった箇所だけを計算。&lt;br /&gt;
+****** cocos2Dはどうか。&lt;br /&gt;
+*******
+バッチは可能だが、プログラマの責任。Playgroundは自動で最適化する。&lt;br /&gt;
+****** Unityではどうか。&lt;br /&gt;
+******* staticバッチ、dynamicバッチ、cullingをサポート。&lt;br /&gt;
+******* 2DライブラリではC#で自前でバッチする。&lt;br /&gt;
+**** PlaygroundとAndroid&lt;br /&gt;
+***** Androidはバラエティに富んでいる。&lt;br /&gt;
+****** CPU、グラフィクス、サウンドで様々なハードウェア。&lt;br /&gt;
+****** 多くのOSバージョン、端末固有のドライバ。&lt;br /&gt;
+****** 多くのデバイスでテストすることが必然。&lt;br /&gt;
+******
+社内テスト端末限定の機能としてアプリ実行状況モニタリングサービスを作った。&lt;br /&gt;
+***** サウンド重視のモバイルゲーム設計。&lt;br /&gt;
+****** 「システムクロック=正義」な実装だと音ズレが激しく詰む。&lt;br /&gt;
+***** OSとドライバの限界。&lt;br /&gt;
+****** Android4.1以降はLow Latency Audioを利用できる。&lt;br /&gt;
+****** プレイアビリティに強く関わるのはジッタ(ゆらぎ)。&lt;br /&gt;
+****** サウンドの再生時間とシステムクロックの情報をブレンド。&lt;br /&gt;
+****** 音飛び時もスムージング。&lt;br /&gt;
+****** ゲームとして都合の良い、一貫性のあるタイムスタンプ。&lt;br /&gt;
+***** 今後&lt;br /&gt;
+****** Low Latency
+Audioを、より広い範囲の端末で利用できるようにサウンドライブラリを改修。&lt;br /&gt;
+******
+Android4.4の新機能を利用してサウンド出力時間差をある程度把握して改善に活かす。&lt;br /&gt;
+***** 宣伝&lt;br /&gt;
+****** オーディオとAndroidのDRMをEffective Androidに寄稿。&lt;/p&gt;
+&lt;p&gt;** 「次世代ゲームエンジンの比較」浦田 祐輝さん(CROOZ)&lt;br /&gt;
+*** 価格の比較&lt;br /&gt;
+*** cocos2d-xが表示できるSprite数が最も多そう&lt;br /&gt;
+*** Unityの情報が圧倒的に多い。&lt;br /&gt;
+*** cocos2d-x&lt;br /&gt;
+**** それぞれのプロジェクトが同じ場所を参照している。&lt;br /&gt;
+**** パフォーマンス良い。&lt;br /&gt;
+**** 情報がまだ少ない。バージョンが上がった際の対応などが難しい。&lt;br /&gt;
+*** Unity&lt;br /&gt;
+**** カスタマイズ性。&lt;br /&gt;
+**** 情報が多い。&lt;br /&gt;
+**** 2Dのパフォーマンスが他のエンジンに比べて高くない。&lt;br /&gt;
+***** 4.3のリリースでこの点は解消されたかも。&lt;br /&gt;
+**** チーム開発。sceneがコンフリクトする。&lt;br /&gt;
+**** Unity Asset Serverを使うとよいかも&lt;br /&gt;
+*** enchant.js&lt;br /&gt;
+**** 分かりやすい。&lt;br /&gt;
+**** HTML5なので取り組みやすい。&lt;br /&gt;
+**** リリースするならWebViewで側を作る必要がある。&lt;br /&gt;
+*** Playground&lt;br /&gt;
+**** ツールが少ない&lt;br /&gt;
+**** コンパイルする必要がない。&lt;br /&gt;
+*** Project Anarchy&lt;br /&gt;
+**** 無料で、Havok社が持っているライブラリ群を利用できる&lt;br /&gt;
+**** 今年6月リリースで情報が少ない&lt;br /&gt;
+**** Windowsのみなので、iOSのプロジェクトはmacに転送する必要あり。&lt;br /&gt;
+*** Unreal Engine&lt;br /&gt;
+**** ハイパフォーマンス。&lt;br /&gt;
+****
+コストが高い。売上の5万ドルを超えると売上の25%を支払う必要あり。&lt;br /&gt;
+**** ある程度のスキルを要する。&lt;br /&gt;
+**** unreal scriptを用いる。学習コスト高め。&lt;br /&gt;
+*** 総評&lt;br /&gt;
+****
+3Dエンジンは一度にたくさんのSpriteを表示するのに向いていない。&lt;br /&gt;
+***** 2Dは2Dのエンジンを使うほうが良い。&lt;br /&gt;
+**** 3DはUnityがおすすめか。&lt;br /&gt;
+**** とことん追求する場合はUnrealもよい。&lt;br /&gt;
+**** チーム開発に対応していることや、日本語の情報があることも重要。&lt;/p&gt;</summary></entry><entry><title>テーマを変更しました。</title><link href="http://yuseinishiyama.github.io/posts/2013/10/09/%e3%83%86%e3%83%bc%e3%83%9e%e3%82%92%e5%a4%89%e6%9b%b4%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%e3%80%82/" rel="alternate"></link><updated>2013-10-09T02:33:00+02:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-10-09:posts/2013/10/09/%e3%83%86%e3%83%bc%e3%83%9e%e3%82%92%e5%a4%89%e6%9b%b4%e3%81%97%e3%81%be%e3%81%97%e3%81%9f%e3%80%82/</id><summary type="html">&lt;p&gt;開発者のWordpressサイトがデフォルトのテーマだというのもなんとなく恥ずかしいので、テーマを作成してみた。とはいえ、Webの開発経験は全然ないので結構苦戦した。未だにあちこち粗が目立つ。しかし、「そのうち全部直して適応〜」とかいってると、一生デフォルトのを使い続けそうなので、先に本番環境に適応してから少しずつ修正することにした。&lt;/p&gt;
+&lt;p&gt;レスポンシブデザインとかそういうことも考えだすと、自作するのを辞めたい衝動に駆られてしまうが・・・。&lt;/p&gt;</summary></entry><entry><title>iOSでアプリの最新バージョンを取得する方法。</title><link href="http://yuseinishiyama.github.io/posts/2013/09/16/ios%e3%81%a7%e3%82%a2%e3%83%97%e3%83%aa%e3%81%ae%e6%9c%80%e6%96%b0%e3%83%90%e3%83%bc%e3%82%b8%e3%83%a7%e3%83%b3%e3%82%92%e5%8f%96%e5%be%97%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95%e3%80%82/" rel="alternate"></link><updated>2013-09-16T21:50:00+02:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-09-16:posts/2013/09/16/ios%e3%81%a7%e3%82%a2%e3%83%97%e3%83%aa%e3%81%ae%e6%9c%80%e6%96%b0%e3%83%90%e3%83%bc%e3%82%b8%e3%83%a7%e3%83%b3%e3%82%92%e5%8f%96%e5%be%97%e3%81%99%e3%82%8b%e6%96%b9%e6%b3%95%e3%80%82/</id><summary type="html">&lt;p&gt;開発者であれば、ユーザーには自分の開発したアプリの最新版を使ってほしいと思うだろう。また、ユーザーのアプリバージョンにばらつきがないことは、ビジネス面のメリットも大きい。仕事として開発を行っている人であれば、「アプリのアップデートが行われた場合に通知する機能」の実装を要求されたことは多々あるだろう。&lt;/p&gt;
+&lt;p&gt;そこで今回は、&lt;/p&gt;
+&lt;p&gt;アプリの最新版を取得し、ユーザーが利用しているアプリが最新版より古ければ通知する機能&lt;/p&gt;
+&lt;p&gt;の実装方法を紹介する。&lt;/p&gt;
+&lt;p&gt;さて、まず考えなくてはいけないのは、どこからアプリの最新版を取得するか、ということである。これにはおおまかに言って、2通りの方法がある。「1.自前のサーバを利用する方法」、と「2.AppleのAPIを利用する方法」の2つだ。どちらが適切な方法であるか比較するために、それぞれのメリット、デメリットを挙げてみた。&lt;/p&gt;
+&lt;p&gt;1.自前のサーバを利用する方法&lt;/p&gt;
+&lt;p&gt;メリット&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;テストが容易。&lt;/li&gt;
+&lt;li&gt;更新のタイミングを自由に決めることができる。&lt;/li&gt;
+&lt;li&gt;取得先が勝手に変更されることがない。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;デメリット&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;運用者が必要。&lt;/li&gt;
+&lt;li&gt;運用ミスが発生する可能性がある。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;2.AppleのAPIを利用する方法。&lt;/p&gt;
+&lt;p&gt;メリット&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;自分で運用しなくて良い。&lt;/li&gt;
+&lt;li&gt;運用ミスが発生しない。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;デメリット&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;テストが行えない。&lt;/li&gt;
+&lt;li&gt;APIが変更された場合、機能が無効になる。&lt;/li&gt;
+&lt;li&gt;APIから取得できるバージョンと、ストアへ反映されているバージョンとの間にタイムラグがあったりなどした場合、その間はどうすることもできない。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;結論から言うと、「AppleのAPIを使ったほうが楽だが、その場合はなにか問題が発生してもどうすることもできない」ということになる。今回は、個人開発者や、規模の小さなアプリで、サーバを設置するのはコストに見合わない場合を想定し、「2.AppleのAPIを利用する方法」の実装を紹介することにした。&lt;/p&gt;
+&lt;p&gt;``` {.lang:objc .decode:true title="UpdateChecker.h"}&lt;/p&gt;
+&lt;h1&gt;import &lt;Foundation/Foundation.h&gt;&lt;/h1&gt;
+&lt;p&gt;@interface UpdateChecker : NSObject&lt;/p&gt;
+&lt;p&gt;// 利用中のバージョンより、新しいバージョンのアプリがストアに公開されている場合に、
+// ダイアログを表示する。
++ (void)showNeedUpdateAlertIfNeeded;&lt;/p&gt;
+&lt;p&gt;@end&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt; &lt;/span&gt;
+
+&lt;span class="err"&gt;```&lt;/span&gt; &lt;span class="p"&gt;{.&lt;/span&gt;&lt;span class="n"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;objc&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;crayon&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;selected&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;UpdateChecker.m&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="cp"&gt;#import &amp;quot;UpdateChecker.h&amp;quot;&lt;/span&gt;
+
+&lt;span class="cp"&gt;#import &amp;quot;ApplicationInformation.h&amp;quot;&lt;/span&gt;
+
+&lt;span class="c1"&gt;// アプリのID。&lt;/span&gt;
+&lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="n"&gt;kAppStoreID&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;@&amp;quot;123456789&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;@implementation&lt;/span&gt; &lt;span class="nc"&gt;UpdateChecker&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;showNeedUpdateAlertIfNeeded&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;getLatestAppVersionAsynchronousWithCompletionBlock&lt;/span&gt;&lt;span class="o"&gt;:^&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;latestAppVersion&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;// 現行のアプリバージョンが、最新のアプリバージョンよりも古い場合(NSNumericSearchでバージョン番号での比較が可能)、&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;latestAppVersion&lt;/span&gt; &lt;span class="n"&gt;compare&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;self&lt;/span&gt; &lt;span class="n"&gt;applicationVersion&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;options&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;NSNumericSearch&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;NSOrderedDescending&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="kt"&gt;BOOL&lt;/span&gt; &lt;span class="n"&gt;isAlreadyShow&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;NO&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+            &lt;span class="c1"&gt;// 通知中でなければ、&lt;/span&gt;
+            &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="n"&gt;isAlreadyShow&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                &lt;span class="n"&gt;isAlreadyShow&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;YES&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+                &lt;span class="c1"&gt;// メインスレッドで通知を実行する。&lt;/span&gt;
+                &lt;span class="n"&gt;dispatch_async&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;dispatch_get_main_queue&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+                    &lt;span class="c1"&gt;// ダイアログを表示するなど、通知の処理をここに記述。&lt;/span&gt;
+                &lt;span class="p"&gt;});&lt;/span&gt;
+            &lt;span class="p"&gt;}&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}];&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="c1"&gt;// アプリの最新バージョンをAppStoreから非同期で取得する。&lt;/span&gt;
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;getLatestAppVersionAsynchronousWithCompletionBlock:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="p"&gt;)(&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="nv"&gt;completionBlock&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="n"&gt;NSURLRequest&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSURLRequest&lt;/span&gt; &lt;span class="n"&gt;requestWithURL&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSURL&lt;/span&gt; &lt;span class="n"&gt;URLWithString&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="n"&gt;stringWithFormat&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;http://itunes.apple.com/lookup?id=%@&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;kAppStoreID&lt;/span&gt;&lt;span class="p"&gt;]]&lt;/span&gt;
+                                             &lt;span class="nl"&gt;cachePolicy:&lt;/span&gt;&lt;span class="n"&gt;NSURLRequestReloadIgnoringLocalCacheData&lt;/span&gt; &lt;span class="c1"&gt;// キャッシュしない&lt;/span&gt;
+                                         &lt;span class="nl"&gt;timeoutInterval:&lt;/span&gt;&lt;span class="mf"&gt;20.0&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+    &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSURLConnection&lt;/span&gt; &lt;span class="n"&gt;sendAsynchronousRequest&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;
+                                       &lt;span class="nl"&gt;queue:&lt;/span&gt;&lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;NSOperationQueue&lt;/span&gt; &lt;span class="n"&gt;alloc&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;init&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+                           &lt;span class="nl"&gt;completionHandler:&lt;/span&gt;&lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSURLResponse&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;response&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;NSData&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;NSError&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                               &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                                   &lt;span class="n"&gt;NSDictionary&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;versionSummary&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;NSJSONSerialization&lt;/span&gt; &lt;span class="n"&gt;JSONObjectWithData&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;
+                                                                                                  &lt;span class="nl"&gt;options:&lt;/span&gt;&lt;span class="n"&gt;NSJSONReadingAllowFragments&lt;/span&gt;
+                                                                                                    &lt;span class="nl"&gt;error:&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+                                   &lt;span class="n"&gt;NSDictionary&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;results&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[[&lt;/span&gt;&lt;span class="n"&gt;versionSummary&lt;/span&gt; &lt;span class="n"&gt;objectForKey&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;results&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;objectAtIndex&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+                                   &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;latestVersion&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;results&lt;/span&gt; &lt;span class="n"&gt;objectForKey&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;version&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+                                   &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt; Latest App Version is %@.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;latestVersion&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+                                   &lt;span class="n"&gt;completionBlock&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;latestVersion&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+                               &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                                   &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt; Fail to Get Latest App Version.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+                               &lt;span class="p"&gt;}&lt;/span&gt;
+                           &lt;span class="p"&gt;}];&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="c1"&gt;// 利用中のアプリのバージョンを取得する。&lt;/span&gt;
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;applicationVersion&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt;  &lt;span class="p"&gt;[[[&lt;/span&gt;&lt;span class="n"&gt;NSBundle&lt;/span&gt; &lt;span class="n"&gt;mainBundle&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;infoDictionary&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="n"&gt;objectForKey&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;CFBundleShortVersionString&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;@end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;取得するタイミングは悩ましいところではあるが、例えばアプリがフォアグラウンドになる度に取得する場合は、&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;{.lang:objc .decode:true title="AppDelegate.m"}
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    // バージョンチェック。
+    [UpdateChecker showNeedUpdateAlertIfNeeded];
+}&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;AppDelegate内のコールバックから呼び出すことになる。&lt;/p&gt;
+&lt;p&gt;上述の通り、この確認方法は確実ではないので、アプリの最新版の通知がクリティカルな機能である場合は利用しないほうが良いかもしれない。&lt;/p&gt;</summary></entry><entry><title>UnityでiOS向けのビルド時に、RequiredDeviceCapabilityを追加する方法。</title><link href="http://yuseinishiyama.github.io/posts/2013/09/07/addition-to-required-device-capability/" rel="alternate"></link><updated>2013-09-07T21:06:00+02:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-09-07:posts/2013/09/07/addition-to-required-device-capability/</id><summary type="html">&lt;p&gt;&lt;a href="https://developer.apple.com/library/ios/documentation/general/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html"&gt;RequiredDeviceCapability&lt;/a&gt;を正しく設定していないと、Appleにリジェクトされてしまうことは、広く知られている。&lt;/p&gt;
+&lt;p&gt;例えば、アプリに静止画を撮影する機能がある場合、このRequiredDeviceCapabilityに「still-camera」を追加してやらないといけない。&lt;/p&gt;
+&lt;p&gt;RequiredDeviceCapabilityは正しく設定されていなくても、ビルドに失敗しないし、Validationも通過する。だからこそ、リジェクトされてから気づくわけで、こういう作業は特に自動化するメリットが大きいだろう。&lt;/p&gt;
+&lt;p&gt;そこで、PostProcessBuildPlayerを利用し、Unityからのビルド時にInfo.plistを書き換えて、RequiredDeviceCapabilityを編集する関数を作成してみた。&lt;/p&gt;
+&lt;p&gt;``` {.lang:python .decode:true title="PostProcessBuildPlayer"}
+def process_plist(plist_filepath):
+    pl = plistlib.readPlist(plist_filepath)
+    new_settings = {
+        "still-camera"
+    }
+    if "UIRequiredDeviceCapabilities" in pl:
+        pl["UIRequiredDeviceCapabilities"].extend(new_settings)
+    else:
+        pl["UIRequiredDeviceCapabilities"] = [new_settings]&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;plistlib&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;writePlist&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pl&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;plist_filepath&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;```&lt;/p&gt;
+&lt;p&gt;Info.plistのパスを与えてやると、Info.plistに「still-camera」を追記してくれる。ちなみに&lt;a href="http://docs.python.jp/2/library/plistlib.html"&gt;plistlib&lt;/a&gt;を利用しているので、インポートしておく必要が有る(当たり前のように書いてはいるが、plistlibの存在は今回はじめて知った...)。&lt;/p&gt;</summary></entry><entry><title>Unityでスクリーンショットを撮影し、iPhoneのカメラロールに保存する方法。</title><link href="http://yuseinishiyama.github.io/posts/2013/09/06/screenshot-with-unity-ios/" rel="alternate"></link><updated>2013-09-06T02:55:00+02:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-09-06:posts/2013/09/06/screenshot-with-unity-ios/</id><summary type="html">&lt;p&gt;Unityでスクリーンショットを撮るのは非常に簡単である。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://docs.unity3d.com/Documentation/ScriptReference/Application.CaptureScreenshot.html"&gt;Application.CaptureScreenshot&lt;/a&gt;という関数が用意されているからだ。&lt;/p&gt;
+&lt;p&gt;だが、この方法ではアプリのデータ領域に画像が保存されるだけなので、ユーザーが、その画像を閲覧できるようにはならない。アプリ内で画像を管理できるようにしてもいいかもしれないが、スクリーンショットを確認したいだけなのであれば、そこまでする必要はないだろう。&lt;/p&gt;
+&lt;p&gt;そこで今回は、UnityからiOSのカメラロールにアクセスする方法を紹介する。&lt;/p&gt;
+&lt;p&gt;``` {.lang:objc .decode:true}&lt;/p&gt;
+&lt;h1&gt;import &lt;Foundation/Foundation.h&gt;&lt;/h1&gt;
+&lt;h1&gt;import &lt;AssetsLibrary/AssetsLibrary.h&gt;&lt;/h1&gt;
+&lt;h1&gt;import &lt;AVFoundation/AVFoundation.h&gt;&lt;/h1&gt;
+&lt;p&gt;/&lt;em&gt; 
+ スクリーンショット撮影時に利用するネイティブコード。
+ &lt;/em&gt;/&lt;/p&gt;
+&lt;p&gt;// 指定したパスの画像をカメラロールに保存する。
+extern "C" void _WriteImageToAlbum (const char&lt;em&gt; path)
+{
+    UIImage &lt;/em&gt;image = [UIImage imageWithContentsOfFile:[NSString stringWithUTF8String:path]];
+    ALAssetsLibrary &lt;em&gt;library = [[[ALAssetsLibrary alloc] init] autorelease];
+    NSMutableDictionary &lt;/em&gt;metadata = [[[NSMutableDictionary alloc] init] autorelease];
+    [library writeImageToSavedPhotosAlbum:image.CGImage metadata:metadata completionBlock:^(NSURL &lt;em&gt;assetURL, NSError &lt;/em&gt;error) {
+        // 書き込み終了後、Unity側へコールバック。
+        UnitySendMessage("CaptureScreenShot", "DidImageWriteToAlbum", [error.description UTF8String]);
+    }];
+}&lt;/p&gt;
+&lt;p AudioServicesPlaySystemSound_1108_="AudioServicesPlaySystemSound(1108);
+" NOTE:_="NOTE:
+" _="//" マナーモードや本体音量に左右されずに鳴る。_="マナーモードや本体音量に左右されずに鳴る。
+"&gt;// システムのシャッター音を鳴らす。
+extern "C" void _PlaySystemShutterSound ()&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;このネイティブコードをファイルの拡張子を&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;mm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Objective&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="err"&gt;の拡張子&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="err"&gt;にして&lt;/span&gt;&lt;span class="n"&gt;StreamingAssets&lt;/span&gt;&lt;span class="err"&gt;内に配置しておけば、そのまま&lt;/span&gt;&lt;span class="n"&gt;Xcode&lt;/span&gt;&lt;span class="err"&gt;のプロジェクトに追加される。&lt;/span&gt;
+
+&lt;span class="err"&gt;さて、&lt;/span&gt;&lt;span class="n"&gt;Unity&lt;/span&gt;&lt;span class="err"&gt;のスクリプトから、このファイルの関数を呼び出すわけだが、&lt;/span&gt;&lt;span class="n"&gt;writeImageToSavedPhotosAlbum&lt;/span&gt;&lt;span class="err"&gt;での書き込みは非同期で行われるので、&lt;/span&gt;&lt;span class="n"&gt;Unity&lt;/span&gt;&lt;span class="err"&gt;側へコールバックを返したい。そこで、&lt;/span&gt;&lt;span class="n"&gt;Unity&lt;/span&gt;&lt;span class="err"&gt;側の関数を呼び出すことができる、&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;UnitySendMessage&lt;/span&gt;&lt;span class="p"&gt;][]&lt;/span&gt;&lt;span class="err"&gt;を利用する。&lt;/span&gt;&lt;span class="n"&gt;UnitySendMessage&lt;/span&gt;&lt;span class="err"&gt;は第&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="err"&gt;引数にオブジェクト名、第&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="err"&gt;引数に関数名、第&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="err"&gt;引数に呼び出す関数の引数をとる。&lt;/span&gt;
+
+&lt;span class="err"&gt;また、&lt;/span&gt;&lt;span class="n"&gt;iOS&lt;/span&gt;&lt;span class="err"&gt;標準のスクリーンショット機能のように、シャッター音が鳴るようにしたいので、システムのシャッター音を鳴らす関数&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="err"&gt;\&lt;/span&gt;&lt;span class="n"&gt;_PlaySystemShutterSound&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="err"&gt;を作成した。おそらく、カメラからの入力がある状態でスクリーンショットを撮られることを考慮してシャッター音がなるようにしているのであろう。最近は&lt;/span&gt;&lt;span class="n"&gt;AR&lt;/span&gt;&lt;span class="err"&gt;等でカメラを使うことも多く、その場合はキャプチャ時にシャッター音が実装されていなければ高確率でリジェクトされるであろう。&lt;/span&gt;
+
+&lt;span class="err"&gt;次は、スクリプト側の実装だ。&lt;/span&gt;
+
+&lt;span class="err"&gt;```&lt;/span&gt; &lt;span class="p"&gt;{.&lt;/span&gt;&lt;span class="n"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;CaptureScreenshot.cs&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="n"&gt;using&lt;/span&gt; &lt;span class="n"&gt;UnityEngine&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;using&lt;/span&gt; &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;using&lt;/span&gt; &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Collections&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;using&lt;/span&gt; &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Runtime&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;InteropServices&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="n"&gt;class&lt;/span&gt; &lt;span class="n"&gt;CaptureScreenshot&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;MonoBehaviour&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+     &lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="n"&gt;string&lt;/span&gt; &lt;span class="n"&gt;ScreenshotFilename&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;src.png&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="cp"&gt;#if  UNITY_IPHONE &amp;amp;&amp;amp; !UNITY_EDITOR&lt;/span&gt;
+     &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;DllImport&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;__Internal&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+     &lt;span class="n"&gt;private&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;extern&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="n"&gt;_PlaySystemShutterSound&lt;/span&gt; &lt;span class="p"&gt;();&lt;/span&gt;
+     &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;DllImport&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;__Internal&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)]&lt;/span&gt;
+     &lt;span class="n"&gt;private&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;extern&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="n"&gt;_WriteImageToAlbum&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;string&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+     &lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;CaptureScreenShot&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="c1"&gt;// ネイティブコードからシャッター音を再生。マナーモード時や、ボリュームオフ時もシャッター音を再生したいため。&lt;/span&gt;
+          &lt;span class="n"&gt;_PlaySystemShutterSound&lt;/span&gt; &lt;span class="p"&gt;();&lt;/span&gt;
+          &lt;span class="c1"&gt;// スクリーンショットを撮影。Documents下に保存される。&lt;/span&gt;
+          &lt;span class="n"&gt;Application&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CaptureScreenshot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;temporaryScreenshotFilename&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+          &lt;span class="c1"&gt;// スクリーンショットが書き込まれるまで待つ。書き込み完了後、画像をカメラロールへ保存する。&lt;/span&gt;
+          &lt;span class="n"&gt;StartCoroutine&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;WaitUntilFinishedWriting&lt;/span&gt; &lt;span class="p"&gt;(()&lt;/span&gt;&lt;span class="o"&gt;=&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;_WriteImageToAlbum&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;TemporaryScreenshotPath&lt;/span&gt;&lt;span class="p"&gt;());}));&lt;/span&gt;
+     &lt;span class="p"&gt;}&lt;/span&gt;
+
+     &lt;span class="c1"&gt;// スクリーンショットの画像が一時的に保存されるパス。&lt;/span&gt;
+     &lt;span class="n"&gt;string&lt;/span&gt; &lt;span class="nf"&gt;TemporaryScreenshotPath&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;Application&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;persistentDataPath&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;/&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;temporaryScreenshotFilename&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+     &lt;span class="p"&gt;}&lt;/span&gt;
+
+     &lt;span class="c1"&gt;// スクリーンショットの書き込みが終了するまで、毎フレームファイルの有無を確認する。&lt;/span&gt;
+     &lt;span class="n"&gt;IEnumerator&lt;/span&gt; &lt;span class="nf"&gt;WaitUntilFinishedWriting&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Action&lt;/span&gt; &lt;span class="n"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IO&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Exists&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;TemporaryScreenshotPath&lt;/span&gt;&lt;span class="p"&gt;()))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                &lt;span class="n"&gt;Debug&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt; Temporary Screenshot have not been written yet.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+               &lt;span class="n"&gt;yield&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;null&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+          &lt;span class="p"&gt;}&lt;/span&gt;
+          &lt;span class="n"&gt;Debug&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;gt;&amp;gt;&amp;gt;&amp;gt; Temporary Screenshot have been Written.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+          &lt;span class="n"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+          &lt;span class="n"&gt;yield&lt;/span&gt; &lt;span class="k"&gt;break&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+     &lt;span class="p"&gt;}&lt;/span&gt;
+
+     &lt;span class="c1"&gt;// カメラロール保存後、ネイティブ側から呼び出される。&lt;/span&gt;
+     &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;DidImageWriteToAlbum&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;string&lt;/span&gt; &lt;span class="n"&gt;errorDescription&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;string&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IsNullOrEmpty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;errorDescription&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+               &lt;span class="n"&gt;Debug&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt; Image have been Written To Album Successfully.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+               &lt;span class="n"&gt;Debug&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt; Delete Temporary Screenshot.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+               &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IO&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Delete&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;TemporaryScreenshotPath&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+          &lt;span class="p"&gt;}&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+               &lt;span class="n"&gt;Debug&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt; An Error Occured. Error Description is...&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;errorDescription&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+          &lt;span class="p"&gt;}&lt;/span&gt;
+     &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="cp"&gt;#else&lt;/span&gt;
+     &lt;span class="n"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;CaptureScreenShot&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+         &lt;span class="c1"&gt;// Android端末での処理等。&lt;/span&gt;
+     &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="cp"&gt;#endif&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;こちらは少しややこしいので補足しておく。&lt;/p&gt;
+&lt;p&gt;``` {.lang:c# .decode:true}
+[DllImport("__Internal")]
+private static extern void _PlaySystemShutterSound ();
+[DllImport("__Internal")]
+private static extern void _WriteImageToAlbum (string path);&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;DllImport&lt;/span&gt;&lt;span class="err"&gt;を使い、呼び出されるネイティブコードのシグネチャを宣言する。&lt;/span&gt;
+
+&lt;span class="err"&gt;```&lt;/span&gt; &lt;span class="p"&gt;{.&lt;/span&gt;&lt;span class="n"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="err"&gt;#&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="n"&gt;IEnumerator&lt;/span&gt; &lt;span class="n"&gt;WaitUntilFinishedWriting&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Action&lt;/span&gt; &lt;span class="n"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;&lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;IO&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;File&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Exists&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;TemporaryScreenshotPath&lt;/span&gt;&lt;span class="p"&gt;()))&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;Debug&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt; Temporary Screenshot have not been written　yet.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;yield&lt;/span&gt; &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;null&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="n"&gt;Debug&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;gt;&amp;gt;&amp;gt;&amp;gt; Temporary Screenshot have been Written.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;callback&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="n"&gt;yield&lt;/span&gt; &lt;span class="k"&gt;break&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;コルーチンを利用し、画像がディスクに書き込まれるまで、毎フレームファイルの有無をチェックし、画像の存在が確認でき次第コールバック(ここではカメラロールへの保存)を実行する。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;{.lang:c# .decode:true}
+void DidImageWriteToAlbum (string errorDescription) {
+    if (string.IsNullOrEmpty(errorDescription)) {
+        Debug.Log("&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt; Image have been Written To Album Successfully.");
+        Debug.Log("&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt; Delete Temporary Screenshot.");
+        System.IO.File.Delete (TemporaryScreenshotPath());
+    } else {
+        Debug.Log("&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt; An Error Occured. Error Description is..." + errorDescription);
+    }
+}&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;こちらは、カメラロール保存後に前述のUnitySendMessageによって呼び出される関数だ。&lt;a href="http://docs.unity3d.com/Documentation/ScriptReference/Application.CaptureScreenshot.html"&gt;Application.CaptureScreenshot&lt;/a&gt;は画像をDocuments内に保存するが、&lt;a href="https://developer.apple.com/jp/devcenter/ios/library/documentation/FileSystemProgrammingGuide.pdf"&gt;一時ファイルをDocuments内に置いてはいけないことになっている&lt;/a&gt;ので、すぐに削除している。&lt;/p&gt;
+&lt;p&gt;実装するコードは以上である。&lt;/p&gt;
+&lt;p&gt;また、AssetsLibraryを利用しているため、フレームワークを追加する必要がある。Xcodeから手動で追加しても良いし、&lt;a href="http://docs.unity3d.com/Documentation/Manual/BuildPlayerPipeline.html"&gt;PostProcessBuildPlayer&lt;/a&gt;にフレームワークを追加するコードを記述しても良い。このあたりはネット上で割りと簡単に情報が見つかるのでそちらを参考にしてほしい。&lt;/p&gt;</summary></entry><entry><title>Raspberry Piのセットアップ(NOOBS)。</title><link href="http://yuseinishiyama.github.io/posts/2013/08/31/setup-raspberrypi/" rel="alternate"></link><updated>2013-08-31T21:08:00+02:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-08-31:posts/2013/08/31/setup-raspberrypi/</id><summary type="html">&lt;p&gt;購入してからしばらく放置していたRaspberry Piをセットアップしてみる。&lt;/p&gt;
+&lt;p&gt;今のところRaspberry
+Piでやりたいことはないから、セットアップするに足る目的もないけどなぁ、などと思いつつ作業を開始する。すると、どうしたことか全然上手くいかないので、セットアップすることが目的になって、Raspberry
+Piが起動した時には、なんとも言えない達成感が・・・。セットアップとは得てして、このような性質を持った作業である。&lt;/p&gt;
+&lt;p&gt;さて、私の「セットアップ観」など何の役にも立たないので、私がセットアップの際に困った事を展開したい。&lt;/p&gt;
+&lt;p&gt;まずインストールするOSをダウンロードするために、下記サイトを見る。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.raspberrypi.org/downloads"&gt;http://www.raspberrypi.org/downloads&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;「初心者はNOOBSを利用してOSをインストールするのが、おすすめ」ということなので、それに従う(ちなみにnoobは「新参者」という意味らしい)。「俺は利口だから中級者以上の扱いで頼むぜ」という感じで臨んで、マニュアルで色々やろうとしたら散々な結果になった、などということはぜひとも避けたい。&lt;/p&gt;
+&lt;p&gt;さて、Transcendの8GB(Class10)のSDカードをフォーマットし、そこにNOOBSのファイルを突っ込み、Raspberry
+Piを起動した。&lt;/p&gt;
+&lt;p&gt;しかし、画面に何も表示されない。よくみると「ACT」のLEDが消灯しているので、それを手がかりに調べてみる。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://elinux.org/R-Pi_Troubleshooting"&gt;http://elinux.org/R-Pi_Troubleshooting&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;上記のサイトによると、ACTはSDカードのステータスらしい。これは、所謂「&lt;a href="http://elinux.org/RPi_SD_cards"&gt;SDカードの相性問題&lt;/a&gt;」かと思い、別のSDカード(TOSHIBA)のもので試す。が、これも同じ結果。無念、Raspberry
+Piは屋根裏行きかなと思ったものの、さすがに本体・入門用書籍・SDカードx2の代金を捨てるのはあまりに勿体ないので、もうちょっと調べてみる。すると、気になる投稿を見つけた。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.raspberrypi.org/phpBB3/viewtopic.php?t=48389&amp;amp;p=378706"&gt;http://www.raspberrypi.org/phpBB3/viewtopic.php?t=48389&amp;amp;p=378706&lt;/a&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;by &lt;strong&gt;&lt;a href="http://www.raspberrypi.org/phpBB3/memberlist.php?mode=viewprofile&amp;amp;u=14062"&gt;mahjongg&lt;/a&gt;&lt;/strong&gt; » Fri Jun 28, 2013 12:26 am&lt;/p&gt;
+&lt;p&gt;Okay, my bad, I suddenly realized you didn't make any install yet, and
+config.txt is (only) installed after you choose to install a linux
+variant. config.txt doesn't exist on the card until then.&lt;/p&gt;
+&lt;p&gt;the NOOBS menu itself shouldn't need config.txt, as it uses the most
+elementary VGA format that any (VGA) monitor should be able to display.&lt;/p&gt;
+&lt;p&gt;By default, NOOBS 1.2 will try to output over HDMI at your display's
+preferred resolution. If you do not see any output on your HDMI display
+or are using the composite output, you can manually select a different
+output mode by pressing one of the following number keys on your
+keyboard;&lt;/p&gt;
+&lt;p&gt;​1. HDMI preferred mode - this is the default display mode for NOOBS.&lt;br /&gt;
+2. HDMI safe mode - select this mode if your display is connected to
+the Pi's HDMI connector and you cannot see anything on screen after the
+Pi has booted.&lt;br /&gt;
+3. Composite PAL mode - select either this mode or composite NTSC mode
+if you are using the composite RCA video connector on the Pi&lt;br /&gt;
+4. Composite NTSC mode&lt;/p&gt;
+&lt;p&gt;So in your case you will need to boot the Pi, wait for a second or so,
+then press either 3 or 4 until you get a display on your monitor.&lt;/p&gt;
+&lt;p&gt;You can tell that your keypress has been registered as the green ACT LED
+will turn on after the key has been pressed before switching off once
+the display mode has been changed. If you still do no see a display
+after the LED goes off then try another mode.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;私も同じくVGAのディスプレイに出力していた。どうやらNOOBSをVGA出力で起動する場合にはキーボードのキーを押して、出力モードを選択しないといけないようだ。試しにキーボードの1を押してみる。すると、NOOBSのセットアップ画面が表示されたではないか！ということで、SDカードの問題ではなく、VGA出力が問題であったことが発覚した。こうして、無事にNOOBSからRaspbian
+“wheezy”をインストールすることができたのだが、ここで再度つまずいた。OS起動後、またもや画面が表示されないのである。だが、VGAが問題であることは分かっているので、再度調べてみる。すると、こういう記事を発見した。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://nomolk.hatenablog.com/entry/2013/03/28/234247"&gt;http://nomolk.hatenablog.com/entry/2013/03/28/234247&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;この記事と、記事のリンクにあるtwitterの投稿を参考にして、config.txtを編集し、最終的に、&lt;/p&gt;
+&lt;p&gt;hdmi_safe=1&lt;br /&gt;
+hdmi_drive=2&lt;/p&gt;
+&lt;p&gt;という設定にすることで、画面が出力された。こうして、ゆとりプログラマー(noob)はハードウェアの手痛い洗礼を受けながらも、無事にRaspberry
+Piをセットアップすることができたのである。&lt;/p&gt;
+&lt;p&gt;VGA出力にしている人は参考にしていただきたい。&lt;/p&gt;</summary></entry><entry><title>輝度の計算</title><link href="http://yuseinishiyama.github.io/posts/2013/07/01/calculate-luminance/" rel="alternate"></link><updated>2013-07-01T00:50:00+02:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-07-01:posts/2013/07/01/calculate-luminance/</id><summary type="html">&lt;p&gt;シェーダーでは、よくこんなコードを見かける。&lt;/p&gt;
+&lt;p&gt;``` {.lang:c .decode:true title="Luminance"}
+const mediump vec3 Perception = vec3(0.299, 0.587, 0.114);&lt;/p&gt;
+&lt;p&gt;void main(void)
+{
+    mediump vec3 color = texture2D(Sampler, TextureCoord).xyz;
+    mediump float luminance = dot(Perception, color);
+    gl_FragColor = (luminance &amp;gt; Threshold) ? vec4(color, 1) : vec4(0);
+}
+```&lt;/p&gt;
+&lt;p&gt;輝度がThresholdを上回れば、テクスチャの色を使い、そうでなければ黒にするということは分かる。それにしても、luminanceを取得するときにテクスチャの色と内積をとっているPerceptionとはなんだろうか。謎めいた値がハードコードされている。&lt;/p&gt;
+&lt;p&gt;どうも人間の光受容体の特性を考慮するための値らしい。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/Photoreceptor_cell" title="Photoreceptor cell"&gt;Photoreceptor cell&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;人間の目は青にはあまり反応せず、緑には強く反応する。そのままRGBを平均した値を輝度に使ってしまうと、青が明るすぎ、緑が暗すぎる不自然な画像になってしまうというわけだ。&lt;/p&gt;
+&lt;p&gt;ちなみにこの係数はNTSC係数と呼ばれ、日本や北米でのテレビ用の規格らしい。&lt;br /&gt;
+一般的なsRGB色空間のモニタでは&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;vec3(0.2126, 0.7152, 0.0722)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;こちらの係数を利用したほうが良いようだ。&lt;/p&gt;</summary></entry><entry><title>iPhoneでの同時動画再生数の上限について</title><link href="http://yuseinishiyama.github.io/posts/2013/06/13/simultaneous-video-playing-in-ios/" rel="alternate"></link><updated>2013-06-13T00:15:00+02:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-06-13:posts/2013/06/13/simultaneous-video-playing-in-ios/</id><summary type="html">&lt;p&gt;現在動画編集アプリを作っている。&lt;br /&gt;
+動画にエフェクトとかBGMとかなんやらの設定をしていくわけだが、  &lt;/p&gt;
+&lt;p&gt;画面上部にプレビュー画面を持ち、その下に編集用のOutletがいくつか存在するような見た目のViewControllerがNavigationControllerでいくつか続いていくというような作りだ。&lt;/p&gt;
+&lt;p&gt;ここで奇妙な問題が発生した。&lt;br /&gt;
+MPMoviePlayerControllerを使用して、動画を再生しようとしたところ&lt;/p&gt;
+&lt;p&gt;``` {.lang:objc .decode:true}
+Error Domain=AVFoundationErrorDomain Code=-11839 "Cannot Decode"&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;こんなエラーがでた。デコードできない？動画の形式が悪いのだろうか？&lt;/span&gt;  
+
+&lt;span class="err"&gt;だが、試しにその&lt;/span&gt;&lt;span class="n"&gt;ViewController&lt;/span&gt;&lt;span class="err"&gt;だけにして実行してみたところ問題なく再生できた。&lt;/span&gt;  
+&lt;span class="err"&gt;ということは、特定のコンテキストにおいてのみデコードが失敗するわけだ。&lt;/span&gt;
+
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="err"&gt;先日の記事&lt;/span&gt;&lt;span class="p"&gt;][]&lt;/span&gt;&lt;span class="err"&gt;にもある通り、いざ実装を始めると全く予期しないところで躓くことが多々ある。&lt;/span&gt;  
+
+&lt;span class="err"&gt;特にこういうロジックの問題でない箇所は原因の特定が難しく、心が折れそうになる。&lt;/span&gt;
+
+&lt;span class="err"&gt;とにかくググるしかないので、上記のログをそのまま検索バーに貼り付けた。&lt;/span&gt;  
+&lt;span class="err"&gt;すると同じ様な現象で困っている人を発見することが出来た。&lt;/span&gt;
+
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decode][]&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;There&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;limit&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;number&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;concurrent&lt;/span&gt; &lt;span class="n"&gt;video&lt;/span&gt; &lt;span class="n"&gt;players&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;AVFoundation&lt;/span&gt; &lt;span class="n"&gt;will&lt;/span&gt; &lt;span class="n"&gt;allow&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;It&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;due&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;limitations&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;iOS&lt;/span&gt; &lt;span class="n"&gt;hardware&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;The&lt;/span&gt; &lt;span class="n"&gt;limit&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;current&lt;/span&gt; &lt;span class="n"&gt;devices&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt; &lt;span class="n"&gt;players&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;If&lt;/span&gt; &lt;span class="n"&gt;you&lt;/span&gt; &lt;span class="n"&gt;create&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="n"&gt;th&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;player&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;you&lt;/span&gt; &lt;span class="n"&gt;will&lt;/span&gt; &lt;span class="n"&gt;get&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;cannot decode&amp;quot;&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;It&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;not&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;limit&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;number&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;instances&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;AVPlayer&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;or&lt;/span&gt; &lt;span class="n"&gt;AVPlayerItem&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;Rather&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;it&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;association&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;AVPlayerItem&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;an&lt;/span&gt; &lt;span class="n"&gt;AVPlayer&lt;/span&gt; &lt;span class="n"&gt;which&lt;/span&gt; &lt;span class="n"&gt;creates&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;render&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;pipeline&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;, and you are limited to 4 of these. For example, this causes&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;new&lt;/span&gt; &lt;span class="n"&gt;render&lt;/span&gt; &lt;span class="n"&gt;pipeline&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+
+&lt;span class="err"&gt;どうやら、「&lt;/span&gt;&lt;span class="n"&gt;AVFoundation&lt;/span&gt;&lt;span class="err"&gt;で同時に実行できるプレイヤーの数はハードウェアによって制限がある」らしい。&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;What&lt;/span&gt; &lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="n"&gt;eventually&lt;/span&gt; &lt;span class="n"&gt;found&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;AVPlayers&lt;/span&gt; &lt;span class="n"&gt;were&lt;/span&gt; &lt;span class="n"&gt;not&lt;/span&gt; &lt;span class="n"&gt;being&lt;/span&gt; &lt;span class="n"&gt;released&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;when&lt;/span&gt; &lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="n"&gt;had&lt;/span&gt; &lt;span class="n"&gt;thought&lt;/span&gt; &lt;span class="n"&gt;they&lt;/span&gt; &lt;span class="n"&gt;were&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="n"&gt;my&lt;/span&gt; &lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="n"&gt;was&lt;/span&gt; &lt;span class="n"&gt;pushing&lt;/span&gt; &lt;span class="n"&gt;my&lt;/span&gt; &lt;span class="n"&gt;AVPlayer&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;View&lt;/span&gt; &lt;span class="n"&gt;Controller&lt;/span&gt; &lt;span class="n"&gt;onto&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;Navigation&lt;/span&gt; &lt;span class="n"&gt;Controller&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;Even&lt;/span&gt; &lt;span class="n"&gt;though&lt;/span&gt; &lt;span class="n"&gt;I&lt;/span&gt; &lt;span class="n"&gt;was&lt;/span&gt; &lt;span class="n"&gt;only&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;creating&lt;/span&gt; &lt;span class="n"&gt;one&lt;/span&gt; &lt;span class="n"&gt;AVPlayer&lt;/span&gt; &lt;span class="n"&gt;instance&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;when&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;View&lt;/span&gt; &lt;span class="n"&gt;Controllers&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;are&lt;/span&gt; &lt;span class="n"&gt;popped&lt;/span&gt; &lt;span class="n"&gt;off&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;nav&lt;/span&gt; &lt;span class="n"&gt;controller&lt;/span&gt; &lt;span class="n"&gt;they&lt;/span&gt; &lt;span class="n"&gt;were&lt;/span&gt; &lt;span class="n"&gt;not&lt;/span&gt; &lt;span class="n"&gt;being&lt;/span&gt; &lt;span class="n"&gt;released&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;immediately&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;It&lt;/span&gt; &lt;span class="n"&gt;was&lt;/span&gt; &lt;span class="n"&gt;then&lt;/span&gt; &lt;span class="n"&gt;very&lt;/span&gt; &lt;span class="n"&gt;easy&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;me&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;reach&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt; &lt;span class="n"&gt;AVPlayer&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;instances&lt;/span&gt; &lt;span class="n"&gt;before&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;old&lt;/span&gt; &lt;span class="n"&gt;View&lt;/span&gt; &lt;span class="n"&gt;Controllers&lt;/span&gt; &lt;span class="n"&gt;were&lt;/span&gt; &lt;span class="n"&gt;cleaned&lt;/span&gt; &lt;span class="n"&gt;up&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+
+&lt;span class="err"&gt;確かに、自分の場合は&lt;/span&gt;&lt;span class="n"&gt;MPMoviePlayerController&lt;/span&gt;&lt;span class="err"&gt;でエラーが出たが、それ以前に複数の&lt;/span&gt;&lt;span class="n"&gt;AVPlayer&lt;/span&gt;&lt;span class="err"&gt;を使用していて、それらは&lt;/span&gt;&lt;span class="n"&gt;NavigationController&lt;/span&gt;&lt;span class="err"&gt;に残ったままだ。&lt;/span&gt;&lt;span class="n"&gt;AVPlayer&lt;/span&gt;&lt;span class="err"&gt;のインスタンスを開放しろとのことだが、試しに以下のコードを画面遷移時に実行してみた。&lt;/span&gt;
+
+&lt;span class="err"&gt;```&lt;/span&gt; &lt;span class="p"&gt;{.&lt;/span&gt;&lt;span class="n"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;objc&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;_player&lt;/span&gt; &lt;span class="n"&gt;replaceCurrentItemWithPlayerItem&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;nil&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;なんと、これだけで治った。&lt;/p&gt;
+&lt;p&gt;というわけで、AVPlayerやMPMoviePlayerController(MPMoviePlayerViewControllerも)なんかを複数使うときは、AVPlayerItemのインスタンスが残ったままにならないように注意しよう。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nl"&gt;http:&lt;/span&gt;&lt;span class="c1"&gt;//stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decodehttp://&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;</summary></entry><entry><title>Objective-Cで文字列定数</title><link href="http://yuseinishiyama.github.io/posts/2013/06/02/constant-string-in-objectivec/" rel="alternate"></link><updated>2013-06-02T21:54:00+02:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-06-02:posts/2013/06/02/constant-string-in-objectivec/</id><summary type="html">&lt;p&gt;Objective-Cで文字列定数の宣言をする方法について考えてみた。&lt;br /&gt;
+最も手っ取り早いのは当然マクロだろう。&lt;/p&gt;
+&lt;p&gt;``` {.lang:objc .decode:true title="SomeClass.m"}&lt;/p&gt;
+&lt;h1&gt;define CONST_STR @"Const Str"&lt;/h1&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;だが、当然二重定義の問題があるので好ましいとは言えない。&lt;/span&gt;  
+&lt;span class="err"&gt;より好ましいのは以下の方法だろう。&lt;/span&gt;
+
+&lt;span class="err"&gt;```&lt;/span&gt; &lt;span class="p"&gt;{.&lt;/span&gt;&lt;span class="n"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;objc&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SomeClass.m&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="n"&gt;kConstStr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;@&amp;quot;Const Str&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;constの位置に注意。&lt;br /&gt;
+文字列に対するポインタにconstを指定している。  &lt;/p&gt;
+&lt;p&gt;（ちなみにObective-Cではメンバ変数のプレフィックは「_」が完全に推奨されている一方で、定数にこうしたハンガリアン記法を使うかどうか迷いどころだが、たいがいのフレームワークでは定数はこの形で書かれているし、実際しっくりくる。）&lt;/p&gt;
+&lt;p&gt;さてこの定数を外部に公開したいとする。&lt;br /&gt;
+ここでこんな風にやってしまうと間違いだ。&lt;/p&gt;
+&lt;p&gt;``` {.lang:objc .decode:true title="SomeClass.h"}
+static NSString * const kConstStr = @"Const Str";&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="err"&gt; &lt;/span&gt;&lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="c1"&gt;//stackoverflow.com/a/7642561][]  &lt;/span&gt;
+&lt;span class="err"&gt;ここに&lt;/span&gt;&lt;span class="k"&gt;static&lt;/span&gt;&lt;span class="err"&gt;に関する分かりやすい説明がある。&lt;/span&gt;
+
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="n"&gt;Objective&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="n"&gt;means&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;different&lt;/span&gt; &lt;span class="n"&gt;thing&lt;/span&gt; &lt;span class="n"&gt;than&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;C&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;class&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;context&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="n"&gt;class&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="n"&gt;members&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="n"&gt;class&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;methods&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;In&lt;/span&gt; &lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;Objective&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt; &lt;span class="n"&gt;or&lt;/span&gt; &lt;span class="n"&gt;function&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="n"&gt;global&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;scope&lt;/span&gt; &lt;span class="n"&gt;means&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;symbol&lt;/span&gt; &lt;span class="n"&gt;has&lt;/span&gt; &lt;span class="n"&gt;internal&lt;/span&gt; &lt;span class="n"&gt;linkage&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;Internal&lt;/span&gt; &lt;span class="n"&gt;linkage&lt;/span&gt; &lt;span class="n"&gt;means&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;symbol&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;local&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;current&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;translation&lt;/span&gt; &lt;span class="n"&gt;unit&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;which&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;current&lt;/span&gt; &lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="p"&gt;(.&lt;/span&gt;&lt;span class="n"&gt;c&lt;/span&gt; &lt;span class="n"&gt;or&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="n"&gt;being&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;compiled&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;header&lt;/span&gt; &lt;span class="n"&gt;files&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt; &lt;span class="n"&gt;recursively&lt;/span&gt; &lt;span class="n"&gt;includes&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;That&lt;/span&gt; &lt;span class="n"&gt;symbol&lt;/span&gt; &lt;span class="n"&gt;cannot&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;referenced&lt;/span&gt; &lt;span class="n"&gt;from&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;different&lt;/span&gt; &lt;span class="n"&gt;translation&lt;/span&gt; &lt;span class="n"&gt;unit&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;you&lt;/span&gt; &lt;span class="n"&gt;can&lt;/span&gt; &lt;span class="n"&gt;have&lt;/span&gt; &lt;span class="n"&gt;other&lt;/span&gt; &lt;span class="n"&gt;symbols&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;internal&lt;/span&gt; &lt;span class="n"&gt;linkage&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="n"&gt;other&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;translation&lt;/span&gt; &lt;span class="n"&gt;units&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;same&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;So&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;you&lt;/span&gt; &lt;span class="n"&gt;have&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;header&lt;/span&gt; &lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="n"&gt;declaring&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt; &lt;span class="n"&gt;as&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;each&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;includes&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;header&lt;/span&gt; &lt;span class="n"&gt;gets&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;separate&lt;/span&gt; &lt;span class="n"&gt;global&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt;&lt;span class="err"&gt;—&lt;/span&gt;&lt;span class="n"&gt;all&lt;/span&gt; &lt;span class="n"&gt;references&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt; &lt;span class="n"&gt;within&lt;/span&gt; &lt;span class="n"&gt;one&lt;/span&gt; &lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="n"&gt;file&lt;/span&gt; &lt;span class="n"&gt;will&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;refer&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;same&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;but&lt;/span&gt; &lt;span class="n"&gt;references&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="n"&gt;different&lt;/span&gt; &lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="n"&gt;files&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;will&lt;/span&gt; &lt;span class="n"&gt;refer&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;different&lt;/span&gt; &lt;span class="n"&gt;variables&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;If&lt;/span&gt; &lt;span class="n"&gt;you&lt;/span&gt; &lt;span class="n"&gt;want&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;have&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;single&lt;/span&gt; &lt;span class="n"&gt;global&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;you&lt;/span&gt; &lt;span class="n"&gt;can&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;have&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;class&lt;/span&gt; &lt;span class="n"&gt;scope&lt;/span&gt; &lt;span class="n"&gt;like&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="n"&gt;C&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;One&lt;/span&gt; &lt;span class="n"&gt;option&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;create&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;global&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;external&lt;/span&gt; &lt;span class="n"&gt;linkage&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;declare&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="k"&gt;extern&lt;/span&gt; &lt;span class="n"&gt;keyword&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;header&lt;/span&gt; &lt;span class="n"&gt;file&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;then&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="n"&gt;one&lt;/span&gt; &lt;span class="n"&gt;source&lt;/span&gt; &lt;span class="n"&gt;file&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;define&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="n"&gt;global&lt;/span&gt; &lt;span class="n"&gt;scope&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;without&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="k"&gt;extern&lt;/span&gt; &lt;span class="n"&gt;keyword&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;Internal&lt;/span&gt; &lt;span class="n"&gt;linkage&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;external&lt;/span&gt; &lt;span class="n"&gt;linkage&lt;/span&gt; &lt;span class="n"&gt;are&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;mutually&lt;/span&gt; &lt;span class="n"&gt;exclusive&lt;/span&gt;&lt;span class="err"&gt;—&lt;/span&gt;&lt;span class="n"&gt;you&lt;/span&gt; &lt;span class="n"&gt;cannot&lt;/span&gt; &lt;span class="n"&gt;have&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt; &lt;span class="n"&gt;declared&lt;/span&gt; &lt;span class="n"&gt;as&lt;/span&gt; &lt;span class="n"&gt;both&lt;/span&gt; &lt;span class="k"&gt;extern&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;An&lt;/span&gt; &lt;span class="n"&gt;alternative&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;as&lt;/span&gt; &lt;span class="n"&gt;Panos&lt;/span&gt; &lt;span class="n"&gt;suggested&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;would&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;use&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;class&lt;/span&gt; &lt;span class="n"&gt;method&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;instead&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;variable&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;This&lt;/span&gt; &lt;span class="n"&gt;keeps&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;functionality&lt;/span&gt; &lt;span class="n"&gt;within&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;scope&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;class&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;which&lt;/span&gt; &lt;span class="n"&gt;makes&lt;/span&gt; &lt;span class="n"&gt;more&lt;/span&gt; &lt;span class="n"&gt;sense&lt;/span&gt; &lt;span class="n"&gt;semantically&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;you&lt;/span&gt; &lt;span class="n"&gt;can&lt;/span&gt; &lt;span class="n"&gt;also&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;make&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt; &lt;span class="k"&gt;@private&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;you&lt;/span&gt; &lt;span class="n"&gt;so&lt;/span&gt; &lt;span class="n"&gt;desire&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;It&lt;/span&gt; &lt;span class="n"&gt;does&lt;/span&gt; &lt;span class="n"&gt;add&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="n"&gt;marginal&lt;/span&gt; &lt;span class="n"&gt;performance&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;penalty&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;but&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="n"&gt;highly&lt;/span&gt; &lt;span class="n"&gt;unlikely&lt;/span&gt; &lt;span class="n"&gt;to&lt;/span&gt; &lt;span class="n"&gt;be&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;bottleneck&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt; &lt;span class="n"&gt;your&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;application&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;you&lt;/span&gt; &lt;span class="n"&gt;suspect&lt;/span&gt; &lt;span class="n"&gt;it&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;always&lt;/span&gt; &lt;span class="n"&gt;profile&lt;/span&gt; &lt;span class="n"&gt;first&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="err"&gt;つまり&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt;&lt;span class="err"&gt;や&lt;/span&gt;&lt;span class="n"&gt;Objective&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;C&lt;/span&gt;&lt;span class="err"&gt;の&lt;/span&gt;&lt;span class="k"&gt;static&lt;/span&gt;&lt;span class="err"&gt;は内部結合であり、ヘッダ上の&lt;/span&gt;&lt;span class="k"&gt;static&lt;/span&gt;&lt;span class="err"&gt;変数を異なるソースファイルから読み取ると、それぞれのファイル内で独立した変数として認識されてしまうというわけだ。&lt;/span&gt;  
+&lt;span class="err"&gt;試しに以下のような実験をしてみた。&lt;/span&gt;
+
+&lt;span class="err"&gt;```&lt;/span&gt; &lt;span class="p"&gt;{.&lt;/span&gt;&lt;span class="n"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;objc&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;ClassA.h&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="cp"&gt;#import &amp;lt;Foundation/Foundation.h&amp;gt;&lt;/span&gt;
+
+&lt;span class="k"&gt;@interface&lt;/span&gt; &lt;span class="nc"&gt;ClassA&lt;/span&gt; : &lt;span class="nc"&gt;NSObject&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;setStaticVar:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;value&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;staticVarOfClassD&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;setStaticVarOfClassD:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;value&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;setExternVar:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;value&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;externVarOfClassD&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;setExternVarOfClassD:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;value&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;@end&lt;/span&gt;
+
+&lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="n"&gt;NSInteger&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;extern&lt;/span&gt; &lt;span class="n"&gt;NSInteger&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;``` {.lang:objc .decode:true title="ClassA.m"}&lt;/p&gt;
+&lt;h1&gt;import "ClassA.h"&lt;/h1&gt;
+&lt;p&gt;@interface ClassD : NSObject&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;(NSInteger)staticVar;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;(void)setStaticVar:(NSInteger)value;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;@end&lt;/p&gt;
+&lt;p&gt;@implementation ClassD&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p _="
+" return="return" staticVar_="staticVar;
+"&gt;(NSInteger)staticVar&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="=" staticVar="staticVar" value_="value;
+"&gt;(void)setStaticVar:(NSInteger)value&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="
+" externVar_="externVar;
+" return="return"&gt;(NSInteger)externVar&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="=" externVar="externVar" value_="value;
+"&gt;(void)setExternVar:(NSInteger)value&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;@end&lt;/p&gt;
+&lt;p&gt;NSInteger externVar = 0;&lt;/p&gt;
+&lt;p&gt;@implementation ClassA&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p _="
+" _ClassD="[ClassD" return="return" staticVar_="staticVar];
+"&gt;(NSInteger)staticVarOfClassD&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="
+" _ClassD="[ClassD" setStaticVar:value_="setStaticVar:value];
+"&gt;(void)setStaticVarOfClassD:(NSInteger)value&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="
+" _ClassD="[ClassD" externVar_="externVar];
+" return="return"&gt;(NSInteger)externVarOfClassD&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="
+" _ClassD="[ClassD" setExternVar:value_="setExternVar:value];
+"&gt;(void)setExternVarOfClassD:(NSInteger)value&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="
+" return="return" staticVar_="staticVar;
+"&gt;(NSInteger)staticVar&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="=" staticVar="staticVar" value_="value;
+"&gt;(void)setStaticVar:(NSInteger)value&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="
+" externVar_="externVar;
+" return="return"&gt;(NSInteger)externVar&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="=" externVar="externVar" value_="value;
+"&gt;(void)setExternVar:(NSInteger)value&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;@end&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;```&lt;/span&gt; &lt;span class="p"&gt;{.&lt;/span&gt;&lt;span class="n"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;objc&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;ClassB.h&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="cp"&gt;#import &amp;lt;Foundation/Foundation.h&amp;gt;&lt;/span&gt;
+
+&lt;span class="k"&gt;@interface&lt;/span&gt; &lt;span class="nc"&gt;ClassB&lt;/span&gt; : &lt;span class="nc"&gt;NSObject&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;setStaticVar:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;value&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;setExternVar:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;value&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;@end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;``` {.lang:objc .decode:true title="ClassB.m"}&lt;/p&gt;
+&lt;h1&gt;import "ClassB.h"&lt;/h1&gt;
+&lt;h1&gt;import "ClassA.h"&lt;/h1&gt;
+&lt;p&gt;@interface ClassB ()&lt;/p&gt;
+&lt;p&gt;@end&lt;/p&gt;
+&lt;p&gt;@implementation ClassB&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p _="
+" return="return" staticVar_="staticVar;
+"&gt;(NSInteger)staticVar&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="=" staticVar="staticVar" value_="value;
+"&gt;(void)setStaticVar:(NSInteger)value&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="
+" externVar_="externVar;
+" return="return"&gt;(NSInteger)externVar&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="=" externVar="externVar" value_="value;
+"&gt;(void)setExternVar:(NSInteger)value&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;@end&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;```&lt;/span&gt; &lt;span class="p"&gt;{.&lt;/span&gt;&lt;span class="n"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;objc&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;ClassC.h&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="cp"&gt;#import &amp;lt;Foundation/Foundation.h&amp;gt;&lt;/span&gt;
+
+&lt;span class="k"&gt;@interface&lt;/span&gt; &lt;span class="nc"&gt;ClassC&lt;/span&gt; : &lt;span class="nc"&gt;NSObject&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;setStaticVar:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;value&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;+&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nf"&gt;setExternVar:&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NSInteger&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="nv"&gt;value&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;@end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;``` {.lang:objc .decode:true title="ClassC.m"}&lt;/p&gt;
+&lt;h1&gt;import "ClassC.h"&lt;/h1&gt;
+&lt;h1&gt;import "ClassA.h"&lt;/h1&gt;
+&lt;p&gt;@implementation ClassC&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p _="
+" return="return" staticVar_="staticVar;
+"&gt;(NSInteger)staticVar&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="=" staticVar="staticVar" value_="value;
+"&gt;(void)setStaticVar:(NSInteger)value&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="
+" externVar_="externVar;
+" return="return"&gt;(NSInteger)externVar&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p _="=" externVar="externVar" value_="value;
+"&gt;(void)setExternVar:(NSInteger)value&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;@end&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt; &lt;/span&gt;
+
+&lt;span class="err"&gt;```&lt;/span&gt; &lt;span class="p"&gt;{.&lt;/span&gt;&lt;span class="n"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;objc&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;main.m&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="cp"&gt;#import &amp;lt;Foundation/Foundation.h&amp;gt;&lt;/span&gt;
+
+&lt;span class="cp"&gt;#import &amp;quot;ClassA.h&amp;quot;&lt;/span&gt;
+&lt;span class="cp"&gt;#import &amp;quot;ClassB.h&amp;quot;&lt;/span&gt;
+&lt;span class="cp"&gt;#import &amp;quot;ClassC.h&amp;quot;&lt;/span&gt;
+
+&lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="n"&gt;kConst&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;@&amp;quot;const&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;argc&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="kt"&gt;char&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;argv&lt;/span&gt;&lt;span class="p"&gt;[])&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="err"&gt;@&lt;/span&gt;&lt;span class="n"&gt;autoreleasepool&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;setStaticVar&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;setExternVar&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classA is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classB is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassB&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classC is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassC&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classD is %ld &lt;/span&gt;&lt;span class="se"&gt;\n\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;staticVarOfClassD&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classA is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classB is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassB&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classC is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassC&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classD is %ld &lt;/span&gt;&lt;span class="se"&gt;\n\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;externVarOfClassD&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ClassB&lt;/span&gt; &lt;span class="n"&gt;setStaticVar&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ClassB&lt;/span&gt; &lt;span class="n"&gt;setExternVar&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classA is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classB is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassB&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classC is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassC&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classD is %ld &lt;/span&gt;&lt;span class="se"&gt;\n\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;staticVarOfClassD&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classA is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classB is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassB&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classC is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassC&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classD is %ld &lt;/span&gt;&lt;span class="se"&gt;\n\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;externVarOfClassD&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ClassC&lt;/span&gt; &lt;span class="n"&gt;setStaticVar&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ClassC&lt;/span&gt; &lt;span class="n"&gt;setExternVar&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classA is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classB is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassB&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classC is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassC&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classD is %ld &lt;/span&gt;&lt;span class="se"&gt;\n\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;staticVarOfClassD&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classA is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classB is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassB&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classC is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassC&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classD is %ld &lt;/span&gt;&lt;span class="se"&gt;\n\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;externVarOfClassD&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;setStaticVarOfClassD&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;setExternVarOfClassD&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;];&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classA is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classB is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassB&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classC is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassC&lt;/span&gt; &lt;span class="n"&gt;staticVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;staticVar of classD is %ld &lt;/span&gt;&lt;span class="se"&gt;\n\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;staticVarOfClassD&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classA is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classB is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassB&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classC is %ld&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassC&lt;/span&gt; &lt;span class="n"&gt;externVar&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+        &lt;span class="n"&gt;NSLog&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;@&amp;quot;extern of classD is %ld &lt;/span&gt;&lt;span class="se"&gt;\n\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;long&lt;/span&gt;&lt;span class="p"&gt;)[&lt;/span&gt;&lt;span class="n"&gt;ClassA&lt;/span&gt; &lt;span class="n"&gt;externVarOfClassD&lt;/span&gt;&lt;span class="p"&gt;]);&lt;/span&gt;
+     &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;出力結果がこれ。&lt;/p&gt;
+&lt;p&gt;``` {.lang:objc .highlight:0 .decode:true}
+2013-06-02 21:21:04.953 StaticExternTest[1020:303] staticVar of classA is 0
+2013-06-02 21:21:04.955 StaticExternTest[1020:303] staticVar of classB is 0
+2013-06-02 21:21:04.955 StaticExternTest[1020:303] staticVar of classC is 0
+2013-06-02 21:21:04.956 StaticExternTest[1020:303] staticVar of classD is 0 &lt;/p&gt;
+&lt;p&gt;2013-06-02 21:21:04.956 StaticExternTest[1020:303] extern of classA is 0
+2013-06-02 21:21:04.957 StaticExternTest[1020:303] extern of classB is 0
+2013-06-02 21:21:04.957 StaticExternTest[1020:303] extern of classC is 0
+2013-06-02 21:21:04.957 StaticExternTest[1020:303] extern of classD is 0 &lt;/p&gt;
+&lt;p&gt;2013-06-02 21:21:04.958 StaticExternTest[1020:303] staticVar of classA is 0
+2013-06-02 21:21:04.958 StaticExternTest[1020:303] staticVar of classB is 1
+2013-06-02 21:21:04.959 StaticExternTest[1020:303] staticVar of classC is 0
+2013-06-02 21:21:04.959 StaticExternTest[1020:303] staticVar of classD is 0 &lt;/p&gt;
+&lt;p&gt;2013-06-02 21:21:04.959 StaticExternTest[1020:303] extern of classA is 1
+2013-06-02 21:21:04.960 StaticExternTest[1020:303] extern of classB is 1
+2013-06-02 21:21:04.960 StaticExternTest[1020:303] extern of classC is 1
+2013-06-02 21:21:04.960 StaticExternTest[1020:303] extern of classD is 1 &lt;/p&gt;
+&lt;p&gt;2013-06-02 21:21:04.961 StaticExternTest[1020:303] staticVar of classA is 0
+2013-06-02 21:21:04.961 StaticExternTest[1020:303] staticVar of classB is 1
+2013-06-02 21:21:04.961 StaticExternTest[1020:303] staticVar of classC is 2
+2013-06-02 21:21:04.962 StaticExternTest[1020:303] staticVar of classD is 0 &lt;/p&gt;
+&lt;p&gt;2013-06-02 21:21:04.962 StaticExternTest[1020:303] extern of classA is 2
+2013-06-02 21:21:04.962 StaticExternTest[1020:303] extern of classB is 2
+2013-06-02 21:21:04.963 StaticExternTest[1020:303] extern of classC is 2
+2013-06-02 21:21:04.963 StaticExternTest[1020:303] extern of classD is 2 &lt;/p&gt;
+&lt;p&gt;2013-06-02 21:21:04.963 StaticExternTest[1020:303] staticVar of classA is 3
+2013-06-02 21:21:04.964 StaticExternTest[1020:303] staticVar of classB is 1
+2013-06-02 21:21:04.964 StaticExternTest[1020:303] staticVar of classC is 2
+2013-06-02 21:21:04.964 StaticExternTest[1020:303] staticVar of classD is 3 &lt;/p&gt;
+&lt;p&gt;2013-06-02 21:21:04.965 StaticExternTest[1020:303] extern of classA is 3
+2013-06-02 21:21:04.965 StaticExternTest[1020:303] extern of classB is 3
+2013-06-02 21:21:04.966 StaticExternTest[1020:303] extern of classC is 3
+2013-06-02 21:21:04.966 StaticExternTest[1020:303] extern of classD is 3&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="err"&gt;実際にヘッダファイルから読み込まれた&lt;/span&gt;&lt;span class="k"&gt;static&lt;/span&gt;&lt;span class="err"&gt;変数は、それぞれ独立して変更されてしまっている。&lt;/span&gt;  
+
+&lt;span class="err"&gt;一方で、&lt;/span&gt;&lt;span class="k"&gt;extern&lt;/span&gt;&lt;span class="err"&gt;は外部結合であり、期待通りの動作をする。&lt;/span&gt;&lt;span class="k"&gt;extern&lt;/span&gt;&lt;span class="err"&gt;だと二重定義も防げる&lt;/span&gt;
+
+&lt;span class="err"&gt;外部のファイルからも参照したい定数を宣言する場合は、&lt;/span&gt;
+
+&lt;span class="err"&gt;```&lt;/span&gt; &lt;span class="p"&gt;{.&lt;/span&gt;&lt;span class="n"&gt;lang&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="n"&gt;objc&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;decode&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SomeClass.h&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="k"&gt;extern&lt;/span&gt; &lt;span class="n"&gt;NSString&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="n"&gt;kConstStr&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;{.lang:objc .decode:true title="SomeClass.m"}
+NSString * const kConstStr = @"Const Str";&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;このようにするのが確実だろう。&lt;/p&gt;
+&lt;p&gt;このあたりの細かい挙動は忘れやすい上に、適当にやっても問題が顕在化しないことのほうが多いからこそ、ベストプラクティスを知っておきたいところだ。&lt;/p&gt;</summary></entry></feed>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>だからといって、このままでいいはずがない。</title><link href="http://yuseinishiyama.github.io/" rel="alternate"></link><link href="http://yuseinishiyama.github.io/feeds/impressions-programming.atom.xml" rel="self"></link><id>http://yuseinishiyama.github.io/</id><updated>2013-12-12T00:54:00+01:00</updated><entry><title>第2回potatotipsに参加してきた。</title><link href="http://yuseinishiyama.github.io/posts/2013/12/12/potatotips2/" rel="alternate"></link><updated>2013-12-12T00:54:00+01:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-12-12:posts/2013/12/12/potatotips2/</id><summary type="html">&lt;p&gt;&lt;a href="https://github.com/potatotips/potatotips/wiki/potatotips-2#potatotips-iosandroid%E9%96%8B%E7%99%BAtips%E5%85%B1%E6%9C%89%E4%BC%9A-%E7%AC%AC2%E5%9B%9E" title="potatotips (iOS/Android開発Tips共有会) 第2回"&gt;第2回potatotipsに&lt;/a&gt;参加し、発表してきた。  &lt;/p&gt;
+&lt;p&gt;主にAVFoundationを利用した、iOSでの動画編集の話をした。使用したスライドは以下のものである。&lt;/p&gt;
+&lt;p&gt;[slideshare id=29084610&amp;amp;doc=potatotips2-131210141939-phpapp02]&lt;/p&gt;
+&lt;p&gt;噂通りのハイレベルさで、1人持ち時間5分という短さながらも、濃い内容の発表ばかりであった。&lt;br /&gt;
+特に珍しい意見でもないと思うが、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;調べたらすぐに発見できるわけではないが、&lt;/li&gt;
+&lt;li&gt;かといってニッチすぎず、普段の業務に活かせて、&lt;/li&gt;
+&lt;li&gt;しかも、ユーモアがあって面白い内容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;これらが揃うと、「良い発表」だったなと感じる。&lt;br /&gt;
+とはいえ、普通は1つ満たすだけでも難しい。  &lt;/p&gt;
+&lt;p&gt;それぞれのトレードオフもあるので、全部揃えるとなると、これは並大抵のことではない。&lt;/p&gt;
+&lt;p&gt;まだまだ、先は長い。&lt;/p&gt;</summary></entry><entry><title>iOS向け動画編集アプリ「Findays」をリリースしました。</title><link href="http://yuseinishiyama.github.io/posts/2013/08/31/findays-released/" rel="alternate"></link><updated>2013-08-31T19:51:00+02:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-08-31:posts/2013/08/31/findays-released/</id><summary type="html">&lt;p&gt;[![findays_icon][]][]&lt;/p&gt;
+&lt;p&gt;今月16日(金)に、開発を1人で担当したiOS向けアプリ「Findays」がリリースされました。以下、App
+Storeに記載されている内容の一部転載です。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;【Findaysとは】  &lt;/p&gt;
+&lt;p&gt;Findays（ファインデイズ）は30秒の動画を撮影して、オープニング／エンディングアニメを付けたり、フィルター、
+音楽を選択して、PVのような作品を作ってくれるアプリです。BGMを提供してくれたのは。日本を代表するミュージシャン、
+mito(clammbon)、toe、mouse on the keys、Kazuhide Takamoto(Comeback My
+Daughters)の４組。日常の瞬間を切り取って特別な思い出に変えよう！&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;最新の情報はFacebookでゲットしよう -  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;撮影した動画をアップするとプレゼントがもらえるキャンペーンなどが開催されたり&lt;br /&gt;
+ミュージシャンが曲のコンセプトなどを語ったメッセージビデオも観れます。&lt;br /&gt;
+Official Facebook Page&lt;br /&gt;
+&lt;a href="https://www.facebook.com/FindaysApp"&gt;https://www.facebook.com/FindaysApp&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Findaysの使い方はYoutubeでチェック -&lt;br /&gt;
+Official Youtube Page&lt;br /&gt;
+&lt;a href="http://www.youtube.com/user/findaysofficial"&gt;http://www.youtube.com/user/findaysofficial&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr /&gt;
+&lt;p&gt;是非ダウンロードしてご利用くださいませ。&lt;br /&gt;
+&lt;a href="https://itunes.apple.com/jp/app/findays/id681034183?mt=8"&gt;https://itunes.apple.com/jp/app/findays/id681034183?mt=8&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[![findays_icon][]]: https://itunes.apple.com/jp/app/findays/id681034183?mt=8&lt;/p&gt;</summary></entry><entry><title>プログラマにとって〈できる〉とは何か。</title><link href="http://yuseinishiyama.github.io/posts/2013/06/07/what-does-saying-i-can-means/" rel="alternate"></link><updated>2013-06-07T00:54:00+02:00</updated><author><name>nishiyama101</name></author><id>tag:yuseinishiyama.github.io,2013-06-07:posts/2013/06/07/what-does-saying-i-can-means/</id><summary type="html">&lt;p&gt;プログラマとして働いていると、特に非プログラマの人から&lt;/p&gt;
+&lt;p&gt;「hogehogeをfugafugaするようなことって（プログラムで）できるんですか？」&lt;/p&gt;
+&lt;p&gt;という類の質問をされることが良くある。当然そういうことを聞かれたら&lt;/p&gt;
+&lt;p&gt;「できると思いますよ。」&lt;/p&gt;
+&lt;p&gt;と答えるしかない。まともな思考な人が考えるような要求、つまり「iPhoneの画面をダブルタップすると、口やかましい上司を遠隔地へと転送できる」とか「母親をカメラで撮影すると、実家への仕送りを強要しなくなる」とか、そういうのではない要求、というものはたいていの場合、理論上実現可能だからだ。&lt;/p&gt;
+&lt;p&gt;コンピュータサイエンスに明るいわけではないが、「&lt;a href="http://ja.wikipedia.org/wiki/%E3%83%81%E3%83%A5%E3%83%BC%E3%83%AA%E3%83%B3%E3%82%B0%E5%AE%8C%E5%85%A8" title="チューリング完全"&gt;チューリング完全&lt;/a&gt;」という言葉ぐらいなら知っている。コンピュータの世界における「やればできる」に相当する概念といったところか。  &lt;/p&gt;
+&lt;p&gt;つまり、「できますか」という問に「やればできる」と答えていて、さらに、「やればできる」のことを「できる」という言葉で表してしまっているわけだ。&lt;/p&gt;
+&lt;p&gt;物質世界にくらべて、「やればできる」のが当たり前のソフトウェアの世界だからこそ、その当たり前の答えを使ってしまうと厄介なことが起きる。まず、&lt;/p&gt;
+&lt;p&gt;「Aさんがhogehogeをfugafugaできるらしいから、やってもらおう。」&lt;/p&gt;
+&lt;p&gt;という風に自分が頼まれてしまう。そして、自分自身も判断力が鈍っていると&lt;/p&gt;
+&lt;p&gt;「まぁ、やればできるはずだからやってみるか。」&lt;/p&gt;
+&lt;p&gt;と安易に引き受けてしまうわけである。プログラムの世界以外なら「やればできる」と「できる」の間にある大きな溝を認識できるのにも関わらず、だ。&lt;br /&gt;
+こうして、バカな私はその溝に落ちることになる。&lt;/p&gt;
+&lt;p&gt;パフォーマンスが・・・&lt;br /&gt;
+このAPIを使用するとメモリリークが・・・&lt;br /&gt;
+ドキュメントにはそう書いてあるんですけど・・・  &lt;/p&gt;
+&lt;p&gt;オープンソースのライブラリを使おうと思ったんですけど、ライセンスが・・・&lt;/p&gt;
+&lt;p&gt;様々な問題との果てしない戦いが始まり、終いにはコレを言われるわけだ。&lt;/p&gt;
+&lt;p&gt;「できるって言ったよね？」&lt;/p&gt;
+&lt;p&gt;悲しいかな、当初は物腰が柔らかかった人でさえ、冷ややかなタメ口になっていたりする。&lt;/p&gt;
+&lt;p&gt;とはいえ、「できない」はどうも使いたくない。「やればできる」わけだからそれはそれで論理的ではない。それに、「できない」と言うと仕事が無くなるわけで、そうなるぐらいだったら茨の道を歩んだほうがマシだ。そもそも「できないということを証明する」ことは「できるということを証明する」ことよりはるかに困難で、だからこそ「できない」という答えが正解になることは少なく、非論理的だと考えている。だから、簡単に「できない」などという開発者は現実主義者でもなんでもなく、ただただ信用出来ない。&lt;/p&gt;
+&lt;p&gt;結論としては、これからも「できる」と言っていこうと思う。&lt;br /&gt;
+ただし、自分の中で「できる」という結論を出すのは、「できた」後だ。&lt;br /&gt;
+プログラマにとっての「できる」は「したことがある」であるべきだ。  &lt;/p&gt;
+&lt;p&gt;だからこそ、手を動かすべきだし、なにか作ってみるべきだ。実践から学ぶことは非常に多い。  &lt;/p&gt;
+&lt;p&gt;（実践から全てを学べるという意味ではない。そういう考えの人は得てして、「動けばオーケープログラマ」だったり「フラグ大好きコールバックもループとフラグで実現するよプログラマ」だったりする。）&lt;/p&gt;
+&lt;p&gt;本当は「できることはできるのですが、僕のスキルでは途中で挫折するか、もしくは時間がかかりすぎるかもしれません、調査期間をNヶ月いただければ・・・」とかなんとか言いたいところだが、そんなやつには誰も何も任せてくれない。自分の成長のために大風呂敷を広げ、一方で自分が「できる」状態ではないことを認識し内心は謙虚でなければいけない。&lt;br /&gt;
+そうすれば他所様が開発したものを見て&lt;/p&gt;
+&lt;p&gt;「これくらいなら俺も\&amp;lt;できる&gt;けどなぁ」&lt;/p&gt;
+&lt;p&gt;というようなことを言わなくなるだろう。&lt;br /&gt;
+ここでも、「やればできる==できる」の間違えが犯されている。&lt;/p&gt;</summary></entry></feed>
