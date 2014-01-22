@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>だからといって、このままでいいはずがない。 - Impressions, Programming, SICP KenIngle.com</title>
+
+    <link rel="stylesheet" href="/theme/css/main.css">
+    <link rel="stylesheet" href="/theme/css/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <div><img src="" class="grv-img"/></div>
+        <div class="title"><a href="/">だからといって、このままでいいはずがない。 </a></div>
+        <div class="sub-title"></div>
+
+<p>
+    <div class="view"><a href="/pages/about-me.html">About Me</a></div>
+  <div class="view"><a href="/archives.html">Archives</a></div>
+</p>
+
+<!-- Social links -->
+<div class="social">
+<h4>Follow Me</h4>
+<ul>
+    <li><a href="#">You can add links in your config file</a></li>
+    <li><a href="#">Another social link</a></li>
+</ul>
+</div>
+
+      </header>
+      <section>
+      <div class="front-title"><a href="/posts/2013/11/25/sicp3/">SICP 第2章「Building Abstractions with Data」【前編】</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-11-25T04:18:00">
+  月 25 11月 2013
+</abbr> | 
+ -- (<a href="/posts/2013/11/25/sicp3/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>1章が割りとすんなり終わったものだから、少し油断していた。2章からは分量も問題数も随分多くなりなかなか終わりそうにない。大体2章の60%ぐらいが終わったから、備忘録も兼ねてこの辺りで感想をまとめておこう。</p>
+<p>ところで、Edsgar Dijkstraの言葉にこのようなものがある</p>
+<blockquote>
+<p>Being abstract is something profoundly different from being vague…<br />
+ The purpose of abstraction is not to be vague, but to create a new
+semantic level in which one can be absolutely precise.   (<a href="http://www.linfo.org/q_programming.html" title="Best Programming Quotations">「Best
+Programming Quotations」</a>より)</p>
+<p>抽象的であることと曖昧であることは全く違う。<br />
+ 抽象化の目的は、曖昧にすることではない。<br />
+ 抽象化は、新たなセマンティックレベルを創出し ...</p></blockquote> 
+      <div class="read-more"><a href="/posts/2013/11/25/sicp3/">read more...</a></div>
+      <hr />
+
+      </section>
+      <footer>
+        <p><small>&copy; だからといって、このままでいいはずがない。 &mdash; Theme based on Sundown by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!-- Scale fix -->
+    <script>
+      var metas = document.getElementsByTagName('meta');
+      var i;
+      
+      if (navigator.userAgent.match(/iPhone/i)) {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+          }
+        }
+      
+        document.addEventListener("gesturestart", gestureStart, false);
+      }
+
+      function gestureStart() {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>輝度の計算 KenIngle.com</title>
+
+    <link rel="stylesheet" href="/theme/css/main.css">
+    <link rel="stylesheet" href="/theme/css/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <div><img src="" class="grv-img"/></div>
+        <div class="title"><a href="/">だからといって、このままでいいはずがない。 </a></div>
+        <div class="sub-title"></div>
+
+<p>
+    <div class="view"><a href="/pages/about-me.html">About Me</a></div>
+  <div class="view"><a href="/archives.html">Archives</a></div>
+</p>
+
+<!-- Social links -->
+<div class="social">
+<h4>Follow Me</h4>
+<ul>
+    <li><a href="#">You can add links in your config file</a></li>
+    <li><a href="#">Another social link</a></li>
+</ul>
+</div>
+
+      </header>
+      <section>
+<section id="content" class="body">
+  <article>
+      <div class="article-title">
+        輝度の計算
+      </div>
+
+    <div class="entry-content">
+<p>
+<small>
+<abbr class="published" title="2013-07-01T00:50:00">
+  月 01 7月 2013
+</abbr> | 
+ -- (<a href="/posts/2013/07/01/calculate-luminance/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>シェーダーでは、よくこんなコードを見かける。</p>
+<p>``` {.lang:c .decode:true title="Luminance"}
+const mediump vec3 Perception = vec3(0.299, 0.587, 0.114);</p>
+<p>void main(void)
+{
+    mediump vec3 color = texture2D(Sampler, TextureCoord).xyz;
+    mediump float luminance = dot(Perception, color);
+    gl_FragColor = (luminance &gt; Threshold) ? vec4(color, 1) : vec4(0);
+}
+```</p>
+<p>輝度がThresholdを上回れば、テクスチャの色を使い、そうでなければ黒にするということは分かる。それにしても、luminanceを取得するときにテクスチャの色と内積をとっているPerceptionとはなんだろうか。謎めいた値がハードコードされている。</p>
+<p>どうも人間の光受容体の特性を考慮するための値らしい。</p>
+<p><a href="http://en.wikipedia.org/wiki/Photoreceptor_cell" title="Photoreceptor cell">Photoreceptor cell</a></p>
+<p>人間の目は青にはあまり反応せず、緑には強く反応する。そのままRGBを平均した値を輝度に使ってしまうと、青が明るすぎ、緑が暗すぎる不自然な画像になってしまうというわけだ。</p>
+<p>ちなみにこの係数はNTSC係数と呼ばれ、日本や北米でのテレビ用の規格らしい。<br />
+一般的なsRGB色空間のモニタでは</p>
+<p><code>vec3(0.2126, 0.7152, 0.0722)</code></p>
+<p>こちらの係数を利用したほうが良いようだ。</p>
+    </div><!-- /.entry-content -->
+  </article>
+</section>
+      </section>
+      <footer>
+        <p><small>&copy; だからといって、このままでいいはずがない。 &mdash; Theme based on Sundown by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!-- Scale fix -->
+    <script>
+      var metas = document.getElementsByTagName('meta');
+      var i;
+      
+      if (navigator.userAgent.match(/iPhone/i)) {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+          }
+        }
+      
+        document.addEventListener("gesturestart", gestureStart, false);
+      }
+
+      function gestureStart() {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

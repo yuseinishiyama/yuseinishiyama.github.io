@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Raspberry Piのセットアップ(NOOBS)。 KenIngle.com</title>
+
+    <link rel="stylesheet" href="/theme/css/main.css">
+    <link rel="stylesheet" href="/theme/css/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <div><img src="" class="grv-img"/></div>
+        <div class="title"><a href="/">だからといって、このままでいいはずがない。 </a></div>
+        <div class="sub-title"></div>
+
+<p>
+    <div class="view"><a href="/pages/about-me.html">About Me</a></div>
+  <div class="view"><a href="/archives.html">Archives</a></div>
+</p>
+
+<!-- Social links -->
+<div class="social">
+<h4>Follow Me</h4>
+<ul>
+    <li><a href="#">You can add links in your config file</a></li>
+    <li><a href="#">Another social link</a></li>
+</ul>
+</div>
+
+      </header>
+      <section>
+<section id="content" class="body">
+  <article>
+      <div class="article-title">
+        Raspberry Piのセットアップ(NOOBS)。
+      </div>
+
+    <div class="entry-content">
+<p>
+<small>
+<abbr class="published" title="2013-08-31T21:08:00">
+  土 31 8月 2013
+</abbr> | 
+ -- (<a href="/posts/2013/08/31/setup-raspberrypi/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>購入してからしばらく放置していたRaspberry Piをセットアップしてみる。</p>
+<p>今のところRaspberry
+Piでやりたいことはないから、セットアップするに足る目的もないけどなぁ、などと思いつつ作業を開始する。すると、どうしたことか全然上手くいかないので、セットアップすることが目的になって、Raspberry
+Piが起動した時には、なんとも言えない達成感が・・・。セットアップとは得てして、このような性質を持った作業である。</p>
+<p>さて、私の「セットアップ観」など何の役にも立たないので、私がセットアップの際に困った事を展開したい。</p>
+<p>まずインストールするOSをダウンロードするために、下記サイトを見る。</p>
+<p><a href="http://www.raspberrypi.org/downloads">http://www.raspberrypi.org/downloads</a></p>
+<p>「初心者はNOOBSを利用してOSをインストールするのが、おすすめ」ということなので、それに従う(ちなみにnoobは「新参者」という意味らしい)。「俺は利口だから中級者以上の扱いで頼むぜ」という感じで臨んで、マニュアルで色々やろうとしたら散々な結果になった、などということはぜひとも避けたい。</p>
+<p>さて、Transcendの8GB(Class10)のSDカードをフォーマットし、そこにNOOBSのファイルを突っ込み、Raspberry
+Piを起動した。</p>
+<p>しかし、画面に何も表示されない。よくみると「ACT」のLEDが消灯しているので、それを手がかりに調べてみる。</p>
+<p><a href="http://elinux.org/R-Pi_Troubleshooting">http://elinux.org/R-Pi_Troubleshooting</a></p>
+<p>上記のサイトによると、ACTはSDカードのステータスらしい。これは、所謂「<a href="http://elinux.org/RPi_SD_cards">SDカードの相性問題</a>」かと思い、別のSDカード(TOSHIBA)のもので試す。が、これも同じ結果。無念、Raspberry
+Piは屋根裏行きかなと思ったものの、さすがに本体・入門用書籍・SDカードx2の代金を捨てるのはあまりに勿体ないので、もうちょっと調べてみる。すると、気になる投稿を見つけた。</p>
+<p><a href="http://www.raspberrypi.org/phpBB3/viewtopic.php?t=48389&amp;p=378706">http://www.raspberrypi.org/phpBB3/viewtopic.php?t=48389&amp;p=378706</a></p>
+<hr />
+<p>by <strong><a href="http://www.raspberrypi.org/phpBB3/memberlist.php?mode=viewprofile&amp;u=14062">mahjongg</a></strong> » Fri Jun 28, 2013 12:26 am</p>
+<p>Okay, my bad, I suddenly realized you didn't make any install yet, and
+config.txt is (only) installed after you choose to install a linux
+variant. config.txt doesn't exist on the card until then.</p>
+<p>the NOOBS menu itself shouldn't need config.txt, as it uses the most
+elementary VGA format that any (VGA) monitor should be able to display.</p>
+<p>By default, NOOBS 1.2 will try to output over HDMI at your display's
+preferred resolution. If you do not see any output on your HDMI display
+or are using the composite output, you can manually select a different
+output mode by pressing one of the following number keys on your
+keyboard;</p>
+<p>​1. HDMI preferred mode - this is the default display mode for NOOBS.<br />
+2. HDMI safe mode - select this mode if your display is connected to
+the Pi's HDMI connector and you cannot see anything on screen after the
+Pi has booted.<br />
+3. Composite PAL mode - select either this mode or composite NTSC mode
+if you are using the composite RCA video connector on the Pi<br />
+4. Composite NTSC mode</p>
+<p>So in your case you will need to boot the Pi, wait for a second or so,
+then press either 3 or 4 until you get a display on your monitor.</p>
+<p>You can tell that your keypress has been registered as the green ACT LED
+will turn on after the key has been pressed before switching off once
+the display mode has been changed. If you still do no see a display
+after the LED goes off then try another mode.</p>
+<hr />
+<p>私も同じくVGAのディスプレイに出力していた。どうやらNOOBSをVGA出力で起動する場合にはキーボードのキーを押して、出力モードを選択しないといけないようだ。試しにキーボードの1を押してみる。すると、NOOBSのセットアップ画面が表示されたではないか！ということで、SDカードの問題ではなく、VGA出力が問題であったことが発覚した。こうして、無事にNOOBSからRaspbian
+“wheezy”をインストールすることができたのだが、ここで再度つまずいた。OS起動後、またもや画面が表示されないのである。だが、VGAが問題であることは分かっているので、再度調べてみる。すると、こういう記事を発見した。</p>
+<p><a href="http://nomolk.hatenablog.com/entry/2013/03/28/234247">http://nomolk.hatenablog.com/entry/2013/03/28/234247</a></p>
+<p>この記事と、記事のリンクにあるtwitterの投稿を参考にして、config.txtを編集し、最終的に、</p>
+<p>hdmi_safe=1<br />
+hdmi_drive=2</p>
+<p>という設定にすることで、画面が出力された。こうして、ゆとりプログラマー(noob)はハードウェアの手痛い洗礼を受けながらも、無事にRaspberry
+Piをセットアップすることができたのである。</p>
+<p>VGA出力にしている人は参考にしていただきたい。</p>
+    </div><!-- /.entry-content -->
+  </article>
+</section>
+      </section>
+      <footer>
+        <p><small>&copy; だからといって、このままでいいはずがない。 &mdash; Theme based on Sundown by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!-- Scale fix -->
+    <script>
+      var metas = document.getElementsByTagName('meta');
+      var i;
+      
+      if (navigator.userAgent.match(/iPhone/i)) {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+          }
+        }
+      
+        document.addEventListener("gesturestart", gestureStart, false);
+      }
+
+      function gestureStart() {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

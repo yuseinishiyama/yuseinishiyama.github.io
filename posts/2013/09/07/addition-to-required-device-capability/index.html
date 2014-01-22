@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>UnityでiOS向けのビルド時に、RequiredDeviceCapabilityを追加する方法。 KenIngle.com</title>
+
+    <link rel="stylesheet" href="/theme/css/main.css">
+    <link rel="stylesheet" href="/theme/css/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <div><img src="" class="grv-img"/></div>
+        <div class="title"><a href="/">だからといって、このままでいいはずがない。 </a></div>
+        <div class="sub-title"></div>
+
+<p>
+    <div class="view"><a href="/pages/about-me.html">About Me</a></div>
+  <div class="view"><a href="/archives.html">Archives</a></div>
+</p>
+
+<!-- Social links -->
+<div class="social">
+<h4>Follow Me</h4>
+<ul>
+    <li><a href="#">You can add links in your config file</a></li>
+    <li><a href="#">Another social link</a></li>
+</ul>
+</div>
+
+      </header>
+      <section>
+<section id="content" class="body">
+  <article>
+      <div class="article-title">
+        UnityでiOS向けのビルド時に、RequiredDeviceCapabilityを追加する方法。
+      </div>
+
+    <div class="entry-content">
+<p>
+<small>
+<abbr class="published" title="2013-09-07T21:06:00">
+  土 07 9月 2013
+</abbr> | 
+ -- (<a href="/posts/2013/09/07/addition-to-required-device-capability/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p><a href="https://developer.apple.com/library/ios/documentation/general/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html">RequiredDeviceCapability</a>を正しく設定していないと、Appleにリジェクトされてしまうことは、広く知られている。</p>
+<p>例えば、アプリに静止画を撮影する機能がある場合、このRequiredDeviceCapabilityに「still-camera」を追加してやらないといけない。</p>
+<p>RequiredDeviceCapabilityは正しく設定されていなくても、ビルドに失敗しないし、Validationも通過する。だからこそ、リジェクトされてから気づくわけで、こういう作業は特に自動化するメリットが大きいだろう。</p>
+<p>そこで、PostProcessBuildPlayerを利用し、Unityからのビルド時にInfo.plistを書き換えて、RequiredDeviceCapabilityを編集する関数を作成してみた。</p>
+<p>``` {.lang:python .decode:true title="PostProcessBuildPlayer"}
+def process_plist(plist_filepath):
+    pl = plistlib.readPlist(plist_filepath)
+    new_settings = {
+        "still-camera"
+    }
+    if "UIRequiredDeviceCapabilities" in pl:
+        pl["UIRequiredDeviceCapabilities"].extend(new_settings)
+    else:
+        pl["UIRequiredDeviceCapabilities"] = [new_settings]</p>
+<div class="highlight"><pre><span class="n">plistlib</span><span class="p">.</span><span class="n">writePlist</span><span class="p">(</span><span class="n">pl</span><span class="p">,</span> <span class="n">plist_filepath</span><span class="p">)</span>
+</pre></div>
+
+
+<p>```</p>
+<p>Info.plistのパスを与えてやると、Info.plistに「still-camera」を追記してくれる。ちなみに<a href="http://docs.python.jp/2/library/plistlib.html">plistlib</a>を利用しているので、インポートしておく必要が有る(当たり前のように書いてはいるが、plistlibの存在は今回はじめて知った...)。</p>
+    </div><!-- /.entry-content -->
+  </article>
+</section>
+      </section>
+      <footer>
+        <p><small>&copy; だからといって、このままでいいはずがない。 &mdash; Theme based on Sundown by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!-- Scale fix -->
+    <script>
+      var metas = document.getElementsByTagName('meta');
+      var i;
+      
+      if (navigator.userAgent.match(/iPhone/i)) {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+          }
+        }
+      
+        document.addEventListener("gesturestart", gestureStart, false);
+      }
+
+      function gestureStart() {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

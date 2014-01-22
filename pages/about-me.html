@@ -1,35 +1,43 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--
-Design by Free CSS Templates
-http://www.freecsstemplates.org
-Released for free under a Creative Commons Attribution 2.5 License
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>About Me KenIngle.com</title>
 
-Name       : Brown Stone  
-Description: A two-column, fixed-width design with dark color scheme.
-Version    : 1.0
-Released   : 20100928
+    <link rel="stylesheet" href="/theme/css/main.css">
+    <link rel="stylesheet" href="/theme/css/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <div><img src="" class="grv-img"/></div>
+        <div class="title"><a href="/">だからといって、このままでいいはずがない。 </a></div>
+        <div class="sub-title"></div>
 
--->
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta name="keywords" content="" />
-<meta name="description" content="" />
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>About Me</title>
-<link href="/theme/css/style.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="/" type="application/atom+xml" rel="alternate" title="だからといって、このままでいいはずがない。 ATOM Feed" />
-</head>
-<body>
-<div id="wrapper">
-	<div id="page">
-		<div id="page-bgtop">
-			<div id="page-bgbtm">
-        
-<div id="content">
-<div class="post">    
-    <h2 class="title"><a href="/pages/about-me.html">About Me</a></h1>
-    <div style="clear: both;">&nbsp;</div>
-    <div class="entry">
+<p>
+    <div class="view"><a href="/pages/about-me.html">About Me</a></div>
+  <div class="view"><a href="/archives.html">Archives</a></div>
+</p>
+
+<!-- Social links -->
+<div class="social">
+<h4>Follow Me</h4>
+<ul>
+    <li><a href="#">You can add links in your config file</a></li>
+    <li><a href="#">Another social link</a></li>
+</ul>
+</div>
+
+      </header>
+      <section>
+<section id="content" class="body">    
+    <h1 class="entry-title">About Me</h1>
+    
     <p>[gravatar email="allegllet.scherzand@gmail.com" alt="My Gravatar"
 size="150"]</p>
 <ul>
@@ -67,74 +75,34 @@ OpenGLや画像処理に興味がある。</p>
     Jazz and MPB!</p>
 </li>
 </ul>
+</section>
+      </section>
+      <footer>
+        <p><small>&copy; だからといって、このままでいいはずがない。 &mdash; Theme based on Sundown by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
     </div>
-    </div>
-</div>
+    <!-- Scale fix -->
+    <script>
+      var metas = document.getElementsByTagName('meta');
+      var i;
+      
+      if (navigator.userAgent.match(/iPhone/i)) {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+          }
+        }
+      
+        document.addEventListener("gesturestart", gestureStart, false);
+      }
 
-				<div id="sidebar">
-					<div id="logo">
-						<h1><a href="">だからといって、このままでいいはずがない。</h1>
-					</div>
-					<div id="menu">
-						<ul>
-							<li class="current_page_item"><a href="">Home</a></li>
-							<li><a href="/archives.html">Archives</a></li>
-                                                            <li><a href="/pages/about-me.html">About Me</a></li>
-						</ul>
-					</div>
-					<ul>
-						<li>
-							<h2>Catégories</h2>
-							<ul>
-								 <li ><a href="/category/impressions.html">Impressions</a></li>
-								 <li ><a href="/category/impressions-music.html">Impressions, Music</a></li>
-								 <li ><a href="/category/impressions-music-programming.html">Impressions, Music, Programming</a></li>
-								 <li ><a href="/category/impressions-programming.html">Impressions, Programming</a></li>
-								 <li ><a href="/category/impressions-programming-sicp.html">Impressions, Programming, SICP</a></li>
-								 <li ><a href="/category/misc.html">misc</a></li>
-								 <li ><a href="/category/programming.html">Programming</a></li>
-								 <li ><a href="/category/programming-sicp.html">Programming, SICP</a></li>
-								 <li ><a href="/category/programming-sicp-patahene.html">Programming, SICP, パタヘネ</a></li>
-							</ul>
-						</li>
-						<li>
-							<h2>Blogroll</h2>
-							<ul>
-                                                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                                                            <li><a href="http://python.org/">Python.org</a></li>
-                                                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                                                            <li><a href="#">You can modify those links in your config file</a></li>
-							</ul>
-						</li>
-                                                <li>
-                                                        <h2>Social</h2>
-                                                        <ul>
-                                                            <li><a href="/" rel="alternate">Flux Atom</a></li>
-                                                            <li><a href="#">You can add links in your config file</a></li>
-                                                            <li><a href="#">Another social link</a></li>
-                                                        </ul>
-                                                </li><!-- /.social -->
-						<li>
-						        <h2>Tags</h2>
-						        <ul>
-						        </ul>
-						</li>
-						
-						
-					</ul>
-				</div>
-				<!-- end #sidebar -->
-				<div style="clear: both;">&nbsp;</div>
-			</div>
-		</div>
-	</div>
-	<!-- end #page -->
-
-<div id="footer">
-	<p>Copyright (c) 2008 Sitename.com. All rights reserved. Design by <a href="http://www.freecsstemplates.org/">CSS Templates</a>.</p>
-	<p>Proudly powered by <a href="http://alexis.notmyidea.org/pelican/">pelican</a>, which takes great advantages of <a href="http://python.org">python</a>.
-</p>
-</div>
-<!-- end #footer -->
-</body>
+      function gestureStart() {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+          }
+        }
+      }
+    </script>
+  </body>
 </html>

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>iPhoneでの同時動画再生数の上限について KenIngle.com</title>
+
+    <link rel="stylesheet" href="/theme/css/main.css">
+    <link rel="stylesheet" href="/theme/css/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <div><img src="" class="grv-img"/></div>
+        <div class="title"><a href="/">だからといって、このままでいいはずがない。 </a></div>
+        <div class="sub-title"></div>
+
+<p>
+    <div class="view"><a href="/pages/about-me.html">About Me</a></div>
+  <div class="view"><a href="/archives.html">Archives</a></div>
+</p>
+
+<!-- Social links -->
+<div class="social">
+<h4>Follow Me</h4>
+<ul>
+    <li><a href="#">You can add links in your config file</a></li>
+    <li><a href="#">Another social link</a></li>
+</ul>
+</div>
+
+      </header>
+      <section>
+<section id="content" class="body">
+  <article>
+      <div class="article-title">
+        iPhoneでの同時動画再生数の上限について
+      </div>
+
+    <div class="entry-content">
+<p>
+<small>
+<abbr class="published" title="2013-06-13T00:15:00">
+  木 13 6月 2013
+</abbr> | 
+ -- (<a href="/posts/2013/06/13/simultaneous-video-playing-in-ios/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>現在動画編集アプリを作っている。<br />
+動画にエフェクトとかBGMとかなんやらの設定をしていくわけだが、  </p>
+<p>画面上部にプレビュー画面を持ち、その下に編集用のOutletがいくつか存在するような見た目のViewControllerがNavigationControllerでいくつか続いていくというような作りだ。</p>
+<p>ここで奇妙な問題が発生した。<br />
+MPMoviePlayerControllerを使用して、動画を再生しようとしたところ</p>
+<p>``` {.lang:objc .decode:true}
+Error Domain=AVFoundationErrorDomain Code=-11839 "Cannot Decode"</p>
+<div class="highlight"><pre><span class="err">こんなエラーがでた。デコードできない？動画の形式が悪いのだろうか？</span>  
+
+<span class="err">だが、試しにその</span><span class="n">ViewController</span><span class="err">だけにして実行してみたところ問題なく再生できた。</span>  
+<span class="err">ということは、特定のコンテキストにおいてのみデコードが失敗するわけだ。</span>
+
+<span class="p">[</span><span class="err">先日の記事</span><span class="p">][]</span><span class="err">にもある通り、いざ実装を始めると全く予期しないところで躓くことが多々ある。</span>  
+
+<span class="err">特にこういうロジックの問題でない箇所は原因の特定が難しく、心が折れそうになる。</span>
+
+<span class="err">とにかくググるしかないので、上記のログをそのまま検索バーに貼り付けた。</span>  
+<span class="err">すると同じ様な現象で困っている人を発見することが出来た。</span>
+
+<span class="p">[</span><span class="n">http</span><span class="o">:</span><span class="c1">//stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decode][]</span>
+
+<span class="o">&gt;</span> <span class="n">There</span> <span class="n">is</span> <span class="n">a</span> <span class="n">limit</span> <span class="n">on</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">concurrent</span> <span class="n">video</span> <span class="n">players</span> <span class="n">that</span>
+<span class="o">&gt;</span> <span class="n">AVFoundation</span> <span class="n">will</span> <span class="n">allow</span><span class="p">.</span> <span class="n">It</span> <span class="n">is</span> <span class="n">due</span> <span class="n">to</span> <span class="n">the</span> <span class="n">limitations</span> <span class="n">of</span> <span class="n">iOS</span> <span class="n">hardware</span><span class="p">.</span>
+<span class="o">&gt;</span> <span class="n">The</span> <span class="n">limit</span> <span class="k">for</span> <span class="n">current</span> <span class="n">devices</span> <span class="n">is</span> <span class="mi">4</span> <span class="n">players</span><span class="p">.</span> <span class="n">If</span> <span class="n">you</span> <span class="n">create</span> <span class="n">a</span> <span class="mi">5</span><span class="n">th</span>
+<span class="o">&gt;</span> <span class="n">player</span><span class="p">,</span> <span class="n">you</span> <span class="n">will</span> <span class="n">get</span> <span class="n">the</span> <span class="s">&quot;cannot decode&quot;</span> <span class="n">error</span><span class="p">.</span> <span class="n">It</span> <span class="n">is</span> <span class="n">not</span> <span class="n">a</span> <span class="n">limit</span> <span class="n">on</span>
+<span class="o">&gt;</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">instances</span> <span class="n">of</span> <span class="n">AVPlayer</span><span class="p">,</span> <span class="n">or</span> <span class="n">AVPlayerItem</span><span class="p">.</span> <span class="n">Rather</span><span class="p">,</span><span class="n">it</span> <span class="n">is</span> <span class="n">the</span>
+<span class="o">&gt;</span> <span class="n">association</span> <span class="n">of</span> <span class="n">AVPlayerItem</span> <span class="n">with</span> <span class="n">an</span> <span class="n">AVPlayer</span> <span class="n">which</span> <span class="n">creates</span> <span class="n">a</span> <span class="s">&quot;render</span>
+<span class="o">&gt;</span> <span class="n">pipeline</span><span class="s">&quot;, and you are limited to 4 of these. For example, this causes</span>
+<span class="o">&gt;</span> <span class="n">a</span> <span class="n">new</span> <span class="n">render</span> <span class="n">pipeline</span><span class="o">:</span>
+
+<span class="err">どうやら、「</span><span class="n">AVFoundation</span><span class="err">で同時に実行できるプレイヤーの数はハードウェアによって制限がある」らしい。</span>
+
+<span class="o">&gt;</span> <span class="n">What</span> <span class="n">I</span> <span class="n">eventually</span> <span class="n">found</span> <span class="n">is</span> <span class="n">that</span> <span class="n">the</span> <span class="n">AVPlayers</span> <span class="n">were</span> <span class="n">not</span> <span class="n">being</span> <span class="n">released</span>
+<span class="o">&gt;</span> <span class="n">when</span> <span class="n">I</span> <span class="n">had</span> <span class="n">thought</span> <span class="n">they</span> <span class="n">were</span><span class="p">.</span> <span class="n">In</span> <span class="n">my</span> <span class="k">case</span> <span class="n">I</span> <span class="n">was</span> <span class="n">pushing</span> <span class="n">my</span> <span class="n">AVPlayer</span>
+<span class="o">&gt;</span> <span class="n">View</span> <span class="n">Controller</span> <span class="n">onto</span> <span class="n">a</span> <span class="n">Navigation</span> <span class="n">Controller</span><span class="p">.</span> <span class="n">Even</span> <span class="n">though</span> <span class="n">I</span> <span class="n">was</span> <span class="n">only</span>
+<span class="o">&gt;</span> <span class="n">creating</span> <span class="n">one</span> <span class="n">AVPlayer</span> <span class="n">instance</span> <span class="n">at</span> <span class="n">a</span> <span class="n">time</span><span class="p">,</span> <span class="n">when</span> <span class="n">the</span> <span class="n">View</span> <span class="n">Controllers</span>
+<span class="o">&gt;</span> <span class="n">are</span> <span class="n">popped</span> <span class="n">off</span> <span class="n">a</span> <span class="n">nav</span> <span class="n">controller</span> <span class="n">they</span> <span class="n">were</span> <span class="n">not</span> <span class="n">being</span> <span class="n">released</span>
+<span class="o">&gt;</span> <span class="n">immediately</span><span class="p">.</span> <span class="n">It</span> <span class="n">was</span> <span class="n">then</span> <span class="n">very</span> <span class="n">easy</span> <span class="k">for</span> <span class="n">me</span> <span class="n">to</span> <span class="n">reach</span> <span class="mi">4</span> <span class="n">AVPlayer</span>
+<span class="o">&gt;</span> <span class="n">instances</span> <span class="n">before</span> <span class="n">the</span> <span class="n">old</span> <span class="n">View</span> <span class="n">Controllers</span> <span class="n">were</span> <span class="n">cleaned</span> <span class="n">up</span><span class="p">.</span>
+
+<span class="err">確かに、自分の場合は</span><span class="n">MPMoviePlayerController</span><span class="err">でエラーが出たが、それ以前に複数の</span><span class="n">AVPlayer</span><span class="err">を使用していて、それらは</span><span class="n">NavigationController</span><span class="err">に残ったままだ。</span><span class="n">AVPlayer</span><span class="err">のインスタンスを開放しろとのことだが、試しに以下のコードを画面遷移時に実行してみた。</span>
+
+<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">objc</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span><span class="p">}</span>
+<span class="p">[</span><span class="n">_player</span> <span class="n">replaceCurrentItemWithPlayerItem</span><span class="o">:</span><span class="nb">nil</span><span class="p">];</span>
+</pre></div>
+
+
+<p>なんと、これだけで治った。</p>
+<p>というわけで、AVPlayerやMPMoviePlayerController(MPMoviePlayerViewControllerも)なんかを複数使うときは、AVPlayerItemのインスタンスが残ったままにならないように注意しよう。</p>
+<div class="highlight"><pre><span class="nl">http:</span><span class="c1">//stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decodehttp://</span>
+</pre></div>
+    </div><!-- /.entry-content -->
+  </article>
+</section>
+      </section>
+      <footer>
+        <p><small>&copy; だからといって、このままでいいはずがない。 &mdash; Theme based on Sundown by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!-- Scale fix -->
+    <script>
+      var metas = document.getElementsByTagName('meta');
+      var i;
+      
+      if (navigator.userAgent.match(/iPhone/i)) {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+          }
+        }
+      
+        document.addEventListener("gesturestart", gestureStart, false);
+      }
+
+      function gestureStart() {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

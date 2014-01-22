@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>だからといって、このままでいいはずがない。 - Programming, SICP KenIngle.com</title>
+
+    <link rel="stylesheet" href="/theme/css/main.css">
+    <link rel="stylesheet" href="/theme/css/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <div><img src="" class="grv-img"/></div>
+        <div class="title"><a href="/">だからといって、このままでいいはずがない。 </a></div>
+        <div class="sub-title"></div>
+
+<p>
+    <div class="view"><a href="/pages/about-me.html">About Me</a></div>
+  <div class="view"><a href="/archives.html">Archives</a></div>
+</p>
+
+<!-- Social links -->
+<div class="social">
+<h4>Follow Me</h4>
+<ul>
+    <li><a href="#">You can add links in your config file</a></li>
+    <li><a href="#">Another social link</a></li>
+</ul>
+</div>
+
+      </header>
+      <section>
+      <div class="front-title"><a href="/posts/2013/12/19/sicp5/">SICP 3.1.2 The Benefits of Introducing Assignment</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-12-19T03:11:00">
+  木 19 12月 2013
+</abbr> | 
+ -- (<a href="/posts/2013/12/19/sicp5/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>代入の効用について説明するだけにしては、Ex 3.5.
+はちょっとやり過ぎな気もするが、なかなか興味深い内容ではある。</p>
+<blockquote>
+<p>Monte Carlo integration is a method of estimating definite integrals
+by means of Monte Carlo simulation. Consider computing the area of a
+region of space described by a predicate P(x, y) that is true for
+points (x, y) in the region and false ...</p></blockquote> 
+      <div class="read-more"><a href="/posts/2013/12/19/sicp5/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="/posts/2013/12/08/sicp4/">SICP 第2章「Building Abstractions with Data」【後編】</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-12-08T23:35:00">
+  日 08 12月 2013
+</abbr> | 
+ -- (<a href="/posts/2013/12/08/sicp4/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>後半はGeneric Procedure関する解説。</p>
+<p>オブジェクト指向の言語で開発を行っていると、「そもそも型とは」というようなことを考える機会がほとんどない。言語のプリミティブな機能を利用して、型の仕組みを実装してみるのはなかなか貴重な経験だ。</p>
+<p>ここでは、Generic Procedureを実現するための戦略が3つ紹介される。</p>
+<ul>
+<li>
+<p>explicit dispatch  </p>
+<p>総称関数側(「たす」、「ひく」など)が、データの型(「実数」、「複素数」など)を見て、実際に実行される函数を決定する。  </p>
+<p>型が追加されるたびに、総称関数側の分岐を追加する必要がある。既存のコードを修正する必要があるので、余り得策とはいえない？</p>
+</li>
+<li>
+<p>data-directed  </p>
+<p>「総称函数名」、「型」、「実際に実行される函数」の結びつきを管理するテーブルを作成する。  </p>
+<p>総称関数内での分岐を作る必要はないが、新しい函数や型が追加されるたびにグローバルなテーブルを更新する必要がある。</p>
+</li>
+<li>
+<p>message-passing<br />
+    "intelligent operation"ではなく、"intelligent data
+    object"。つまり、型に応じた処理を行う「賢い処理」の代わりに、処理に応じて動作を変える「賢いデータ」を作るという方針。</p>
+</li>
+</ul>
+<p>message-passingは非常にオブジェクト指向的だ。直交座標系で複素数を表現する ...</p> 
+      <div class="read-more"><a href="/posts/2013/12/08/sicp4/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="/posts/2013/12/01/emacs%e3%81%a7scheme%e3%81%ae%e8%87%aa%e5%8b%95%e8%a3%9c%e5%ae%8c%e3%82%92%e8%a1%8c%e3%81%86%e3%80%82/">EmacsでSchemeの自動補完を行う。</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-12-01T23:41:00">
+  日 01 12月 2013
+</abbr> | 
+ -- (<a href="/posts/2013/12/01/emacs%e3%81%a7scheme%e3%81%ae%e8%87%aa%e5%8b%95%e8%a3%9c%e5%ae%8c%e3%82%92%e8%a1%8c%e3%81%86%e3%80%82/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>環境構築に手間をかけたくない質なので、最初はDrRacketを利用してSchemeのコードを書いていた。</p>
+<p><a href="http://www.atmarkit.co.jp/ait/articles/0812/17/news149_3.html" title="Gaucheでメタプログラミング">Gaucheでメタプログラミング</a></p>
+<p>しかし、上記のサイトなどから、Emacsでも「別ウインドウで評価しながら、ソースを書けること」が分った。<br />
+その結果、結局Emacs+Gaucheの環境に落ち着いた。</p>
+<p>しばらくはこれで満足していたし、新しい言語であれば、全て手で打つことも、理解を早めるという点では無駄ではないだろう。  </p>
+<p>しかし、SICPの分量・難易度を考えると、あまりゆっくりコーディングしている暇はない。さすがに、最低限の自動補完が欲しくなった。</p>
+<p>ところが、「scheme emacs
+補完」とかで検索すると、結構面倒臭そうな方法が多い。  </p>
+<p>結局、emacsのパッケージ管理システムを使ってauto-completeをインストールする方法が一番楽そうだ、という結論に達した。  </p>
+<p>その方法を備忘録も兼ねて記載しておく。ちなみにEmacsのバージョンは24.2だ。</p>
+<p>まず、パッケージ管理システムを利用したことのない人はリポジトリを設定しよう。</p>
+<p>``` {.lang:lisp .decode:true title="リポジトリの設定。"}
+;;;;;;;;;;;;;;;;;;;;Package;;;;;;;;;;;;;;;;;;;;</p>
+<p>(require 'package)
+(add-to-list 'package-archives
+         '("marmalade" . "http://marmalade-repo ...</p> 
+      <div class="read-more"><a href="/posts/2013/12/01/emacs%e3%81%a7scheme%e3%81%ae%e8%87%aa%e5%8b%95%e8%a3%9c%e5%ae%8c%e3%82%92%e8%a1%8c%e3%81%86%e3%80%82/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="/posts/2013/10/27/sicp2/">SICP 第1章「Building Abstractions with Procedures」を読み終えて。(後編)</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-10-27T03:50:00">
+  日 27 10月 2013
+</abbr> | 
+ -- (<a href="/posts/2013/10/27/sicp2/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p><a href="http://yuseinishiyama.com/archives/184" title="SICP 第1章「Building Abstractions with Procedures」を読み終えて。(前編)">(前編はこちら)</a></p>
+<p>1章から学べたことを列挙する。</p>
+<p>・Schemeに慣れた。  </p>
+<p>if、cond、define、let、lambdaなどを用いてプログラミングできるようになった。例の「カッコ」にもだいぶ慣れてきた。</p>
+<p>・linear recursionとiterationの違いが分かるようになった。  </p>
+<p>今以上に不慣れな時のコードではあるが、以下のようにrecursionとiterationで再帰が書けるようになった。後者のほうが遥かに効率が良い。</p>
+<p>``` {.lang:scheme .decode:true title="Exercise 1.11. "}
+;recursion
+(define (f n)
+  (cond ((&lt; n 3) n)
+        (else (+ (f (- n 1))
+                 (<em> 2 (f (- n 2)))
+                 (</em> 3 (f (- n 3)))))))</p>
+<p>;iteration
+(define (f-iter product product-1 product-2 ...</p> 
+      <div class="read-more"><a href="/posts/2013/10/27/sicp2/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="/posts/2013/10/27/sicp1/">SICP 第1章「Building Abstractions with Procedures」を読み終えて。(前編)</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-10-27T03:15:00">
+  日 27 10月 2013
+</abbr> | 
+ -- (<a href="/posts/2013/10/27/sicp1/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p><a href="http://yuseinishiyama.com/archives/179" title="代替不可能なプログラマとは。">先日の投稿「代替不可能なプログラマとは。」</a>にある通り、SICPを読み始め、先日第1章「Building
+Abstractions with
+Procedures」を読み終えた。実際には<a href="http://yuseinishiyama.com/archives/179" title="代替不可能なプログラマとは。">先日の投稿</a>より少し前から読み始めていて、1章読み終えるのに3週間ほどかかったことになる。(さらに言うと、3ヶ月ほど前に、ビデオ講義を3時間分ほど鑑賞した。この時は、テキストが存在することを知らなかったのと、当たり前だが偉大なるハル・アベルソン氏とジェラルド・ジェイ・サスマン氏の早口の英語が聞き取れるはずもなく、あえなく挫折した。)</p>
+<p>学習環境は以下。</p>
+<p>・テキストは原著で。  </p>
+<p>テキストは原著がオンラインで閲覧できるので、原著で読むことにした。日本語訳に対する酷評を聞き過ぎたせいで、理解できなかった場合に翻訳のせいにしてしまいそうだからだ。それと、語学能力の訓練にもなればと思っている。英語だけをやっている時間がないので、英語とプログラミングを一緒に効率良く学びたい。</p>
+<p>・開発環境にはDrRacketを使用。  </p>
+<p>コマンドラインとかEmacsとかも試してみたが、結局一番楽そうなものに落ち着いた。</p>
+<p>SICPを読んだ結果できるようになること、得られる知識というのははっきりしていなくて、ただただ今よりプログラミングを深く理解できるに違いないという予感だけがモチベーションになっている。SICPに関して「<a href="http://www.cs.berkeley.edu/~bh/sicp.html" title="Why Structure and Interpretation of Computer Programs matters">Why
+Structure and Interpretation of Computer Programs
+matters</a>」という記事を見つけた ...</p> 
+      <div class="read-more"><a href="/posts/2013/10/27/sicp1/">read more...</a></div>
+      <hr />
+
+      </section>
+      <footer>
+        <p><small>&copy; だからといって、このままでいいはずがない。 &mdash; Theme based on Sundown by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!-- Scale fix -->
+    <script>
+      var metas = document.getElementsByTagName('meta');
+      var i;
+      
+      if (navigator.userAgent.match(/iPhone/i)) {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+          }
+        }
+      
+        document.addEventListener("gesturestart", gestureStart, false);
+      }
+
+      function gestureStart() {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
