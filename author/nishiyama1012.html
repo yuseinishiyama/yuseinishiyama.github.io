@@ -139,17 +139,18 @@
 <p>例えば、アプリに静止画を撮影する機能がある場合、このRequiredDeviceCapabilityに「still-camera」を追加してやらないといけない。</p>
 <p>RequiredDeviceCapabilityは正しく設定されていなくても、ビルドに失敗しないし、Validationも通過する。だからこそ、リジェクトされてから気づくわけで、こういう作業は特に自動化するメリットが大きいだろう。</p>
 <p>そこで、PostProcessBuildPlayerを利用し、Unityからのビルド時にInfo.plistを書き換えて、RequiredDeviceCapabilityを編集する関数を作成してみた。</p>
-<p>``` {.lang:python .decode:true title="PostProcessBuildPlayer"}
-def process_plist(plist_filepath):
-    pl = plistlib.readPlist(plist_filepath)
-    new_settings = {
-        "still-camera"
-    }
-    if "UIRequiredDeviceCapabilities" in pl:
-        pl["UIRequiredDeviceCapabilities"].extend(new_settings)
-    else:
-        pl["UIRequiredDeviceCapabilities"] = [new_settings]</p>
-<div class="highlight"><pre><span class="n">plistlib</span><span class="p">.</span><span class="n">writePlist</span><span class="p">(</span><span class="n">pl ...</span></pre></div> 
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">process_plist</span><span class="p">(</span><span class="n">plist_filepath</span><span class="p">):</span>
+  <span class="n">pl</span> <span class="o">=</span> <span class="n">plistlib</span><span class="o">.</span><span class="n">readPlist</span><span class="p">(</span><span class="n">plist_filepath</span><span class="p">)</span>
+  <span class="n">new_settings</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;still-camera&quot;</span><span class="p">}</span>
+  <span class="k">if</span> <span class="s">&quot;UIRequiredDeviceCapabilities&quot;</span> <span class="ow">in</span> <span class="n">pl</span><span class="p">:</span>
+    <span class="n">pl</span><span class="p">[</span><span class="s">&quot;UIRequiredDeviceCapabilities&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">new_settings</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">pl</span><span class="p">[</span><span class="s">&quot;UIRequiredDeviceCapabilities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_settings</span><span class="p">]</span>
+  <span class="n">plistlib</span><span class="o">.</span><span class="n">writePlist</span><span class="p">(</span><span class="n">pl</span><span class="p">,</span> <span class="n">plist_filepath</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Info.plistのパスを与えてやると、Info.plistに「still-camera ...</p> 
       <div class="read-more"><a href="/posts/2013/09/07/addition-to-required-device-capability/">read more...</a></div>
       <hr />
       <div class="front-title"><a href="/posts/2013/09/06/screenshot-with-unity-ios/">Unityでスクリーンショットを撮影し、iPhoneのカメラロールに保存する方法。</a></div>
