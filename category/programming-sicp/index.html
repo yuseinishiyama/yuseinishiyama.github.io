@@ -102,11 +102,11 @@ points (x, y) in the region and false ...</p></blockquote>
 <p>結局、emacsのパッケージ管理システムを使ってauto-completeをインストールする方法が一番楽そうだ、という結論に達した。  </p>
 <p>その方法を備忘録も兼ねて記載しておく。ちなみにEmacsのバージョンは24.2だ。</p>
 <p>まず、パッケージ管理システムを利用したことのない人はリポジトリを設定しよう。</p>
-<p>``` {.lang:lisp .decode:true title="リポジトリの設定。"}
-;;;;;;;;;;;;;;;;;;;;Package;;;;;;;;;;;;;;;;;;;;</p>
-<p>(require 'package)
-(add-to-list 'package-archives
-         '("marmalade" . "http://marmalade-repo ...</p> 
+<div class="highlight"><pre><span class="p">;;;;;;;;;;;;;;;;;;;;</span><span class="n">Package</span><span class="p">;;;;;;;;;;;;;;;;;;;;</span>
+<span class="p">(</span><span class="n">require</span> <span class="err">&#39;</span><span class="n">package</span><span class="p">)</span>
+<span class="p">(</span><span class="n">add</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">list</span> <span class="err">&#39;</span><span class="n">package</span><span class="o">-</span><span class="n">archives</span>
+     <span class="err">&#39;</span><span class="p">(</span><span class="s">&quot;marmalade&quot;</span> <span class="p">.</span> <span class="s">&quot;http://marmalade-repo.org/packages/&quot;</span><span class="p">)</span>
+     <span class="err">&#39;</span><span class="p">(</span><span class="s">&quot;melpa ...</span></pre></div> 
       <div class="read-more"><a href="/posts/2013/12/01/autocomplite-scheme-with-emacs-and-gauche/">read more...</a></div>
       <hr />
       <div class="front-title"><a href="/posts/2013/10/27/sicp2/">SICP 第1章「Building Abstractions with Procedures」を読み終えて。(後編)</a></div>

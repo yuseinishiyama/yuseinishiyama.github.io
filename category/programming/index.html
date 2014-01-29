@@ -50,14 +50,21 @@
 <p>試しに動画に対して顔を検出するサンプルを作成してみた。</p>
 <p><a href="https://github.com/yuseinishiyama/VideoFaceDetection">https://github.com/yuseinishiyama/VideoFaceDetection</a></p>
 <p>CIDetectorとAVAssetReaderを組み合わせるだけで簡単にできる。</p>
-<p>``` {.lang:objc .decode:true title="VFDVideoFaceDetector.h"}</p>
-<h1>import <Foundation/Foundation.h></h1>
-<p>typedef void(^VFDVideoReaderCompletionHandler)(NSArray *allFeatures);</p>
-<p>@interface VFDVideoFaceDetector : NSObject
-- (void)readFromURL:(NSURL *)targetURL
-  complitionHandler:(VFDVideoReaderCompletionHandler)completionHandler;
-@end</p>
-<div class="highlight"><pre><span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">objc</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;VFDVideoFaceDetector.m ...</span></pre></div> 
+<p>VFDVideoFaceDetector.h</p>
+<div class="highlight"><pre><span class="cp">#import &lt;Foundation/Foundation.h&gt;</span>
+
+<span class="k">typedef</span> <span class="nf">void</span><span class="p">(</span><span class="o">^</span><span class="n">VFDVideoReaderCompletionHandler</span><span class="p">)(</span><span class="n">NSArray</span> <span class="o">*</span><span class="n">allFeatures</span><span class="p">);</span>
+
+<span class="k">@interface</span> <span class="nc">VFDVideoFaceDetector</span> : <span class="nc">NSObject</span>
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">readFromURL:</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="p">)</span><span class="nv">targetURL</span>
+<span class="nl">complitionHandler:</span><span class="p">(</span><span class="n">VFDVideoReaderCompletionHandler</span><span class="p">)</span><span class="nv">completionHandler</span><span class="p">;</span>
+<span class="k">@end</span>
+</pre></div>
+
+
+<p>VFDVideoFaceDetector.m</p>
+<div class="highlight"><pre><span class="cp">#import &quot;VFDVideoFaceDetector.h&quot;</span>
+<span class="cp">#import &lt;AVFoundation/AVFoundation.h ...</span></pre></div> 
       <div class="read-more"><a href="/posts/2013/12/24/face-detection-from-movie/">read more...</a></div>
       <hr />
       <div class="front-title"><a href="/posts/2013/11/13/tech-hills7/">第7回テックヒルズにいってきました。</a></div>

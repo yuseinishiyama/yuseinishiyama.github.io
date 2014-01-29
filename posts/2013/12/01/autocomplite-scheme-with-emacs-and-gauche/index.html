@@ -60,33 +60,28 @@
 <p>結局、emacsのパッケージ管理システムを使ってauto-completeをインストールする方法が一番楽そうだ、という結論に達した。  </p>
 <p>その方法を備忘録も兼ねて記載しておく。ちなみにEmacsのバージョンは24.2だ。</p>
 <p>まず、パッケージ管理システムを利用したことのない人はリポジトリを設定しよう。</p>
-<p>``` {.lang:lisp .decode:true title="リポジトリの設定。"}
-;;;;;;;;;;;;;;;;;;;;Package;;;;;;;;;;;;;;;;;;;;</p>
-<p>(require 'package)
-(add-to-list 'package-archives
-         '("marmalade" . "http://marmalade-repo.org/packages/")
-         '("melpa" . "http://melpa.milkbox.net/packages/"))</p>
-<div class="highlight"><pre><span class="err">設定後は</span>
+<div class="highlight"><pre><span class="p">;;;;;;;;;;;;;;;;;;;;</span><span class="n">Package</span><span class="p">;;;;;;;;;;;;;;;;;;;;</span>
+<span class="p">(</span><span class="n">require</span> <span class="err">&#39;</span><span class="n">package</span><span class="p">)</span>
+<span class="p">(</span><span class="n">add</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">list</span> <span class="err">&#39;</span><span class="n">package</span><span class="o">-</span><span class="n">archives</span>
+     <span class="err">&#39;</span><span class="p">(</span><span class="s">&quot;marmalade&quot;</span> <span class="p">.</span> <span class="s">&quot;http://marmalade-repo.org/packages/&quot;</span><span class="p">)</span>
+     <span class="err">&#39;</span><span class="p">(</span><span class="s">&quot;melpa&quot;</span> <span class="p">.</span> <span class="s">&quot;http://melpa.milkbox.net/packages/&quot;</span><span class="p">))</span>
+</pre></div>
 
-<span class="n">M</span><span class="o">-</span><span class="n">x</span> <span class="n">package</span><span class="o">-</span><span class="n">list</span><span class="o">-</span><span class="n">packages</span>
 
-<span class="err">でインストール可能なパッケージの一覧が確認できる。「</span><span class="n">i</span><span class="err">」で選択し「</span><span class="n">x</span><span class="err">」でインストールの実行だ。</span>  
-
-<span class="err">もちろんここでは「</span><span class="k">auto</span><span class="o">-</span><span class="n">complete</span><span class="err">」をインストールする。</span><span class="mi">2013</span><span class="err">年</span><span class="mi">12</span><span class="err">月</span><span class="mi">1</span><span class="err">日現在、最新版は</span><span class="mf">1.4</span><span class="err">だ。</span>
-
-<span class="err">ちなみに、パッケージ管理システムでインストールした</span><span class="n">elisp</span><span class="err">ファイルはデフォルトで、「\</span><span class="o">~/</span><span class="p">.</span><span class="n">emacs</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">elpa</span><span class="o">/</span><span class="err">パッケージ名」内に格納される。毎回、パッケージ名のディレクトリを</span><span class="n">load</span><span class="o">-</span><span class="n">path</span><span class="err">として追加するのも面倒なので、</span><span class="n">elpa</span><span class="err">以下は自動的に</span><span class="n">load</span><span class="o">-</span><span class="n">path</span><span class="err">に追加されるようにしておくと便利だろう</span><span class="p">([</span><span class="err">特定のディレクトリ配下のディレクトリを</span><span class="n">load</span><span class="o">-</span><span class="n">path</span><span class="err">に追加する</span><span class="p">][]</span><span class="err">を参考にした</span><span class="p">)</span><span class="err">。</span>
-
-<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">lisp</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;ロードパスの設定。&quot;</span><span class="p">}</span>
-<span class="p">;;;;;;;;;;;;;;;;;;;;</span><span class="n">LoadPath</span><span class="p">;;;;;;;;;;;;;;;;;;;;</span>
-
+<p>設定後は</p>
+<p>M-x package-list-packages</p>
+<p>でインストール可能なパッケージの一覧が確認できる。「i」で選択し「x」でインストールの実行だ。  </p>
+<p>もちろんここでは「auto-complete」をインストールする。2013年12月1日現在、最新版は1.4だ。</p>
+<p>ちなみに、パッケージ管理システムでインストールしたelispファイルはデフォルトで、「\~/.emacs.d/elpa/パッケージ名」内に格納される。毎回、パッケージ名のディレクトリをload-pathとして追加するのも面倒なので、elpa以下は自動的にload-pathに追加されるようにしておくと便利だろう(<a href="http://qiita.com/icb54615/items/4c652ad4afccae5fe2ef" title="特定のディレクトリ配下のディレクトリをload-pathに追加する">特定のディレクトリ配下のディレクトリをload-pathに追加する</a>を参考にした)。</p>
+<div class="highlight"><pre><span class="p">;;;;;;;;;;;;;;;;;;;;</span><span class="n">LoadPath</span><span class="p">;;;;;;;;;;;;;;;;;;;;</span>
 <span class="p">;;</span> <span class="n">load</span><span class="o">-</span><span class="n">path</span><span class="err">を再帰的に追加。</span>
 <span class="p">(</span><span class="n">defun</span> <span class="n">add</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">load</span><span class="o">-</span><span class="n">path</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">rest</span> <span class="n">paths</span><span class="p">)</span>
-  <span class="p">(</span><span class="n">let</span> <span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="p">(</span><span class="n">let</span> <span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="p">(</span><span class="n">dolist</span> <span class="p">(</span><span class="n">path</span> <span class="n">paths</span> <span class="n">paths</span><span class="p">)</span>
-     <span class="p">(</span><span class="n">let</span> <span class="p">((</span><span class="k">default</span><span class="o">-</span><span class="n">directory</span> <span class="p">(</span><span class="n">expand</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">name</span> <span class="p">(</span><span class="n">concat</span> <span class="n">user</span><span class="o">-</span><span class="n">emacs</span><span class="o">-</span><span class="n">directory</span> <span class="n">path</span><span class="p">))))</span>
-        <span class="p">(</span><span class="n">add</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">list</span> <span class="err">&#39;</span><span class="n">load</span><span class="o">-</span><span class="n">path</span> <span class="k">default</span><span class="o">-</span><span class="n">directory</span><span class="p">)</span>
-         <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="n">fboundp</span> <span class="err">&#39;</span><span class="n">normal</span><span class="o">-</span><span class="n">top</span><span class="o">-</span><span class="n">level</span><span class="o">-</span><span class="n">add</span><span class="o">-</span><span class="n">subdirs</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">load</span><span class="o">-</span><span class="n">path</span><span class="p">)</span>
-             <span class="p">(</span><span class="n">normal</span><span class="o">-</span><span class="n">top</span><span class="o">-</span><span class="n">level</span><span class="o">-</span><span class="n">add</span><span class="o">-</span><span class="n">subdirs</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">load</span><span class="o">-</span><span class="n">path</span><span class="p">))))))</span>
+    <span class="p">(</span><span class="n">let</span> <span class="p">((</span><span class="k">default</span><span class="o">-</span><span class="n">directory</span> <span class="p">(</span><span class="n">expand</span><span class="o">-</span><span class="n">file</span><span class="o">-</span><span class="n">name</span> <span class="p">(</span><span class="n">concat</span> <span class="n">user</span><span class="o">-</span><span class="n">emacs</span><span class="o">-</span><span class="n">directory</span> <span class="n">path</span><span class="p">))))</span>
+    <span class="p">(</span><span class="n">add</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">list</span> <span class="err">&#39;</span><span class="n">load</span><span class="o">-</span><span class="n">path</span> <span class="k">default</span><span class="o">-</span><span class="n">directory</span><span class="p">)</span>
+     <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="n">fboundp</span> <span class="err">&#39;</span><span class="n">normal</span><span class="o">-</span><span class="n">top</span><span class="o">-</span><span class="n">level</span><span class="o">-</span><span class="n">add</span><span class="o">-</span><span class="n">subdirs</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">load</span><span class="o">-</span><span class="n">path</span><span class="p">)</span>
+         <span class="p">(</span><span class="n">normal</span><span class="o">-</span><span class="n">top</span><span class="o">-</span><span class="n">level</span><span class="o">-</span><span class="n">add</span><span class="o">-</span><span class="n">subdirs</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">load</span><span class="o">-</span><span class="n">path</span><span class="p">))))))</span>
 
 <span class="p">;;</span> <span class="n">elpa</span><span class="err">配下をロードパスに指定。</span>
 <span class="p">(</span><span class="n">add</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">load</span><span class="o">-</span><span class="n">path</span> <span class="s">&quot;elpa&quot;</span><span class="p">)</span>
@@ -97,12 +92,13 @@
 しかし、auto-completeの辞書ファイルが格納されているディレクトリ(
 \~/.emacs.d/elpa/auto-complete-1.4/dict)には「scheme-mode」のファイルがあるので、コレを使う方法が今は一番簡単なのではないだろうか。もし、scheme-complete.elを使う利点があればどなたか教えてほしい。</p>
 <p>とりあえず今回は、デフォルトで用意されている辞書ファイルにパスを通そう。</p>
-<p>``` {.lang:lisp .decode:true title="auto-completeの設定。"}
-;;;;;;;;;;;;;;;;;;;;Auto-Complete;;;;;;;;;;;;;;;;;;;;</p>
-<p>(require 'auto-complete-config)
-(ac-config-default)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-1.4/dict")
-```</p>
+<div class="highlight"><pre><span class="p">;;;;;;;;;;;;;;;;;;;;</span><span class="n">Auto</span><span class="o">-</span><span class="n">Complete</span><span class="p">;;;;;;;;;;;;;;;;;;;;</span>
+<span class="p">(</span><span class="n">require</span> <span class="err">&#39;</span><span class="k">auto</span><span class="o">-</span><span class="n">complete</span><span class="o">-</span><span class="n">config</span><span class="p">)</span>
+<span class="p">(</span><span class="n">ac</span><span class="o">-</span><span class="n">config</span><span class="o">-</span><span class="k">default</span><span class="p">)</span>
+<span class="p">(</span><span class="n">add</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">list</span> <span class="err">&#39;</span><span class="n">ac</span><span class="o">-</span><span class="n">dictionary</span><span class="o">-</span><span class="n">directories</span> <span class="s">&quot;~/.emacs.d/elpa/auto-complete-1.4/dict&quot;</span><span class="p">)</span>
+</pre></div>
+
+
 <p>これらの設定を有効にし、Scheme-modeに入れば、補完がポップアップで表示されるはずだ。</p>
     </div><!-- /.entry-content -->
   </article>
