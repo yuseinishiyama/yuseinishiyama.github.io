@@ -89,68 +89,70 @@ input.8</p>
 </blockquote>
 <p><a href="http://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%B3%E3%83%86%E3%82%AB%E3%83%AB%E3%83%AD%E6%B3%95" title="モンテカルロ法">モンテカルロ法</a>を用いて、単位円の面積(円周率)を求める問題だ。</p>
 <p>まず、乱数生成用の函数を定義する。<a href="http://sicp.g.hatena.ne.jp/hyuki/20060505/random" title="SRFI-27疑似乱数発生器インタフェース">乱数を扱うので、srfi-27を使用する</a>。</p>
-<p>``` {.lang:lisp .decode:true title="Ex 3.5."}
-;; ランダム数生成のため
-(use srfi-27)</p>
-<p>(define (random num)
-  (* (random-real) num))</p>
-<p>(define (random-in-range low high)
-  (let ((range (- high low)))
-    (+ low (random range))))</p>
-<div class="highlight"><pre><span class="err">次に、テキスト内でも使用されているモンテカルロ函数。試行回数と試行内容から、試行の成功確率を出力する。</span>
+<div class="highlight"><pre><span class="p">;;</span> <span class="err">ランダム数生成のため</span>
+<span class="p">(</span><span class="n">use</span> <span class="n">srfi</span><span class="o">-</span><span class="mi">27</span><span class="p">)</span>
 
-<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">lisp</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Ex 3.5.&quot;</span><span class="p">}</span>
-<span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">monte</span><span class="o">-</span><span class="n">carlo</span> <span class="n">trials</span> <span class="n">experiment</span><span class="p">)</span>
+<span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">random</span> <span class="n">num</span><span class="p">)</span>
+  <span class="p">(</span><span class="o">*</span> <span class="p">(</span><span class="n">random</span><span class="o">-</span><span class="n">real</span><span class="p">)</span> <span class="n">num</span><span class="p">))</span>
+
+<span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">random</span><span class="o">-</span><span class="n">in</span><span class="o">-</span><span class="n">range</span> <span class="n">low</span> <span class="n">high</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">let</span> <span class="p">((</span><span class="n">range</span> <span class="p">(</span><span class="o">-</span> <span class="n">high</span> <span class="n">low</span><span class="p">)))</span>
+    <span class="p">(</span><span class="o">+</span> <span class="n">low</span> <span class="p">(</span><span class="n">random</span> <span class="n">range</span><span class="p">))))</span>
+</pre></div>
+
+
+<p>次に、テキスト内でも使用されているモンテカルロ函数。試行回数と試行内容から、試行の成功確率を出力する。</p>
+<div class="highlight"><pre><span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">monte</span><span class="o">-</span><span class="n">carlo</span> <span class="n">trials</span> <span class="n">experiment</span><span class="p">)</span>
   <span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">iter</span> <span class="n">trials</span><span class="o">-</span><span class="n">remaining</span> <span class="n">trials</span><span class="o">-</span><span class="n">passed</span><span class="p">)</span>
     <span class="p">(</span><span class="n">cond</span> <span class="p">((</span><span class="o">=</span> <span class="n">trials</span><span class="o">-</span><span class="n">remaining</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="p">(</span><span class="o">/</span> <span class="n">trials</span><span class="o">-</span><span class="n">passed</span> <span class="n">trials</span><span class="p">))</span>
-       <span class="p">((</span><span class="n">experiment</span><span class="p">)</span>
-        <span class="p">(</span><span class="n">iter</span> <span class="p">(</span><span class="o">-</span> <span class="n">trials</span><span class="o">-</span><span class="n">remaining</span> <span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="o">+</span> <span class="n">trials</span><span class="o">-</span><span class="n">passed</span> <span class="mi">1</span><span class="p">)))</span>
-       <span class="p">(</span><span class="k">else</span>
-        <span class="p">(</span><span class="n">iter</span> <span class="p">(</span><span class="o">-</span> <span class="n">trials</span><span class="o">-</span><span class="n">remaining</span> <span class="mi">1</span><span class="p">)</span> <span class="n">trials</span><span class="o">-</span><span class="n">passed</span><span class="p">))))</span>
+           <span class="p">(</span><span class="o">/</span> <span class="n">trials</span><span class="o">-</span><span class="n">passed</span> <span class="n">trials</span><span class="p">))</span>
+          <span class="p">((</span><span class="n">experiment</span><span class="p">)</span>
+           <span class="p">(</span><span class="n">iter</span> <span class="p">(</span><span class="o">-</span> <span class="n">trials</span><span class="o">-</span><span class="n">remaining</span> <span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="o">+</span> <span class="n">trials</span><span class="o">-</span><span class="n">passed</span> <span class="mi">1</span><span class="p">)))</span>
+          <span class="p">(</span><span class="k">else</span>
+           <span class="p">(</span><span class="n">iter</span> <span class="p">(</span><span class="o">-</span> <span class="n">trials</span><span class="o">-</span><span class="n">remaining</span> <span class="mi">1</span><span class="p">)</span> <span class="n">trials</span><span class="o">-</span><span class="n">passed</span><span class="p">))))</span>
   <span class="p">(</span><span class="n">iter</span> <span class="n">trials</span> <span class="mi">0</span><span class="p">))</span>
 </pre></div>
 
 
 <p>そして、数値積分を行う。矩形の面積に1.0をかけているのは、単に小数で結果を見たいからだ。</p>
-<p>``` {.lang:lisp .decode:true title="Ex 3.5."}
-(define (estimate-integral P x1 x2 y1 y2 trials)
-  (define (rectangle-space)
-    (<em> (- x2 x1)
-       (- y2 y1)))
-  (define (test)
-    (P (random-in-range x1 x2) (random-in-range y1 y2)))
-  (</em> (* (rectangle-space) 1.0)
-     (monte-carlo trials test)))</p>
-<div class="highlight"><pre><span class="err">最後に肝心の、正方形と</span><span class="p">(</span><span class="err">述語としての</span><span class="p">)</span><span class="err">円を与える。</span>
+<div class="highlight"><pre><span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">estimate</span><span class="o">-</span><span class="n">integral</span> <span class="n">P</span> <span class="n">x1</span> <span class="n">x2</span> <span class="n">y1</span> <span class="n">y2</span> <span class="n">trials</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">rectangle</span><span class="o">-</span><span class="n">space</span><span class="p">)</span>
+    <span class="p">(</span><span class="o">*</span> <span class="p">(</span><span class="o">-</span> <span class="n">x2</span> <span class="n">x1</span><span class="p">)</span>
+       <span class="p">(</span><span class="o">-</span> <span class="n">y2</span> <span class="n">y1</span><span class="p">)))</span>
+  <span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">P</span> <span class="p">(</span><span class="n">random</span><span class="o">-</span><span class="n">in</span><span class="o">-</span><span class="n">range</span> <span class="n">x1</span> <span class="n">x2</span><span class="p">)</span> <span class="p">(</span><span class="n">random</span><span class="o">-</span><span class="n">in</span><span class="o">-</span><span class="n">range</span> <span class="n">y1</span> <span class="n">y2</span><span class="p">)))</span>
+  <span class="p">(</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span> <span class="p">(</span><span class="n">rectangle</span><span class="o">-</span><span class="n">space</span><span class="p">)</span> <span class="mf">1.0</span><span class="p">)</span>
+     <span class="p">(</span><span class="n">monte</span><span class="o">-</span><span class="n">carlo</span> <span class="n">trials</span> <span class="n">test</span><span class="p">)))</span>
+</pre></div>
 
-<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">lisp</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Ex 3.5.&quot;</span><span class="p">}</span>
-<span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">estimate</span><span class="o">-</span><span class="n">pi</span> <span class="n">trials</span><span class="p">)</span>
+
+<p>最後に肝心の、正方形と(述語としての)円を与える。</p>
+<div class="highlight"><pre><span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">estimate</span><span class="o">-</span><span class="n">pi</span> <span class="n">trials</span><span class="p">)</span>
   <span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">unit</span><span class="o">-</span><span class="n">circle</span><span class="p">)</span>
     <span class="p">(</span><span class="n">lambda</span> <span class="p">(</span><span class="n">x</span> <span class="n">y</span><span class="p">)</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="mi">1</span> <span class="p">(</span><span class="o">+</span> <span class="p">(</span><span class="o">*</span> <span class="n">x</span> <span class="n">x</span><span class="p">)</span>
-                  <span class="p">(</span><span class="o">*</span> <span class="n">y</span> <span class="n">y</span><span class="p">)))))</span>
+                           <span class="p">(</span><span class="o">*</span> <span class="n">y</span> <span class="n">y</span><span class="p">)))))</span>
   <span class="p">(</span><span class="n">estimate</span><span class="o">-</span><span class="n">integral</span> <span class="p">(</span><span class="n">unit</span><span class="o">-</span><span class="n">circle</span><span class="p">)</span>
-               <span class="o">-</span><span class="mi">1</span> <span class="mi">1</span> <span class="o">-</span><span class="mi">1</span> <span class="mi">1</span>
-               <span class="n">trials</span><span class="p">))</span>
+                     <span class="o">-</span><span class="mi">1</span> <span class="mi">1</span> <span class="o">-</span><span class="mi">1</span> <span class="mi">1</span>
+                     <span class="n">trials</span><span class="p">))</span>
 </pre></div>
 
 
 <p>大体100万回ぐらいで小数点以下2桁まで等しくなった。</p>
-<p><code>{.lang:lisp .decode:true title="Ex 3.5."}
-;; gosh&gt; (estimate-pi 10)
-;; 3.6
-;; gosh&gt; (estimate-pi 100)
-;; 3.2
-;; gosh&gt; (estimate-pi 1000)
-;; 3.196
-;; gosh&gt; (estimate-pi 10000)
-;; 3.1216
-;; gosh&gt; (estimate-pi 100000)
-;; 3.13956
-;; gosh&gt; (estimate-pi 1000000)
-;; 3.142192
-;; gosh&gt; (estimate-pi 1000000)
-;; 3.143176</code></p>
+<div class="highlight"><pre><span class="p">;;</span> <span class="n">gosh</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">estimate</span><span class="o">-</span><span class="n">pi</span> <span class="mi">10</span><span class="p">)</span>
+<span class="p">;;</span> <span class="mf">3.6</span>
+<span class="p">;;</span> <span class="n">gosh</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">estimate</span><span class="o">-</span><span class="n">pi</span> <span class="mi">100</span><span class="p">)</span>
+<span class="p">;;</span> <span class="mf">3.2</span>
+<span class="p">;;</span> <span class="n">gosh</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">estimate</span><span class="o">-</span><span class="n">pi</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="p">;;</span> <span class="mf">3.196</span>
+<span class="p">;;</span> <span class="n">gosh</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">estimate</span><span class="o">-</span><span class="n">pi</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="p">;;</span> <span class="mf">3.1216</span>
+<span class="p">;;</span> <span class="n">gosh</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">estimate</span><span class="o">-</span><span class="n">pi</span> <span class="mi">100000</span><span class="p">)</span>
+<span class="p">;;</span> <span class="mf">3.13956</span>
+<span class="p">;;</span> <span class="n">gosh</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">estimate</span><span class="o">-</span><span class="n">pi</span> <span class="mi">1000000</span><span class="p">)</span>
+<span class="p">;;</span> <span class="mf">3.142192</span>
+<span class="p">;;</span> <span class="n">gosh</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">estimate</span><span class="o">-</span><span class="n">pi</span> <span class="mi">1000000</span><span class="p">)</span>
+<span class="p">;;</span> <span class="mf">3.143176</span>
+</pre></div>
     </div><!-- /.entry-content -->
   </article>
 </section>

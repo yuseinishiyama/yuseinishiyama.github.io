@@ -71,22 +71,22 @@
 </li>
 </ul>
 <p>message-passingは非常にオブジェクト指向的だ。直交座標系で複素数を表現する、以下の例が紹介されている。</p>
-<p>``` {.lang:lisp .decode:true title="Message Passing"}
-(define (make-from-real-imag x y)
-  (define (dispatch op)
-    (cond ((eq? op 'real-part) x)
-          ((eq? op 'imag-part) y)
-          ((eq? op 'magnitude)
-           (sqrt (+ (square x) (square y))))
-          ((eq? op 'angle) (atan y x))
-          (else
-           (error "Unknown op -- MAKE-FROM-REAL-IMAG" op))))
-  dispatch)</p>
-<div class="highlight"><pre><span class="err">つまり、処理の塊としての函数が返却される。</span>
-<span class="err">利用する側は、以下の様なコードを書けば良い。</span>
+<div class="highlight"><pre><span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">make</span><span class="o">-</span><span class="n">from</span><span class="o">-</span><span class="n">real</span><span class="o">-</span><span class="n">imag</span> <span class="n">x</span> <span class="n">y</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">dispatch</span> <span class="n">op</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">cond</span> <span class="p">((</span><span class="n">eq</span><span class="o">?</span> <span class="n">op</span> <span class="err">&#39;</span><span class="n">real</span><span class="o">-</span><span class="n">part</span><span class="p">)</span> <span class="n">x</span><span class="p">)</span>
+          <span class="p">((</span><span class="n">eq</span><span class="o">?</span> <span class="n">op</span> <span class="err">&#39;</span><span class="n">imag</span><span class="o">-</span><span class="n">part</span><span class="p">)</span> <span class="n">y</span><span class="p">)</span>
+          <span class="p">((</span><span class="n">eq</span><span class="o">?</span> <span class="n">op</span> <span class="err">&#39;</span><span class="n">magnitude</span><span class="p">)</span>
+           <span class="p">(</span><span class="n">sqrt</span> <span class="p">(</span><span class="o">+</span> <span class="p">(</span><span class="n">square</span> <span class="n">x</span><span class="p">)</span> <span class="p">(</span><span class="n">square</span> <span class="n">y</span><span class="p">))))</span>
+          <span class="p">((</span><span class="n">eq</span><span class="o">?</span> <span class="n">op</span> <span class="err">&#39;</span><span class="n">angle</span><span class="p">)</span> <span class="p">(</span><span class="n">atan</span> <span class="n">y</span> <span class="n">x</span><span class="p">))</span>
+          <span class="p">(</span><span class="k">else</span>
+           <span class="p">(</span><span class="n">error</span> <span class="s">&quot;Unknown op -- MAKE-FROM-REAL-IMAG&quot;</span> <span class="n">op</span><span class="p">))))</span>
+  <span class="n">dispatch</span><span class="p">)</span>
+</pre></div>
 
-<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">lisp</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Message Passing&quot;</span><span class="p">}</span>
-<span class="p">(</span><span class="n">define</span> <span class="n">real</span><span class="o">-</span><span class="n">imag</span> <span class="p">(</span><span class="n">make</span><span class="o">-</span><span class="n">from</span><span class="o">-</span><span class="n">real</span><span class="o">-</span><span class="n">imag</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">))</span>
+
+<p>つまり、処理の塊としての函数が返却される。
+利用する側は、以下の様なコードを書けば良い。</p>
+<div class="highlight"><pre><span class="p">(</span><span class="n">define</span> <span class="n">real</span><span class="o">-</span><span class="n">imag</span> <span class="p">(</span><span class="n">make</span><span class="o">-</span><span class="n">from</span><span class="o">-</span><span class="n">real</span><span class="o">-</span><span class="n">imag</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">))</span>
 <span class="p">(</span><span class="n">real</span><span class="o">-</span><span class="n">imag</span> <span class="err">&#39;</span><span class="n">magnitude</span><span class="p">)</span>
 
 <span class="p">;;</span> <span class="err">実行結果</span>
@@ -96,8 +96,7 @@
 
 <p>かなり、オブジェクトっぽい。3章ではクロージャがでてくるので、いよいよデータと手続きが一緒になったデータを定義できるようになるだろう。</p>
 <p>この後、継承などについても軽く触れていたが、この本ではクラスや継承などについて深くは扱わないようだ。もう少し理解が深まったら型システムなどもじっくり勉強してみたい。</p>
-<p>[amazonjs asin="4274069117" locale="JP" title="型システム入門
-−プログラミング言語と型の理論−"]</p>
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=usay0b-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=4274069117" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
     </div><!-- /.entry-content -->
   </article>
 </section>
