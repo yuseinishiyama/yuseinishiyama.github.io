@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>advertisingIdentifierが原因のリジェクトに対応する。 だからといって、このままでいいはずがない。</title>
+
+    <link rel="stylesheet" href="/theme/css/main.css">
+    <link rel="stylesheet" href="/theme/css/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <div><img src="" class="grv-img"/></div>
+        <div class="title"><a href="/">だからといって、このままでいいはずがない。 </a></div>
+        <div class="sub-title"></div>
+
+<p>
+  <div class="view"><a href="/pages/about-me.html">About Me</a></div>
+  <div class="view"><a href="/archives.html">Archives</a></div>
+  <div class="view"><a href="/categories.html">Categories</a></div>  
+</p>
+
+<!-- Social links -->
+<div class="social">
+<h4>Follow Me</h4>
+<ul>
+    <li><a href="https://twitter.com/yuseinishiyama">twitter</a></li>
+    <li><a href="https://github.com/yuseinishiyama">github</a></li>
+</ul>
+</div>
+
+      </header>
+      <section>
+<section id="content" class="body">
+  <article>
+      <div class="article-title">
+        advertisingIdentifierが原因のリジェクトに対応する。
+      </div>
+
+    <div class="entry-content">
+<p>
+<small>
+<abbr class="published" title="2014-02-12T00:11:00">
+  水 12 2月 2014
+</abbr> | 
+ -- (<a href="/posts/2014/02/12/about-scenece/" rel="bookmark">permalink</a>)
+</small>
+</p>      <h1>概要</h1>
+<p>この2月からadvertisingIdentifierの利用方法が原因でリジェクトされるケースが大量に発生しているようだ。
+自分自身でadvertisingIDを利用するコードを書いている人はあまりいないであろうが、
+UDIDが利用できなくなった現在、効果測定を行うSDKの大半がトラッキングのためにこのIDを利用している。
+そして、このadvertisingIDの利用方法がリジェクトされてしまう原因であるようだ。</p>
+<p>ちなみにリジェクトされるとこのようなメッセージがくるようだ。</p>
+<blockquote>
+<p>PLA 3.3.12</p>
+<p>We found your app uses the iOS Advertising Identifier but does not include ad functionality. This does not comply with the terms of the iOS Developer Program License Agreement, as required by the App Store Review Guidelines.</p>
+<p>Specifically, section 3.3.12 of the iOS Developer Program License Agreement states:</p>
+<p>"You and Your Applications (and any third party with whom you have contracted to serve advertising) may use the Advertising Identifier, and any information obtained through the use of the Advertising Identifier, only for the purpose of serving advertising. If a user resets the Advertising Identifier, then You agree not to combine, correlate, link or otherwise associate, either directly or indirectly, the prior Advertising Identifier and any derived information with the reset Advertising Identifier."</p>
+<p>Please check your code - including any third-party libraries - to remove any instances of:</p>
+<p>class: ASIdentifierManager
+selector: advertisingIdentifier
+framework: AdSupport.framework</p>
+<p>If you are planning to incorporate ads in a future version, please remove the Advertising Identifier from your app until you have included ad functionality.</p>
+<p>To help locate the Advertising Identifier, use the “nm” tool. For information on the “nm” tool, open a terminal window and enter, “man nm.”</p>
+<p>If you do not have access to the libraries source, you may be able to search the compiled binary using the "strings" or "otool" command line tools. The "strings" tool lists the methods that the library calls, and "otool -ov" will list the Objective-C class structures and their defined methods. These techniques can help you narrow down where the problematic code resides.</p>
+</blockquote>
+<p>どうやら広告出稿の目的以外でadvertisingIdentiferを利用してはいけないらしい。</p>
+<h1>リジェクトされる可能性のあるケース</h1>
+<ul>
+<li>Google Analytics SDKを利用している。</li>
+<li>Facebook SDKを利用している。</li>
+<li>Unity製アプリである。</li>
+</ul>
+<p>等々、対象になるアプリは多そうだ。
+advertisingIdentifierが利用されているかを調べるには、対象のappファイル内で下記のようなコマンドを実行してみると良い。</p>
+<div class="highlight"><pre><span class="n">strings</span> <span class="p">(</span><span class="err">アプリ名</span><span class="p">)</span> <span class="o">|</span><span class="n">grep</span> <span class="n">advertisingIdentifier</span>
+</pre></div>
+
+
+<h1>対応方法</h1>
+<h2>Facebook SDK</h2>
+<p>いまのところSDK側では対応されていないので、該当箇所をコメントアウトする。
+具体的には、FBUtility内のadvertiserIDメソッド内でadvertisingIdentifierが使用されている。</p>
+<div class="highlight"><pre><span class="k">+</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">advertiserID</span> <span class="p">{</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">advertiserID</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+    <span class="kt">Class</span> <span class="n">ASIdentifierManagerClass</span> <span class="o">=</span> <span class="p">[</span><span class="n">FBDynamicFrameworkLoader</span> <span class="n">loadClass</span><span class="o">:</span><span class="s">@&quot;ASIdentifierManager&quot;</span> <span class="n">withFramework</span><span class="o">:</span><span class="s">@&quot;AdSupport&quot;</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">([</span><span class="n">ASIdentifierManagerClass</span> <span class="n">class</span><span class="p">])</span> <span class="p">{</span>
+<span class="c1">//        ASIdentifierManager *manager = [ASIdentifierManagerClass sharedManager];</span>
+<span class="c1">//        advertiserID = [[manager advertisingIdentifier] UUIDString];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">advertiserID</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h2>Google Analytics SDK</h2>
+<p><a href="https://productforums.google.com/forum/#!msg/analytics/kmaotiQRwQs/LTyz2Z7kTacJ">このスレッド</a>のやりとりにあるように、
+リンカのフラグを変更してあげる必要がある。少々ややこしいので手順をまとめてみた。</p>
+<ol>
+<li>SDKを最新版(3.03a)に更新する。</li>
+<li>AdSupport.frameworkを削除する。</li>
+<li>"Target --&gt; Build Settings --&gt; Other Linker Flags"に下記の設定を追加する。引数が文字列であることに注意。
+-force_load\ "${PROJECT_DIR}/Source/Library/GoogleAnalyticsServicesiOS_3.03a"
+(パスはSDKのオブジェクトファイルの位置にあわせて変更する。)</li>
+<li>-ObjCやall_loadのフラグを削除する。</li>
+<li>-ObjCが必要なStatic Libraryがある場合は、さらに下記の設定を追加する。
+-force_load $(TARGET_BUILD_DIR)/(ライブラリファイル名).a</li>
+</ol>
+<p>ちなみに、私の場合は最終的に下記のような設定になった
+<script src="https://gist.github.com/yuseinishiyama/8860687.js"></script></p>
+<h2>Unity</h2>
+<p><a href="http://qiita.com/monry/items/b473e3db7e48f05be96b#1-2">この記事</a>に詳しい。</p>
+    </div><!-- /.entry-content -->
+  </article>
+</section>
+      </section>
+      <footer>
+        <p><small>&copy; だからといって、このままでいいはずがない。 &mdash; Theme based on Sundown by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!-- Scale fix -->
+    <script>
+      var metas = document.getElementsByTagName('meta');
+      var i;
+      
+      if (navigator.userAgent.match(/iPhone/i)) {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+          }
+        }
+      
+        document.addEventListener("gesturestart", gestureStart, false);
+      }
+
+      function gestureStart() {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -36,6 +36,38 @@
 
       </header>
       <section>
+      <div class="front-title"><a href="/posts/2013/06/13/simultaneous-video-playing-in-ios/">iPhoneでの同時動画再生数の上限について</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-06-13T00:15:00">
+  木 13 6月 2013
+</abbr> | 
+ -- (<a href="/posts/2013/06/13/simultaneous-video-playing-in-ios/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>現在動画編集アプリを作っている。<br />
+動画にエフェクトとかBGMとかなんやらの設定をしていくわけだが、  </p>
+<p>画面上部にプレビュー画面を持ち、その下に編集用のOutletがいくつか存在するような見た目のViewControllerがNavigationControllerでいくつか続いていくというような作りだ。</p>
+<p>ここで奇妙な問題が発生した。<br />
+MPMoviePlayerControllerを使用して、動画を再生しようとしたところ</p>
+<p>``` {.lang:objc .decode:true}
+Error Domain=AVFoundationErrorDomain Code=-11839 "Cannot Decode"</p>
+<div class="highlight"><pre><span class="err">こんなエラーがでた。デコードできない？動画の形式が悪いのだろうか？</span>  
+
+<span class="err">だが、試しにその</span><span class="n">ViewController</span><span class="err">だけにして実行してみたところ問題なく再生できた。</span>  
+<span class="err">ということは、特定のコンテキストにおいてのみデコードが失敗するわけだ。</span>
+
+<span class="p">[</span><span class="err">先日の記事</span><span class="p">][]</span><span class="err">にもある通り、いざ実装を始めると全く予期しないところで躓くことが多々ある。</span>  
+
+<span class="err">特にこういうロジックの問題でない箇所は原因の特定が難しく、心が折れそうになる。</span>
+
+<span class="err">とにかくググるしかないので、上記のログをそのまま検索バーに貼り付けた。</span>  
+<span class="err">すると同じ様な現象で困っている人を発見することが出来た。</span>
+
+<span class="p">[</span><span class="n">http</span><span class="o">:</span><span class="c1">//stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decode][]</span>
+
+<span class="o">&gt;</span> <span class="n">There</span> <span class="n">is</span> <span class="n">a</span> <span class="n">limit</span> <span class="n">on</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">concurrent ...</span></pre></div> 
+      <div class="read-more"><a href="/posts/2013/06/13/simultaneous-video-playing-in-ios/">read more...</a></div>
+      <hr />
       <div class="front-title"><a href="/posts/2013/06/02/constant-string-in-objectivec/">Objective-Cで文字列定数</a></div>
 <p>
 <small>

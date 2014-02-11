@@ -36,6 +36,23 @@
 
       </header>
       <section>
+      <div class="front-title"><a href="/posts/2014/02/12/rejection-for-advertisingIdentifier/">advertisingIdentifierが原因のリジェクトに対応する。</a></div>
+<p>
+<small>
+<abbr class="published" title="2014-02-12T00:11:00">
+  水 12 2月 2014
+</abbr> | 
+ -- (<a href="/posts/2014/02/12/rejection-for-advertisingIdentifier/" rel="bookmark">permalink</a>)
+</small>
+</p>      <h1>概要</h1>
+<p>この2月からadvertisingIdentifierの利用方法が原因でリジェクトされるケースが大量に発生しているようだ。自分自身でadvertisingIDを利用するコードを書いている人はあまりいないであろうが、UDIDが利用できなくなった現在、効果測定を行うSDKの大半がトラッキングのためにこのIDを利用している。そして、このadvertisingIDの利用方法がリジェクトされてしまう原因であるようだ。</p>
+<p>ちなみにリジェクトされるとこのようなメッセージがくる。</p>
+<blockquote>
+<p>PLA 3.3.12</p>
+<p>We found your app uses the iOS Advertising Identifier but does not include ad functionality. This does not comply with the terms of the iOS Developer Program License Agreement, as required by the App Store Review Guidelines.</p>
+<p>Specifically ...</p></blockquote> 
+      <div class="read-more"><a href="/posts/2014/02/12/rejection-for-advertisingIdentifier/">read more...</a></div>
+      <hr />
       <div class="front-title"><a href="/posts/2014/01/31/transition-from-wordpress-to-pelican/">WordpressからPelicanに移行中</a></div>
 <p>
 <small>
@@ -253,38 +270,6 @@ const mediump vec3 Perception = vec3(0.299, 0.587, 0.114);</p>
 <p>輝度がThresholdを上回れば、テクスチャの色を使い、そうでなければ黒にするということは分かる。それにしても、luminanceを取得するときにテクスチャの色と内積をとっているPerceptionとはなんだろうか。謎めいた値がハードコードされている。</p>
 <p>どうも人間の光受容体の特性を考慮するための値らしい ...</p> 
       <div class="read-more"><a href="/posts/2013/07/01/calculate-luminance/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="/posts/2013/06/13/simultaneous-video-playing-in-ios/">iPhoneでの同時動画再生数の上限について</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-06-13T00:15:00">
-  木 13 6月 2013
-</abbr> | 
- -- (<a href="/posts/2013/06/13/simultaneous-video-playing-in-ios/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>現在動画編集アプリを作っている。<br />
-動画にエフェクトとかBGMとかなんやらの設定をしていくわけだが、  </p>
-<p>画面上部にプレビュー画面を持ち、その下に編集用のOutletがいくつか存在するような見た目のViewControllerがNavigationControllerでいくつか続いていくというような作りだ。</p>
-<p>ここで奇妙な問題が発生した。<br />
-MPMoviePlayerControllerを使用して、動画を再生しようとしたところ</p>
-<p>``` {.lang:objc .decode:true}
-Error Domain=AVFoundationErrorDomain Code=-11839 "Cannot Decode"</p>
-<div class="highlight"><pre><span class="err">こんなエラーがでた。デコードできない？動画の形式が悪いのだろうか？</span>  
-
-<span class="err">だが、試しにその</span><span class="n">ViewController</span><span class="err">だけにして実行してみたところ問題なく再生できた。</span>  
-<span class="err">ということは、特定のコンテキストにおいてのみデコードが失敗するわけだ。</span>
-
-<span class="p">[</span><span class="err">先日の記事</span><span class="p">][]</span><span class="err">にもある通り、いざ実装を始めると全く予期しないところで躓くことが多々ある。</span>  
-
-<span class="err">特にこういうロジックの問題でない箇所は原因の特定が難しく、心が折れそうになる。</span>
-
-<span class="err">とにかくググるしかないので、上記のログをそのまま検索バーに貼り付けた。</span>  
-<span class="err">すると同じ様な現象で困っている人を発見することが出来た。</span>
-
-<span class="p">[</span><span class="n">http</span><span class="o">:</span><span class="c1">//stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decode][]</span>
-
-<span class="o">&gt;</span> <span class="n">There</span> <span class="n">is</span> <span class="n">a</span> <span class="n">limit</span> <span class="n">on</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">concurrent ...</span></pre></div> 
-      <div class="read-more"><a href="/posts/2013/06/13/simultaneous-video-playing-in-ios/">read more...</a></div>
       <hr />
 
 <span class="paginator">

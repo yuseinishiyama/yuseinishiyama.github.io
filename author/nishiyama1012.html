@@ -36,6 +36,31 @@
 
       </header>
       <section>
+      <div class="front-title"><a href="/posts/2013/10/27/sicp2/">SICP 第1章「Building Abstractions with Procedures」を読み終えて。(後編)</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-10-27T03:50:00">
+  日 27 10月 2013
+</abbr> | 
+ -- (<a href="/posts/2013/10/27/sicp2/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p><a href="http://yuseinishiyama.com/archives/184" title="SICP 第1章「Building Abstractions with Procedures」を読み終えて。(前編)">(前編はこちら)</a></p>
+<p>1章から学べたことを列挙する。</p>
+<p>・Schemeに慣れた。  </p>
+<p>if、cond、define、let、lambdaなどを用いてプログラミングできるようになった。例の「カッコ」にもだいぶ慣れてきた。</p>
+<p>・linear recursionとiterationの違いが分かるようになった。  </p>
+<p>今以上に不慣れな時のコードではあるが、以下のようにrecursionとiterationで再帰が書けるようになった。後者のほうが遥かに効率が良い。</p>
+<p>``` {.lang:scheme .decode:true title="Exercise 1.11. "}
+;recursion
+(define (f n)
+  (cond ((&lt; n 3) n)
+        (else (+ (f (- n 1))
+                 (<em> 2 (f (- n 2)))
+                 (</em> 3 (f (- n 3)))))))</p>
+<p>;iteration
+(define (f-iter product product-1 product-2 ...</p> 
+      <div class="read-more"><a href="/posts/2013/10/27/sicp2/">read more...</a></div>
+      <hr />
       <div class="front-title"><a href="/posts/2013/10/27/sicp1/">SICP 第1章「Building Abstractions with Procedures」を読み終えて。(前編)</a></div>
 <p>
 <small>
@@ -223,35 +248,6 @@ Piが起動した時には、なんとも言えない達成感が・・・。セ
 Piを起動した。</p>
 <p>しかし、画面に何も表示されない。よくみると「ACT」のLEDが消灯しているので、それを手がかりに調べてみる ...</p> 
       <div class="read-more"><a href="/posts/2013/08/31/setup-raspberrypi/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="/posts/2013/08/31/findays-released/">iOS向け動画編集アプリ「Findays」をリリースしました。</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-08-31T19:51:00">
-  土 31 8月 2013
-</abbr> | 
- -- (<a href="/posts/2013/08/31/findays-released/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>[![findays_icon][]][]</p>
-<p>今月16日(金)に、開発を1人で担当したiOS向けアプリ「Findays」がリリースされました。以下、App
-Storeに記載されている内容の一部転載です。</p>
-<hr />
-<p>【Findaysとは】  </p>
-<p>Findays（ファインデイズ）は30秒の動画を撮影して、オープニング／エンディングアニメを付けたり、フィルター、
-音楽を選択して、PVのような作品を作ってくれるアプリです。BGMを提供してくれたのは。日本を代表するミュージシャン、
-mito(clammbon)、toe、mouse on the keys、Kazuhide Takamoto(Comeback My
-Daughters)の４組。日常の瞬間を切り取って特別な思い出に変えよう！</p>
-<ul>
-<li>最新の情報はFacebookでゲットしよう -  </li>
-</ul>
-<p>撮影した動画をアップするとプレゼントがもらえるキャンペーンなどが開催されたり<br />
-ミュージシャンが曲のコンセプトなどを語ったメッセージビデオも観れます。<br />
-Official Facebook Page<br />
-<a href="https://www.facebook.com/FindaysApp">https://www.facebook.com/FindaysApp</a></p>
-<ul>
-<li>Findaysの使い方はYoutubeでチェック -<br />
-Official Youtube Page ...</li></ul> 
-      <div class="read-more"><a href="/posts/2013/08/31/findays-released/">read more...</a></div>
       <hr />
 
 <span class="paginator">
