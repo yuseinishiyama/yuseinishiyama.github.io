@@ -60,4 +60,4 @@ YEAR_ARCHIVE_SAVE_AS = 'posts/{date:%Y}/index.html'
 GOOGLE_ANALYTICS = 'UA-48020408-1'
 
 # Disqus
-DISQUS_SITENAME = 'http://yuseinishiyama.disqus.com/'
+DISQUS_SITENAME = 'yuseinishiyama'
