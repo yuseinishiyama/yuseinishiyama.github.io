@@ -86,7 +86,7 @@ strings アプリ名 |grep advertisingIdentifier
 
 ### 追記
 
-Gistにアップしていた設定に不備があったため修正(14/02/13)。　
+Gistにアップしていた設定に不備があったため修正(14/02/13)。
 
 ## Unity
 
