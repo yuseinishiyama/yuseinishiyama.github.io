@@ -84,6 +84,10 @@ strings アプリ名 |grep advertisingIdentifier
 ちなみに、私の場合は最終的に下記のような設定になった
 <script src="https://gist.github.com/yuseinishiyama/8860687.js"></script>
 
+### 追記
+
+Gistにアップしていた設定に不備があったため修正。
+
 ## Unity
 
 [この記事](http://qiita.com/monry/items/b473e3db7e48f05be96b#1-2)に詳しい。
@@ -91,3 +95,4 @@ strings アプリ名 |grep advertisingIdentifier
 # 結論
 
 該当箇所を削除したり、不要なコードがリンクされないようにしたりして、advertisingIdentifierが使用されないようにするしかない。もし、SDKから取り除くことができなければ、SDKが対応するまでの間は、そのSDKを使用しない他は対応策がないだろう。
+
