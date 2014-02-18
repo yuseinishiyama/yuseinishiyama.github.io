@@ -36,6 +36,35 @@
 
       </header>
       <section>
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/06/02/constant-string-in-objectivec/">Objective-Cで文字列定数</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-06-02T21:54:00">
+  日 02 6月 2013
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2013/06/02/constant-string-in-objectivec/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>Objective-Cで文字列定数の宣言をする方法について考えてみた。<br />
+最も手っ取り早いのは当然マクロだろう。</p>
+<p>``` {.lang:objc .decode:true title="SomeClass.m"}</p>
+<h1>define CONST_STR @"Const Str"</h1>
+<div class="highlight"><pre><span class="err">だが、当然二重定義の問題があるので好ましいとは言えない。</span>  
+<span class="err">より好ましいのは以下の方法だろう。</span>
+
+<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">objc</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;SomeClass.m&quot;</span><span class="p">}</span>
+<span class="k">static</span> <span class="n">NSString</span> <span class="o">*</span> <span class="k">const</span> <span class="n">kConstStr</span> <span class="o">=</span> <span class="s">@&quot;Const Str&quot;</span><span class="p">;</span>
+</pre></div>
+
+
+<p>constの位置に注意。<br />
+文字列に対するポインタにconstを指定している。  </p>
+<p>（ちなみにObective-Cではメンバ変数のプレフィックは「_」が完全に推奨されている一方で、定数にこうしたハンガリアン記法を使うかどうか迷いどころだが、たいがいのフレームワークでは定数はこの形で書かれているし、実際しっくりくる。）</p>
+<p>さてこの定数を外部に公開したいとする。<br />
+ここでこんな風にやってしまうと間違いだ。</p>
+<p>``` {.lang:objc .decode:true title="SomeClass.h"}
+static NSString * const kConstStr ...</p> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/06/02/constant-string-in-objectivec/">read more...</a></div>
+      <hr />
       <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/05/21/simple-is-best/">Simple is best.</a></div>
 <p>
 <small>

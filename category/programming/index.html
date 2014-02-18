@@ -36,6 +36,26 @@
 
       </header>
       <section>
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2014/02/19/open-hack-day-japan2/">Open Hack Day Japan 2に参加してきた。</a></div>
+<p>
+<small>
+<abbr class="published" title="2014-02-19T00:49:00">
+  水 19 2月 2014
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2014/02/19/open-hack-day-japan2/" rel="bookmark">permalink</a>)
+</small>
+</p>      <h1>はじめに</h1>
+<p>2/15-16と2日間に渡って行われた、Open Hack Day Japan 2というイベントに参加してきた。
+ここではイベントの概要、開発したプロダクト、参加して得た感想について述べる。</p>
+<h1>Open Hack Day Japan 2とは</h1>
+<blockquote>
+<p>Hack Dayは世界各国のYahoo!で開催されている開発イベントで、24時間という限られた時間で自由にアイデアを創造、実際に開発し、できあがったプロトタイプを発表します。日常の業務から離れ、自由な発想で、好きな技術を使って開発に取り組めるクリエイティブマインドにあふれたHack Dayは、ヤフー社内で300人近くの参加者を集める人気イベントです。</p>
+</blockquote>
+<p>これをヤフーが社外にも公開したのがOpen Hack Dayであり、今回はその2回目となる。
+今回も参加者約350名、チーム数80強と、比較的大規模なイベントとなったようだ。</p>
+<blockquote class="twitter-tweet" lang="ja"><p>3, 2, 1, Hack Time!!!!&#10;Open Hack Day 2 はじまりましたー！&#10; <a href="http://t.co/0gtMRrzk8h">http://t.co/0gtMRrzk8h</a> <a href="https://twitter.com/search?q=%23openhackday&amp;src=hash">#openhackday</a> <a href="http://t.co/MDabbnR5DU">pic ...</a></p></blockquote> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2014/02/19/open-hack-day-japan2/">read more...</a></div>
+      <hr />
       <div class="front-title"><a href="http://yuseinishiyama.com/posts/2014/02/12/rejection-for-advertisingIdentifier/">advertisingIdentifierが原因のリジェクトに対応する。</a></div>
 <p>
 <small>
@@ -248,28 +268,6 @@ Piが起動した時には、なんとも言えない達成感が・・・。セ
 Piを起動した。</p>
 <p>しかし、画面に何も表示されない。よくみると「ACT」のLEDが消灯しているので、それを手がかりに調べてみる ...</p> 
       <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/08/31/setup-raspberrypi/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/07/01/calculate-luminance/">輝度の計算</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-07-01T00:50:00">
-  月 01 7月 2013
-</abbr> | 
- -- (<a href="http://yuseinishiyama.com/posts/2013/07/01/calculate-luminance/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>シェーダーでは、よくこんなコードを見かける。</p>
-<p>``` {.lang:c .decode:true title="Luminance"}
-const mediump vec3 Perception = vec3(0.299, 0.587, 0.114);</p>
-<p>void main(void)
-{
-    mediump vec3 color = texture2D(Sampler, TextureCoord).xyz;
-    mediump float luminance = dot(Perception, color);
-    gl_FragColor = (luminance &gt; Threshold) ? vec4(color, 1) : vec4(0);
-}
-```</p>
-<p>輝度がThresholdを上回れば、テクスチャの色を使い、そうでなければ黒にするということは分かる。それにしても、luminanceを取得するときにテクスチャの色と内積をとっているPerceptionとはなんだろうか。謎めいた値がハードコードされている。</p>
-<p>どうも人間の光受容体の特性を考慮するための値らしい ...</p> 
-      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/07/01/calculate-luminance/">read more...</a></div>
       <hr />
 
 <span class="paginator">

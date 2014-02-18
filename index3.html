@@ -36,6 +36,27 @@
 
       </header>
       <section>
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/08/31/setup-raspberrypi/">Raspberry Piのセットアップ(NOOBS)。</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-08-31T21:08:00">
+  土 31 8月 2013
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2013/08/31/setup-raspberrypi/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>購入してからしばらく放置していたRaspberry Piをセットアップしてみる。</p>
+<p>今のところRaspberry
+Piでやりたいことはないから、セットアップするに足る目的もないけどなぁ、などと思いつつ作業を開始する。すると、どうしたことか全然上手くいかないので、セットアップすることが目的になって、Raspberry
+Piが起動した時には、なんとも言えない達成感が・・・。セットアップとは得てして、このような性質を持った作業である。</p>
+<p>さて、私の「セットアップ観」など何の役にも立たないので、私がセットアップの際に困った事を展開したい。</p>
+<p>まずインストールするOSをダウンロードするために、下記サイトを見る。</p>
+<p><a href="http://www.raspberrypi.org/downloads">http://www.raspberrypi.org/downloads</a></p>
+<p>「初心者はNOOBSを利用してOSをインストールするのが、おすすめ」ということなので、それに従う(ちなみにnoobは「新参者」という意味らしい)。「俺は利口だから中級者以上の扱いで頼むぜ」という感じで臨んで、マニュアルで色々やろうとしたら散々な結果になった、などということはぜひとも避けたい。</p>
+<p>さて、Transcendの8GB(Class10)のSDカードをフォーマットし、そこにNOOBSのファイルを突っ込み、Raspberry
+Piを起動した。</p>
+<p>しかし、画面に何も表示されない。よくみると「ACT」のLEDが消灯しているので、それを手がかりに調べてみる ...</p> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/08/31/setup-raspberrypi/">read more...</a></div>
+      <hr />
       <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/08/31/findays-released/">iOS向け動画編集アプリ「Findays」をリリースしました。</a></div>
 <p>
 <small>
@@ -247,35 +268,6 @@ Error Domain=AVFoundationErrorDomain Code=-11839 "Cannot Decode"</p>
 <p>「まぁ、やればできるはずだからやってみるか。」</p>
 <p>と安易に引き受けてしまうわけである。プログラムの世界以外なら ...</p> 
       <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/06/07/what-does-saying-i-can-means/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/06/02/constant-string-in-objectivec/">Objective-Cで文字列定数</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-06-02T21:54:00">
-  日 02 6月 2013
-</abbr> | 
- -- (<a href="http://yuseinishiyama.com/posts/2013/06/02/constant-string-in-objectivec/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>Objective-Cで文字列定数の宣言をする方法について考えてみた。<br />
-最も手っ取り早いのは当然マクロだろう。</p>
-<p>``` {.lang:objc .decode:true title="SomeClass.m"}</p>
-<h1>define CONST_STR @"Const Str"</h1>
-<div class="highlight"><pre><span class="err">だが、当然二重定義の問題があるので好ましいとは言えない。</span>  
-<span class="err">より好ましいのは以下の方法だろう。</span>
-
-<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">objc</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;SomeClass.m&quot;</span><span class="p">}</span>
-<span class="k">static</span> <span class="n">NSString</span> <span class="o">*</span> <span class="k">const</span> <span class="n">kConstStr</span> <span class="o">=</span> <span class="s">@&quot;Const Str&quot;</span><span class="p">;</span>
-</pre></div>
-
-
-<p>constの位置に注意。<br />
-文字列に対するポインタにconstを指定している。  </p>
-<p>（ちなみにObective-Cではメンバ変数のプレフィックは「_」が完全に推奨されている一方で、定数にこうしたハンガリアン記法を使うかどうか迷いどころだが、たいがいのフレームワークでは定数はこの形で書かれているし、実際しっくりくる。）</p>
-<p>さてこの定数を外部に公開したいとする。<br />
-ここでこんな風にやってしまうと間違いだ。</p>
-<p>``` {.lang:objc .decode:true title="SomeClass.h"}
-static NSString * const kConstStr ...</p> 
-      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/06/02/constant-string-in-objectivec/">read more...</a></div>
       <hr />
 
 <span class="paginator">
