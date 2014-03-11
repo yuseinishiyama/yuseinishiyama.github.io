@@ -74,5 +74,4 @@ Voicingは「モダン」だと感じるだろう。
 
 だから、私は「再帰」に惹かれているに違いない。
 
-[amazonjs asin="4480091955" locale="JP" title="相対主義の極北
-(ちくま学芸文庫)"]
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=usay0b-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=4480091955" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>

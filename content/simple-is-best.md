@@ -9,12 +9,15 @@ Slug: simple-is-best
 それでも見ているだけで、格好いい、と思えるアーティストがいる。
 
 たとえば、Caetano Velosoや、
+
 <iframe width="420" height="315" src="//www.youtube.com/embed/KH-dtHH6-tA" frameborder="0" allowfullscreen></iframe>
 
 Peter Gabrielや
+
 <iframe width="420" height="315" src="//www.youtube.com/embed/aO-TM9GA3Tg" frameborder="0" allowfullscreen></iframe>
 
 David Bowieなんかがそうだ。
+
 <iframe width="420" height="315" src="//www.youtube.com/embed/YYjBQKIOb-w" frameborder="0" allowfullscreen></iframe>
 
 視覚的にも、聴覚的にも無駄が少なく、
@@ -44,13 +47,13 @@ David Bowieなんかがそうだ。
 以下のように、彼らのシンプルに至るまでの遠回りは並大抵ではない。
 
 Caetano Veloso
-![Caetano Veloso]
+![Caetano Veloso][]
 
 Peter Gabriel
-![Peter Gabriel]
+![Peter Gabriel][]
 
 David Bowie
-![David Bowie]
+![David Bowie][]
 
 これだけの、装飾過多から晩年の状態を作り出しているのだから、
 当然、相当に必要なものだけが残っているだろう。
