@@ -9,13 +9,13 @@ Slug: simple-is-best
 それでも見ているだけで、格好いい、と思えるアーティストがいる。
 
 たとえば、Caetano Velosoや、
-(http://www.youtube.com/watch?v=4OOa\_Ffv0wg)
+<iframe width="420" height="315" src="//www.youtube.com/embed/KH-dtHH6-tA" frameborder="0" allowfullscreen></iframe>
 
 Peter Gabrielや
-(http://www.youtube.com/watch?v=3\_Q79lls1f0)
+<iframe width="420" height="315" src="//www.youtube.com/embed/aO-TM9GA3Tg" frameborder="0" allowfullscreen></iframe>
 
 David Bowieなんかがそうだ。
-http://www.youtube.com/watch?v=YYjBQKIOb-w
+<iframe width="420" height="315" src="//www.youtube.com/embed/YYjBQKIOb-w" frameborder="0" allowfullscreen></iframe>
 
 視覚的にも、聴覚的にも無駄が少なく、
 どのようにすれば、「どう見えるか」「どう聴こえるか」分かっている。
@@ -44,13 +44,13 @@ http://www.youtube.com/watch?v=YYjBQKIOb-w
 以下のように、彼らのシンプルに至るまでの遠回りは並大抵ではない。
 
 Caetano Veloso
-[Caetano Veloso]
+![Caetano Veloso]
 
 Peter Gabriel
-[PeterGabriel]
+![Peter Gabriel]
 
 David Bowie
-[davidbowie]
+![David Bowie]
 
 これだけの、装飾過多から晩年の状態を作り出しているのだから、
 当然、相当に必要なものだけが残っているだろう。
@@ -74,5 +74,5 @@ David Bowie
 一方で、やがて最高のシンプルを体現するであろう人が生み出す大量のゴミへの温かい眼差しは欠いてはならない。
 
 [Caetano Veloso]: /images/caetanoveloso.jpg
-[PeterGabriel]: /images/petergabriel.jpg
-[davidbowie]: /images/davidbowie.jpg
+[Peter Gabriel]: /images/petergabriel.jpg
+[David Bowie]: /images/davidbowie.jpg
