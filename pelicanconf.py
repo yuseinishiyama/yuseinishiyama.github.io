@@ -3,23 +3,21 @@
 from __future__ import unicode_literals
 
 AUTHOR = u'Yusei Nishiyama'
-SITENAME = u'\u3060\u304b\u3089\u3068\u3044\u3063\u3066\u3001\u3053\u306e\u307e\u307e\u3067\u3044\u3044\u306f\u305a\u304c\u306a\u3044\u3002'
+SITENAME = u'だからといって、このままでいいはずがない。'
 SITEURL = 'http://yuseinishiyama.com'
 
 TIMEZONE = 'Asia/Tokyo'
 
-DEFAULT_LANG = u'ja'
+DEFAULT_LANG = u'jp'
+
+DATE_FORMATS = {
+    'jp': '%Y-%m-%d(%a)',
+}
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
-
-# Blogroll
-LINKS =  (('Pelican', 'http://getpelican.com/'),
-          ('Python.org', 'http://python.org/'),
-          ('Jinja2', 'http://jinja.pocoo.org/'),
-          ('You can modify those links in your config file', '#'),)
 
 # Social widget
 SOCIAL = (('twitter', 'https://twitter.com/yuseinishiyama'),
