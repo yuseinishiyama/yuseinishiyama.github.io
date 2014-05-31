@@ -8,15 +8,14 @@ Slug: sicp3
 
 ところで、Edsgar Dijkstraの言葉にこのようなものがある
 
-> Being abstract is something profoundly different from being vague…  
->  The purpose of abstraction is not to be vague, but to create a new
-> semantic level in which one can be absolutely precise.   ([「Best
-> Programming Quotations」][]より)
+> Being abstract is something profoundly different from being vague…
+> The purpose of abstraction is not to be vague, but to create a new
+> semantic level in which one can be absolutely precise.([「Best Programming Quotations」][]より)
 >
-> 抽象的であることと曖昧であることは全く違う。  
->  抽象化の目的は、曖昧にすることではない。  
->  抽象化は、新たなセマンティックレベルを創出し、  
->  そのレベルにおいて人は非常に正確で有り得る。(拙訳)
+> 抽象的であることと曖昧であることは全く違う。
+> 抽象化の目的は、曖昧にすることではない。
+> 抽象化は、新たなセマンティックレベルを創出し、
+> そのレベルにおいて人は非常に正確で有り得る。(拙訳)
 
 (ここでいうセマンティックレベルとは、抽象化の結果生まれる新しいレイヤーのことであろう。SICPではAbstraction
 Barrierという言葉で述べられている概念だ。)
@@ -27,8 +26,8 @@ Barrierという言葉で述べられている概念だ。)
 
 例えば、
 
-listの長さを求める函数(length)  
-list同士を連結する函数(append)  
+listの長さを求める函数(length)
+list同士を連結する函数(append)
 listの全要素に任意の処理を行う函数(map)
 
 を実装するとして、list構造に慣れていなければappendぐらいでも結構混乱してしまうものだ。だがそれは、これら3つ処理に共通する処理、つまり抽象化可能な処理が見えていないということに他ならない。その抽象化されるべき処理とは
@@ -37,7 +36,7 @@ listの全要素に任意の処理を行う函数(map)
 
 である。この抽象化を実装すると、
 
-``` {.lang:scheme .decode:true title="accumulate"}
+```Lisp
 (define (accumulate op initial sequence)
   (if (null? sequence)
       initial
@@ -45,10 +44,9 @@ listの全要素に任意の処理を行う函数(map)
           (accumulate op initial (cdr sequence)))))
 ```
 
-というようになるわけだ(それにしても、高次の概念であるほど、英語で名前をつけるのが難しい。この処理にaccumulateという動詞を当て嵌めることは今の英語能力では到底出来ない…)。そして、これを用いれば、簡単に上記3つの問題に対処できるということがEx
-2.33.によって示される。
+というようになるわけだ(それにしても、高次の概念であるほど、英語で名前をつけるのが難しい。この処理にaccumulateという動詞を当て嵌めることは今の英語能力では到底出来ない…)。そして、これを用いれば、簡単に上記3つの問題に対処できるということがEx2.33.によって示される。
 
-``` {.lang:scheme .decode:true}
+```Lisp
 ;; Exercise 2.33.  Fill in the missing expressions to complete the following definitions of some basic list-manipulation operations as accumulations:
 
 ;; (define (map p sequence)
@@ -72,7 +70,5 @@ listの全要素に任意の処理を行う函数(map)
 
 複雑な処理を抽象化し分解することで、対処すべき問題が明確になる。そういう意味でDijkstraは「precise」になれると言っているのであろう。人生も同じで、時に全体を見渡す必要があるが、「近視眼になれる仕組み作り」がなにより重要なのではないだろうか。
 
-  [「Best Programming Quotations」]: http://www.linfo.org/q_programming.html
-    "Best Programming Quotations"
-  [ジョージ・ミラーのマジカルナンバー]: http://ja.wikipedia.org/wiki/%E3%82%B8%E3%83%A7%E3%83%BC%E3%82%B8%E3%83%BB%E3%83%9F%E3%83%A9%E3%83%BC
-    "ジョージ・ミラー"
+[「Best Programming Quotations」]: http://www.linfo.org/q_programming.html
+[ジョージ・ミラーのマジカルナンバー]: http://ja.wikipedia.org/wiki/%E3%82%B8%E3%83%A7%E3%83%BC%E3%82%B8%E3%83%BB%E3%83%9F%E3%83%A9%E3%83%BC
