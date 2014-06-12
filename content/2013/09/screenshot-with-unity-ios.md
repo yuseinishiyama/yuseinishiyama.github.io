@@ -12,7 +12,7 @@ Unityでスクリーンショットを撮るのは非常に簡単である。
 
 そこで今回は、UnityからiOSのカメラロールにアクセスする方法を紹介する。
 
-``` {.lang:objc .decode:true}
+```objc
 #import <Foundation/Foundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <AVFoundation/AVFoundation.h>
@@ -50,7 +50,7 @@ extern "C" void _PlaySystemShutterSound ()
 
 次は、スクリプト側の実装だ。
 
-``` {.lang:c# .decode:true title="CaptureScreenshot.cs"}
+```csharp
 using UnityEngine;
 using System;
 using System.Collections;
@@ -111,7 +111,7 @@ public class CaptureScreenshot : MonoBehaviour {
 
 こちらは少しややこしいので補足しておく。
 
-``` {.lang:c# .decode:true}
+```csharp
 [DllImport("__Internal")]
 private static extern void _PlaySystemShutterSound ();
 [DllImport("__Internal")]
@@ -120,7 +120,7 @@ private static extern void _WriteImageToAlbum (string path);
 
 DllImportを使い、呼び出されるネイティブコードのシグネチャを宣言する。
 
-``` {.lang:c# .decode:true}
+```csharp
 IEnumerator WaitUntilFinishedWriting (Action callback) {
     while (!System.IO.File.Exists (TemporaryScreenshotPath())) {
         Debug.Log(">>>>> Temporary Screenshot have not been written　yet.");
@@ -134,7 +134,7 @@ IEnumerator WaitUntilFinishedWriting (Action callback) {
 
 コルーチンを利用し、画像がディスクに書き込まれるまで、毎フレームファイルの有無をチェックし、画像の存在が確認でき次第コールバック(ここではカメラロールへの保存)を実行する。
 
-``` {.lang:c# .decode:true}
+```csharp
 void DidImageWriteToAlbum (string errorDescription) {
     if (string.IsNullOrEmpty(errorDescription)) {
         Debug.Log(">>>>> Image have been Written To Album Successfully.");
