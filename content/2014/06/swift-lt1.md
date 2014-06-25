@@ -34,7 +34,7 @@ Objective-Cでの開発経験があり、Swiftの特徴・メジャーな言語�
 あくまでアクのないベーシックな言語ではあるが、
 
 * 型推論
-* 失敗可能性のコンテキストを持つ多層型、Optional
+* 失敗可能性のコンテキストを持つ多相型、Optional
 * 関数オブジェクトの容易な操作
 
 等々、モダンで重要な機能は全部取り入れた、そういう印象が強い言語だ。
@@ -55,6 +55,6 @@ Objective-Cでの開発経験があり、Swiftの特徴・メジャーな言語�
 
 # その他
 
-Slide Shareをやめて、Speaker Deckにしてみた。いいですね、Speaker Deck
+Slide Shareをやめて、Speaker Deckにしてみた。いいですね、Speaker Deck。
 
 [Yahoo!Japan様主催の第1回 Swift LT会]: http://connpass.com/event/6740/
