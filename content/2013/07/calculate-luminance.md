@@ -6,7 +6,7 @@ Slug: calculate-luminance
 
 シェーダーでは、よくこんなコードを見かける。
 
-``` {.lang:c .decode:true title="Luminance"}
+```c
 const mediump vec3 Perception = vec3(0.299, 0.587, 0.114);
 
 void main(void)

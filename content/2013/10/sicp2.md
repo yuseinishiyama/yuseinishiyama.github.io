@@ -16,7 +16,7 @@ if、cond、define、let、lambdaなどを用いてプログラミングでき�
 
 今以上に不慣れな時のコードではあるが、以下のようにrecursionとiterationで再帰が書けるようになった。後者のほうが遥かに効率が良い。
 
-``` {.lang:scheme .decode:true title="Exercise 1.11. "}
+```lisp
 ;recursion
 (define (f n)
   (cond ((< n 3) n)

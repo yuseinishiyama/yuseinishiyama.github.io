@@ -12,7 +12,7 @@ Slug: simultaneous-video-playing-in-ios
 ここで奇妙な問題が発生した。  
 MPMoviePlayerControllerを使用して、動画を再生しようとしたところ
 
-``` {.lang:objc .decode:true}
+```objc
 Error Domain=AVFoundationErrorDomain Code=-11839 "Cannot Decode"
 ```
 
@@ -51,7 +51,7 @@ Error Domain=AVFoundationErrorDomain Code=-11839 "Cannot Decode"
 
 確かに、自分の場合はMPMoviePlayerControllerでエラーが出たが、それ以前に複数のAVPlayerを使用していて、それらはNavigationControllerに残ったままだ。AVPlayerのインスタンスを開放しろとのことだが、試しに以下のコードを画面遷移時に実行してみた。
 
-``` {.lang:objc .decode:true}
+```objc
 [_player replaceCurrentItemWithPlayerItem:nil];
 ```
 
@@ -60,6 +60,5 @@ Error Domain=AVFoundationErrorDomain Code=-11839 "Cannot Decode"
 というわけで、AVPlayerやMPMoviePlayerController(MPMoviePlayerViewControllerも)なんかを複数使うときは、AVPlayerItemのインスタンスが残ったままにならないように注意しよう。
 
   [先日の記事]: http://yuseinishiyama.com/archives/51
-    "プログラマにとって〈できる〉とは何か。ー「できるって言ったよね？」ー"
-  [http://stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decode]:
-    http://stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decodehttp://
+  
+  [http://stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decode]: http://stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decode

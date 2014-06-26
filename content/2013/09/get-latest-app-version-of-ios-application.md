@@ -42,7 +42,7 @@ Slug: get-latest-app-version-of-ios-application
 
 結論から言うと、「AppleのAPIを使ったほうが楽だが、その場合はなにか問題が発生してもどうすることもできない」ということになる。今回は、個人開発者や、規模の小さなアプリで、サーバを設置するのはコストに見合わない場合を想定し、「2.AppleのAPIを利用する方法」の実装を紹介することにした。
 
-``` {.lang:objc .decode:true title="UpdateChecker.h"}
+```objc
 #import <Foundation/Foundation.h>
 
 @interface UpdateChecker : NSObject
@@ -56,7 +56,7 @@ Slug: get-latest-app-version-of-ios-application
 
  
 
-``` {.lang:objc .decode:true .crayon-selected title="UpdateChecker.m"}
+```objc
 #import "UpdateChecker.h"
 
 #import "ApplicationInformation.h"
@@ -117,7 +117,7 @@ static NSString * const kAppStoreID = @"123456789";
 
 取得するタイミングは悩ましいところではあるが、例えばアプリがフォアグラウンドになる度に取得する場合は、
 
-``` {.lang:objc .decode:true title="AppDelegate.m"}
+```objc
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // バージョンチェック。

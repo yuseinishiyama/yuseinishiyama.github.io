@@ -7,14 +7,14 @@ Slug: constant-string-in-objectivec
 Objective-Cで文字列定数の宣言をする方法について考えてみた。  
 最も手っ取り早いのは当然マクロだろう。
 
-``` {.lang:objc .decode:true title="SomeClass.m"}
+```objc
 #define CONST_STR @"Const Str"
 ```
 
 だが、当然二重定義の問題があるので好ましいとは言えない。  
 より好ましいのは以下の方法だろう。
 
-``` {.lang:objc .decode:true title="SomeClass.m"}
+```objc
 static NSString * const kConstStr = @"Const Str";
 ```
 
@@ -26,11 +26,11 @@ constの位置に注意。
 さてこの定数を外部に公開したいとする。  
 ここでこんな風にやってしまうと間違いだ。
 
-``` {.lang:objc .decode:true title="SomeClass.h"}
+```objc
 static NSString * const kConstStr = @"Const Str";
 ```
 
-[ http://stackoverflow.com/a/7642561][]  
+[http://stackoverflow.com/a/7642561][]  
 ここにstaticに関する分かりやすい説明がある。
 
 > static in Objective-C means a different thing than static in a C++
@@ -69,7 +69,7 @@ static NSString * const kConstStr = @"Const Str";
 つまりCやObjective-Cのstaticは内部結合であり、ヘッダ上のstatic変数を異なるソースファイルから読み取ると、それぞれのファイル内で独立した変数として認識されてしまうというわけだ。  
 試しに以下のような実験をしてみた。
 
-``` {.lang:objc .decode:true title="ClassA.h"}
+```objc
 #import <Foundation/Foundation.h>
 
 @interface ClassA : NSObject
@@ -97,7 +97,7 @@ static NSInteger staticVar = 0;
 extern NSInteger externVar;
 ```
 
-``` {.lang:objc .decode:true title="ClassA.m"}
+```objc
 #import "ClassA.h"
 
 @interface ClassD : NSObject
@@ -179,7 +179,7 @@ NSInteger externVar = 0;
 @end
 ```
 
-``` {.lang:objc .decode:true title="ClassB.h"}
+```objc
 #import <Foundation/Foundation.h>
 
 @interface ClassB : NSObject
@@ -195,7 +195,7 @@ NSInteger externVar = 0;
 @end
 ```
 
-``` {.lang:objc .decode:true title="ClassB.m"}
+```objc
 #import "ClassB.h"
 
 #import "ClassA.h"
@@ -229,7 +229,7 @@ NSInteger externVar = 0;
 @end
 ```
 
-``` {.lang:objc .decode:true title="ClassC.h"}
+```objc
 #import <Foundation/Foundation.h>
 
 @interface ClassC : NSObject
@@ -245,7 +245,7 @@ NSInteger externVar = 0;
 @end
 ```
 
-``` {.lang:objc .decode:true title="ClassC.m"}
+```objc
 #import "ClassC.h"
 
 #import "ClassA.h"
@@ -277,7 +277,7 @@ NSInteger externVar = 0;
 
  
 
-``` {.lang:objc .decode:true title="main.m"}
+```objc
 #import <Foundation/Foundation.h>
 
 #import "ClassA.h"
@@ -343,7 +343,7 @@ int main(int argc, const char * argv[])
 
 出力結果がこれ。
 
-``` {.lang:objc .highlight:0 .decode:true}
+```objc
 2013-06-02 21:21:04.953 StaticExternTest[1020:303] staticVar of classA is 0
 2013-06-02 21:21:04.955 StaticExternTest[1020:303] staticVar of classB is 0
 2013-06-02 21:21:04.955 StaticExternTest[1020:303] staticVar of classC is 0
@@ -391,11 +391,11 @@ int main(int argc, const char * argv[])
 
 外部のファイルからも参照したい定数を宣言する場合は、
 
-``` {.lang:objc .decode:true title="SomeClass.h"}
+```objc
 extern NSString * const kConstStr;
 ```
 
-``` {.lang:objc .decode:true title="SomeClass.m"}
+```objc
 NSString * const kConstStr = @"Const Str";
 ```
 
@@ -403,4 +403,4 @@ NSString * const kConstStr = @"Const Str";
 
 このあたりの細かい挙動は忘れやすい上に、適当にやっても問題が顕在化しないことのほうが多いからこそ、ベストプラクティスを知っておきたいところだ。
 
-  [ http://stackoverflow.com/a/7642561]: %20http://stackoverflow.com/a/7642561
+ [http://stackoverflow.com/a/7642561]: http://stackoverflow.com/a/7642561
