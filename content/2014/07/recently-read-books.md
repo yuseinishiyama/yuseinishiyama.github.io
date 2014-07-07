@@ -107,7 +107,7 @@ Smalltalk由来の由緒正しいオブジェクト指向言語でありなが�
 
 <iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=usay0b-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=4861006414" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
 
-Objective-C関連の本では最も好きな本だ。Objective-Cの思想とその思想をどういうに活かすかということを分かりやすく解説している。
+Objective-C関連の本では最も好きな本だ。Objective-Cの思想とそれをどのように活かすかということを分かりやすく解説している。
 これを読んで、如何にしてObjective-Cがその動的特性を実現しているかを理解することができた。
 また、この本のお陰で（せいで？)コンピュータ言語そのものにも興味を持つようになった。
 
