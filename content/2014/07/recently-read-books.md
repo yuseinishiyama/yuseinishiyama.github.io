@@ -100,7 +100,7 @@ map,reduce,filterなどの味をしめ、「写像」とかなんとかが頭に
 
 これはもっぱら業務でやるので必須であった。私は人がなんと言おうと、Objective-Cという言語でキャリアをスタートさせることが出来てよかったと思っている。
 Smalltalk由来の由緒正しいオブジェクト指向言語でありながら、一方でC言語のスーパーセットでしかないという特徴を持つこの言語のお陰で、
-プログラミングを様々なレイヤーで考えることができるようになった。これからSwiftを書いていくようになるのかもしれないが、この言語で得た知識や関心は無駄にはならないと思っている。
+プログラミングを様々なレイヤーで考えることができるようになった。これから[Swiftを書いていくようになる][]のかもしれないが、この言語で得た知識や関心は無駄にはならないと思っている。
 初心者向けの本から、そうでないものまで幅広く読んだが、特に印象に残った本を挙げる。
 
 ### Dynamic Objective-C
@@ -148,7 +148,7 @@ Cのライブラリ関数を使用してデータを永続化するところか�
 <iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=usay0b-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=4774150029" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
 
 とりあえずここに書かれている設定とパッケージを導入しておけば、エディタとしては十分でないかと思う。
-るびきち本より読みやすい印象。ただし、少し古い情報なので、これからのモダンなEmacs環境には必須と思われるCaskやhelmの解説がないので注意。
+るびきち本より読みやすい印象。ただし、少し古い情報なので、これからのモダンなEmacs環境には必須と思われる[Cask][]や[helm][]の解説がないので注意。
 
 ## ゲームプログラミング関連
 
@@ -216,7 +216,7 @@ Z-Bufferとか衝突判定にまつわる問題などは知らないと、トラ
 
 <iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=usay0b-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=4822740161" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
 
-Windows NTの開発設計者であり、怒ると壁を殴って穴をあけるプログラマ、デビッド・カトラーについて知ることができる。
+Windows NTの開発設計者であり、怒ると壁を殴って穴をあけるプログラマ、[デビッド・カトラー][]について知ることができる。
 プログラマとしてプロダクトを完成に近づけることを徹底するその様は見習わなくてはいけないと考えさせられた。
 
 ### 情熱プログラマー
@@ -231,7 +231,7 @@ Windows NTの開発設計者であり、怒ると壁を殴って穴をあける�
 
 自己修正的なプログラマ達はゼネラリストになり、やがて人格者に。
 少なくとも、「謙虚、尊敬、信頼」の意識は記憶に留めておく必要があると感じた。
-Larry Wallの唱えた「怠慢、短気、傲慢」はあくまでコンピュータに対して推奨される態度であり、これを人間にやるとモヒカンと呼ばれるのでは。
+[Larry Wall][]の唱えた「怠慢、短気、傲慢」はあくまでコンピュータに対して推奨される態度であり、これを人間にやると[モヒカン][]と呼ばれるのでは。
 
 ## ハッカー文化
 
@@ -240,7 +240,7 @@ Larry Wallの唱えた「怠慢、短気、傲慢」はあくまでコンピュ�
 <iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=usay0b-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=475614084X" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
 
 ハッカー文化に関する、パロディ辞書。中古で買った。
-なぜか表紙がベトベトしているのだが、元の所有者であるJ.Random Hackerの手汗だろうか。
+なぜか表紙がベトベトしているのだが、元の所有者である[J.Random Hacker][]の手汗だろうか。
 たまにパラパラめくると面白い。例えば、こんな調子だ。
 
 > program
@@ -269,7 +269,7 @@ Larry Wallの唱えた「怠慢、短気、傲慢」はあくまでコンピュ�
 <iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=usay0b-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=415050332X" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
 
 絶対主義者からの暴力を受け続け、相対主義というオアシスを見つける。
-しかし、相対主義者であるという理由から相対主義の絶対性も主張できなくて、アァァァァな人には至高。
+しかし、相対主義者であるという理由から相対主義の絶対性も主張できなくて、[アァァァァ][]な人には至高。
 ソクラテス・プラトン・アリストテレスらのギリシア哲学の争点が、今なお意味を成す理由が実感できる。
 
 ## その他
@@ -279,8 +279,8 @@ Larry Wallの唱えた「怠慢、短気、傲慢」はあくまでコンピュ�
 <iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=usay0b-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=4130120530" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
 
 型理論とかの話が分かるようになりたいなぁ、などと思っていたら存在量化子程度で吐き気を催したので、基礎から勉強しなおそうと読んでみた。
-初歩の初歩から始まる上にそれほど文量があるわけでもないのに、アリストテレスの古典論理からフレーゲの述語論理、そしてゲーデル数までを平易に解説する。
-やはりゲーデルは難しいので十分に理解していないが、述語論理までの論理記号がまともに読めるようになったのは大きい。
+初歩の初歩から始まる上にそれほど文量があるわけでもないのに、アリストテレスの[古典論理][]から[フレーゲ][]の[述語論理][]、そして[ゲーデル数][]までを平易に解説する何気にすごい本。
+やはりゲーデルは難しいので十分に理解していないが、[述語論理][]までの論理記号がまともに読めるようになったのは大きい。
 
 ### 悪魔の辞典
 
@@ -304,7 +304,7 @@ Larry Wallの唱えた「怠慢、短気、傲慢」はあくまでコンピュ�
 
 <iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=usay0b-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=448006768X" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
 
-待望されていた、唯物論者のための哲学入門。
+待望されていた、[唯物論者][]のための哲学入門。
 この本を手に取り、哲学を虚学といってくる蛮人を殴ろう。
 
 ***
@@ -346,8 +346,20 @@ Larry Wallの唱えた「怠慢、短気、傲慢」はあくまでコンピュ�
 「何だか良くわからないけど知りたいこと」と「何だか良くわからないけど知ろうとさえ思わないこと」というのが明確に出てくる。
 変わろうとする自分の中にある、どうしても変えられない部分が明確になっただけでもこの2年余りは貴重だったのかもしれない。
 
+[フレーゲ]:http://ja.wikipedia.org/wiki/%E3%82%B4%E3%83%83%E3%83%88%E3%83%AD%E3%83%BC%E3%83%97%E3%83%BB%E3%83%95%E3%83%AC%E3%83%BC%E3%82%B2
+[ゲーデル数]:http://ja.wikipedia.org/wiki/%E3%82%B2%E3%83%BC%E3%83%87%E3%83%AB%E6%95%B0
+[古典論理]:http://ja.wikipedia.org/wiki/%E5%8F%A4%E5%85%B8%E8%AB%96%E7%90%86
+[述語論理]:http://ja.wikipedia.org/wiki/%E8%BF%B0%E8%AA%9E%E8%AB%96%E7%90%86
+[唯物論者]:http://ja.wikipedia.org/wiki/%E5%94%AF%E7%89%A9%E8%AB%96
+[Swiftを書いていくようになる]:http://yuseinishiyama.com/posts/2014/06/25/swift-lt1/
+[モヒカン]:http://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%92%E3%82%AB%E3%83%B3%E6%97%8F_(%E3%83%8D%E3%83%83%E3%83%88%E7%94%A8%E8%AA%9E)
+[J.Random Hacker]:http://en.wikipedia.org/wiki/J._Random_Hacker
+[Cask]:https://github.com/cask/cask
+[helm]:https://github.com/emacs-helm/helm
+[アァァァァ]:http://ja.wikipedia.org/wiki/%E7%9B%B8%E5%AF%BE%E4%B8%BB%E7%BE%A9#.E7.9B.B8.E5.AF.BE.E4.B8.BB.E7.BE.A9.E3.81.B8.E3.81.AE.E7.B5.B6.E5.AF.BE.E4.B8.BB.E7.BE.A9.E7.9A.84.E7.AB.8B.E5.A0.B4.E3.81.8B.E3.82.89.E3.81.AE.E6.89.B9.E5.88.A4
 [ドラゴンブック]:http://www.amazon.co.jp/dp/4781905854
 [ウラジミール・プロップ]:http://ja.wikipedia.org/wiki/%E3%82%A6%E3%83%A9%E3%82%B8%E3%83%BC%E3%83%9F%E3%83%AB%E3%83%BB%E3%83%97%E3%83%AD%E3%83%83%E3%83%97
 [デビッド・カトラー]:http://ja.wikipedia.org/wiki/%E3%83%87%E3%83%B4%E3%82%A3%E3%83%83%E3%83%89%E3%83%BB%E3%82%AB%E3%83%88%E3%83%A9%E3%83%BC
+[Larry Wall]:http://ja.wikipedia.org/wiki/%E3%83%A9%E3%83%AA%E3%83%BC%E3%83%BB%E3%82%A6%E3%82%A9%E3%83%BC%E3%83%AB
 [(かわいそうな)GPU]:http://kagamin.net/hole/gpu/
 [こんなスレッド]:http://www.reddit.com/r/books/comments/ch0wt/a_reading_list_for_the_selftaught_computer/
