@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="jp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -22,6 +22,7 @@
 <p>
     <div class="view"><a href="http://yuseinishiyama.com/pages/about-me.html">About Me</a></div>
   <div class="view"><a href="http://yuseinishiyama.com/archives.html">Archives</a></div>
+  <div class="view"><a href="http://yuseinishiyama.com/categories">Categories</a></div>
 </p>
 
 <!-- Social links -->
@@ -45,7 +46,7 @@
 <p>
 <small>
 <abbr class="published" title="2013-09-06T02:55:00">
-  金 06 9月 2013
+  2013-09-06(金)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/09/06/screenshot-with-unity-ios/" rel="bookmark">permalink</a>)
 </small>
@@ -53,90 +54,92 @@
 <p><a href="http://docs.unity3d.com/Documentation/ScriptReference/Application.CaptureScreenshot.html">Application.CaptureScreenshot</a>という関数が用意されているからだ。</p>
 <p>だが、この方法ではアプリのデータ領域に画像が保存されるだけなので、ユーザーが、その画像を閲覧できるようにはならない。アプリ内で画像を管理できるようにしてもいいかもしれないが、スクリーンショットを確認したいだけなのであれば、そこまでする必要はないだろう。</p>
 <p>そこで今回は、UnityからiOSのカメラロールにアクセスする方法を紹介する。</p>
-<p>``` {.lang:objc .decode:true}</p>
-<h1>import <Foundation/Foundation.h></h1>
-<h1>import <AssetsLibrary/AssetsLibrary.h></h1>
-<h1>import <AVFoundation/AVFoundation.h></h1>
-<p>/<em> 
- スクリーンショット撮影時に利用するネイティブコード。
- </em>/</p>
-<p>// 指定したパスの画像をカメラロールに保存する。
-extern "C" void _WriteImageToAlbum (const char<em> path)
-{
-    UIImage </em>image = [UIImage imageWithContentsOfFile:[NSString stringWithUTF8String:path]];
-    ALAssetsLibrary <em>library = [[[ALAssetsLibrary alloc] init] autorelease];
-    NSMutableDictionary </em>metadata = [[[NSMutableDictionary alloc] init] autorelease];
-    [library writeImageToSavedPhotosAlbum:image.CGImage metadata:metadata completionBlock:^(NSURL <em>assetURL, NSError </em>error) {
-        // 書き込み終了後、Unity側へコールバック。
-        UnitySendMessage("CaptureScreenShot", "DidImageWriteToAlbum", [error.description UTF8String]);
-    }];
-}</p>
-<p AudioServicesPlaySystemSound_1108_="AudioServicesPlaySystemSound(1108);
-" NOTE:_="NOTE:
-" _="//" マナーモードや本体音量に左右されずに鳴る。_="マナーモードや本体音量に左右されずに鳴る。
-">// システムのシャッター音を鳴らす。
-extern "C" void _PlaySystemShutterSound ()</p>
-<div class="highlight"><pre><span class="err">このネイティブコードをファイルの拡張子を</span><span class="p">.</span><span class="n">mm</span><span class="p">(</span><span class="n">Objective</span><span class="o">-</span><span class="n">C</span><span class="o">++</span><span class="err">の拡張子</span><span class="p">)</span><span class="err">にして</span><span class="n">StreamingAssets</span><span class="err">内に配置しておけば、そのまま</span><span class="n">Xcode</span><span class="err">のプロジェクトに追加される。</span>
+<div class="highlight"><pre><span class="cp">#import &lt;Foundation/Foundation.h&gt;</span>
+<span class="cp">#import &lt;AssetsLibrary/AssetsLibrary.h&gt;</span>
+<span class="cp">#import &lt;AVFoundation/AVFoundation.h&gt;</span>
 
-<span class="err">さて、</span><span class="n">Unity</span><span class="err">のスクリプトから、このファイルの関数を呼び出すわけだが、</span><span class="n">writeImageToSavedPhotosAlbum</span><span class="err">での書き込みは非同期で行われるので、</span><span class="n">Unity</span><span class="err">側へコールバックを返したい。そこで、</span><span class="n">Unity</span><span class="err">側の関数を呼び出すことができる、</span><span class="p">[</span><span class="n">UnitySendMessage</span><span class="p">][]</span><span class="err">を利用する。</span><span class="n">UnitySendMessage</span><span class="err">は第</span><span class="mi">1</span><span class="err">引数にオブジェクト名、第</span><span class="mi">2</span><span class="err">引数に関数名、第</span><span class="mi">3</span><span class="err">引数に呼び出す関数の引数をとる。</span>
+<span class="cm">/* </span>
+<span class="cm"> スクリーンショット撮影時に利用するネイティブコード。</span>
+<span class="cm"> */</span>
 
-<span class="err">また、</span><span class="n">iOS</span><span class="err">標準のスクリーンショット機能のように、シャッター音が鳴るようにしたいので、システムのシャッター音を鳴らす関数</span><span class="p">(</span><span class="err">\</span><span class="n">_PlaySystemShutterSound</span><span class="p">)</span><span class="err">を作成した。おそらく、カメラからの入力がある状態でスクリーンショットを撮られることを考慮してシャッター音がなるようにしているのであろう。最近は</span><span class="n">AR</span><span class="err">等でカメラを使うことも多く、その場合はキャプチャ時にシャッター音が実装されていなければ高確率でリジェクトされるであろう。</span>
+<span class="c1">// 指定したパスの画像をカメラロールに保存する。</span>
+<span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="kt">void</span> <span class="n">_WriteImageToAlbum</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">UIImage</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="n">imageWithContentsOfFile</span><span class="o">:</span><span class="p">[</span><span class="n">NSString</span> <span class="n">stringWithUTF8String</span><span class="o">:</span><span class="n">path</span><span class="p">]];</span>
+    <span class="n">ALAssetsLibrary</span> <span class="o">*</span><span class="n">library</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">ALAssetsLibrary</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">]</span> <span class="n">autorelease</span><span class="p">];</span>
+    <span class="n">NSMutableDictionary</span> <span class="o">*</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">NSMutableDictionary</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">]</span> <span class="n">autorelease</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">library</span> <span class="n">writeImageToSavedPhotosAlbum</span><span class="o">:</span><span class="n">image</span><span class="p">.</span><span class="n">CGImage</span> <span class="n">metadata</span><span class="o">:</span><span class="n">metadata</span> <span class="n">completionBlock</span><span class="o">:^</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="n">assetURL</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 書き込み終了後、Unity側へコールバック。</span>
+        <span class="n">UnitySendMessage</span><span class="p">(</span><span class="s">&quot;CaptureScreenShot&quot;</span><span class="p">,</span> <span class="s">&quot;DidImageWriteToAlbum&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">error</span><span class="p">.</span><span class="n">description</span> <span class="n">UTF8String</span><span class="p">]);</span>
+    <span class="p">}];</span>
+<span class="p">}</span>
 
-<span class="err">次は、スクリプト側の実装だ。</span>
+<span class="c1">// システムのシャッター音を鳴らす。</span>
+<span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="kt">void</span> <span class="n">_PlaySystemShutterSound</span> <span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// NOTE:</span>
+    <span class="c1">//      マナーモードや本体音量に左右されずに鳴る。</span>
+    <span class="n">AudioServicesPlaySystemSound</span><span class="p">(</span><span class="mi">1108</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 
-<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">c</span><span class="err">#</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;CaptureScreenshot.cs&quot;</span><span class="p">}</span>
-<span class="n">using</span> <span class="n">UnityEngine</span><span class="p">;</span>
-<span class="n">using</span> <span class="n">System</span><span class="p">;</span>
-<span class="n">using</span> <span class="n">System</span><span class="p">.</span><span class="n">Collections</span><span class="p">;</span>
-<span class="n">using</span> <span class="n">System</span><span class="p">.</span><span class="n">Runtime</span><span class="p">.</span><span class="n">InteropServices</span><span class="p">;</span>
 
-<span class="n">public</span> <span class="n">class</span> <span class="n">CaptureScreenshot</span> <span class="o">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+<p>このネイティブコードをファイルの拡張子を.mm(Objective-C++の拡張子)にしてStreamingAssets内に配置しておけば、そのままXcodeのプロジェクトに追加される。</p>
+<p>さて、Unityのスクリプトから、このファイルの関数を呼び出すわけだが、writeImageToSavedPhotosAlbumでの書き込みは非同期で行われるので、Unity側へコールバックを返したい。そこで、Unity側の関数を呼び出すことができる、<a href="docs.unity3d.com/Documentation/Manual/PluginsForIOS.html">UnitySendMessage</a>を利用する。UnitySendMessageは第1引数にオブジェクト名、第2引数に関数名、第3引数に呼び出す関数の引数をとる。</p>
+<p>また、iOS標準のスクリーンショット機能のように、シャッター音が鳴るようにしたいので、システムのシャッター音を鳴らす関数(_PlaySystemShutterSound)を作成した。おそらく、カメラからの入力がある状態でスクリーンショットを撮られることを考慮してシャッター音がなるようにしているのであろう。最近はAR等でカメラを使うことも多く、その場合はキャプチャ時にシャッター音が実装されていなければ高確率でリジェクトされるであろう。</p>
+<p>次は、スクリプト側の実装だ。</p>
+<div class="highlight"><pre><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Runtime.InteropServices</span><span class="p">;</span>
 
-     <span class="k">const</span> <span class="n">string</span> <span class="n">ScreenshotFilename</span> <span class="o">=</span> <span class="s">&quot;src.png&quot;</span><span class="p">;</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CaptureScreenshot</span> <span class="p">:</span> <span class="n">MonoBehaviour</span> <span class="p">{</span>
+
+     <span class="k">const</span> <span class="kt">string</span> <span class="n">ScreenshotFilename</span> <span class="p">=</span> <span class="s">&quot;src.png&quot;</span><span class="p">;</span>
 
 <span class="cp">#if  UNITY_IPHONE &amp;&amp; !UNITY_EDITOR</span>
-     <span class="p">[</span><span class="n">DllImport</span><span class="p">(</span><span class="s">&quot;__Internal&quot;</span><span class="p">)]</span>
-     <span class="n">private</span> <span class="k">static</span> <span class="k">extern</span> <span class="kt">void</span> <span class="n">_PlaySystemShutterSound</span> <span class="p">();</span>
-     <span class="p">[</span><span class="n">DllImport</span><span class="p">(</span><span class="s">&quot;__Internal&quot;</span><span class="p">)]</span>
-     <span class="n">private</span> <span class="k">static</span> <span class="k">extern</span> <span class="kt">void</span> <span class="n">_WriteImageToAlbum</span> <span class="p">(</span><span class="n">string</span> <span class="n">path</span><span class="p">);</span>
+<span class="na">     [DllImport(&quot;__Internal&quot;)]</span>
+     <span class="k">private</span> <span class="k">static</span> <span class="k">extern</span> <span class="k">void</span> <span class="nf">_PlaySystemShutterSound</span> <span class="p">();</span>
+<span class="na">     [DllImport(&quot;__Internal&quot;)]</span>
+     <span class="k">private</span> <span class="k">static</span> <span class="k">extern</span> <span class="k">void</span> <span class="nf">_WriteImageToAlbum</span> <span class="p">(</span><span class="kt">string</span> <span class="n">path</span><span class="p">);</span>
 
-     <span class="n">public</span> <span class="kt">void</span> <span class="nf">CaptureScreenShot</span> <span class="p">()</span> <span class="p">{</span>
+     <span class="k">public</span> <span class="k">void</span> <span class="nf">CaptureScreenShot</span> <span class="p">()</span> <span class="p">{</span>
           <span class="c1">// ネイティブコードからシャッター音を再生。マナーモード時や、ボリュームオフ時もシャッター音を再生したいため。</span>
           <span class="n">_PlaySystemShutterSound</span> <span class="p">();</span>
           <span class="c1">// スクリーンショットを撮影。Documents下に保存される。</span>
           <span class="n">Application</span><span class="p">.</span><span class="n">CaptureScreenshot</span><span class="p">(</span><span class="n">temporaryScreenshotFilename</span><span class="p">);</span>
           <span class="c1">// スクリーンショットが書き込まれるまで待つ。書き込み完了後、画像をカメラロールへ保存する。</span>
-          <span class="n">StartCoroutine</span><span class="p">(</span><span class="n">WaitUntilFinishedWriting</span> <span class="p">(()</span><span class="o">=&gt;</span><span class="p">{</span> <span class="n">_WriteImageToAlbum</span> <span class="p">(</span><span class="n">TemporaryScreenshotPath</span><span class="p">());}));</span>
+          <span class="n">StartCoroutine</span><span class="p">(</span><span class="n">WaitUntilFinishedWriting</span> <span class="p">(()=&gt;{</span> <span class="n">_WriteImageToAlbum</span> <span class="p">(</span><span class="n">TemporaryScreenshotPath</span><span class="p">());}));</span>
      <span class="p">}</span>
 
      <span class="c1">// スクリーンショットの画像が一時的に保存されるパス。</span>
-     <span class="n">string</span> <span class="nf">TemporaryScreenshotPath</span> <span class="p">()</span> <span class="p">{</span>
-          <span class="k">return</span> <span class="n">Application</span><span class="p">.</span><span class="n">persistentDataPath</span> <span class="o">+</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="n">temporaryScreenshotFilename</span><span class="p">;</span>
+     <span class="kt">string</span> <span class="nf">TemporaryScreenshotPath</span> <span class="p">()</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="n">Application</span><span class="p">.</span><span class="n">persistentDataPath</span> <span class="p">+</span> <span class="s">&quot;/&quot;</span> <span class="p">+</span> <span class="n">temporaryScreenshotFilename</span><span class="p">;</span>
      <span class="p">}</span>
 
      <span class="c1">// スクリーンショットの書き込みが終了するまで、毎フレームファイルの有無を確認する。</span>
      <span class="n">IEnumerator</span> <span class="nf">WaitUntilFinishedWriting</span> <span class="p">(</span><span class="n">Action</span> <span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
-          <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">System</span><span class="p">.</span><span class="n">IO</span><span class="p">.</span><span class="n">File</span><span class="p">.</span><span class="n">Exists</span> <span class="p">(</span><span class="n">TemporaryScreenshotPath</span><span class="p">()))</span> <span class="p">{</span>
+          <span class="k">while</span> <span class="p">(!</span><span class="n">System</span><span class="p">.</span><span class="n">IO</span><span class="p">.</span><span class="n">File</span><span class="p">.</span><span class="n">Exists</span> <span class="p">(</span><span class="n">TemporaryScreenshotPath</span><span class="p">()))</span> <span class="p">{</span>
                 <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt;&gt;&gt; Temporary Screenshot have not been written yet.&quot;</span><span class="p">);</span>
-               <span class="n">yield</span> <span class="k">return</span> <span class="n">null</span><span class="p">;</span>
+               <span class="k">yield</span> <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
           <span class="p">}</span>
           <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt;&gt; Temporary Screenshot have been Written.&quot;</span><span class="p">);</span>
           <span class="n">callback</span><span class="p">();</span>
-          <span class="n">yield</span> <span class="k">break</span><span class="p">;</span>
+          <span class="k">yield</span> <span class="k">break</span><span class="p">;</span>
      <span class="p">}</span>
 
      <span class="c1">// カメラロール保存後、ネイティブ側から呼び出される。</span>
-     <span class="kt">void</span> <span class="nf">DidImageWriteToAlbum</span> <span class="p">(</span><span class="n">string</span> <span class="n">errorDescription</span><span class="p">)</span> <span class="p">{</span>
-          <span class="k">if</span> <span class="p">(</span><span class="n">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">errorDescription</span><span class="p">))</span> <span class="p">{</span>
+     <span class="k">void</span> <span class="nf">DidImageWriteToAlbum</span> <span class="p">(</span><span class="kt">string</span> <span class="n">errorDescription</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">errorDescription</span><span class="p">))</span> <span class="p">{</span>
                <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt;&gt;&gt; Image have been Written To Album Successfully.&quot;</span><span class="p">);</span>
                <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt;&gt;&gt; Delete Temporary Screenshot.&quot;</span><span class="p">);</span>
                <span class="n">System</span><span class="p">.</span><span class="n">IO</span><span class="p">.</span><span class="n">File</span><span class="p">.</span><span class="n">Delete</span> <span class="p">(</span><span class="n">TemporaryScreenshotPath</span><span class="p">());</span>
           <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-               <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt;&gt;&gt; An Error Occured. Error Description is...&quot;</span> <span class="o">+</span> <span class="n">errorDescription</span><span class="p">);</span>
+               <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt;&gt;&gt; An Error Occured. Error Description is...&quot;</span> <span class="p">+</span> <span class="n">errorDescription</span><span class="p">);</span>
           <span class="p">}</span>
      <span class="p">}</span>
 <span class="cp">#else</span>
-     <span class="n">public</span> <span class="kt">void</span> <span class="nf">CaptureScreenShot</span> <span class="p">()</span> <span class="p">{</span>
+     <span class="k">public</span> <span class="k">void</span> <span class="nf">CaptureScreenShot</span> <span class="p">()</span> <span class="p">{</span>
          <span class="c1">// Android端末での処理等。</span>
      <span class="p">}</span>
 <span class="cp">#endif</span>
@@ -145,37 +148,39 @@ extern "C" void _PlaySystemShutterSound ()</p>
 
 
 <p>こちらは少しややこしいので補足しておく。</p>
-<p>``` {.lang:c# .decode:true}
-[DllImport("__Internal")]
-private static extern void _PlaySystemShutterSound ();
-[DllImport("__Internal")]
-private static extern void _WriteImageToAlbum (string path);</p>
-<div class="highlight"><pre><span class="n">DllImport</span><span class="err">を使い、呼び出されるネイティブコードのシグネチャを宣言する。</span>
+<div class="highlight"><pre><span class="na">[DllImport(&quot;__Internal&quot;)]</span>
+<span class="k">private</span> <span class="k">static</span> <span class="k">extern</span> <span class="k">void</span> <span class="nf">_PlaySystemShutterSound</span> <span class="p">();</span>
+<span class="na">[DllImport(&quot;__Internal&quot;)]</span>
+<span class="k">private</span> <span class="k">static</span> <span class="k">extern</span> <span class="k">void</span> <span class="nf">_WriteImageToAlbum</span> <span class="p">(</span><span class="kt">string</span> <span class="n">path</span><span class="p">);</span>
+</pre></div>
 
-<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">c</span><span class="err">#</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span><span class="p">}</span>
-<span class="n">IEnumerator</span> <span class="n">WaitUntilFinishedWriting</span> <span class="p">(</span><span class="n">Action</span> <span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">System</span><span class="p">.</span><span class="n">IO</span><span class="p">.</span><span class="n">File</span><span class="p">.</span><span class="n">Exists</span> <span class="p">(</span><span class="n">TemporaryScreenshotPath</span><span class="p">()))</span> <span class="p">{</span>
+
+<p>DllImportを使い、呼び出されるネイティブコードのシグネチャを宣言する。</p>
+<div class="highlight"><pre><span class="n">IEnumerator</span> <span class="nf">WaitUntilFinishedWriting</span> <span class="p">(</span><span class="n">Action</span> <span class="n">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">while</span> <span class="p">(!</span><span class="n">System</span><span class="p">.</span><span class="n">IO</span><span class="p">.</span><span class="n">File</span><span class="p">.</span><span class="n">Exists</span> <span class="p">(</span><span class="n">TemporaryScreenshotPath</span><span class="p">()))</span> <span class="p">{</span>
         <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt;&gt;&gt; Temporary Screenshot have not been written　yet.&quot;</span><span class="p">);</span>
-    <span class="n">yield</span> <span class="k">return</span> <span class="n">null</span><span class="p">;</span>
+    <span class="k">yield</span> <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt;&gt; Temporary Screenshot have been Written.&quot;</span><span class="p">);</span>
     <span class="n">callback</span><span class="p">();</span>
-    <span class="n">yield</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">yield</span> <span class="k">break</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 
 
 <p>コルーチンを利用し、画像がディスクに書き込まれるまで、毎フレームファイルの有無をチェックし、画像の存在が確認でき次第コールバック(ここではカメラロールへの保存)を実行する。</p>
-<p><code>{.lang:c# .decode:true}
-void DidImageWriteToAlbum (string errorDescription) {
-    if (string.IsNullOrEmpty(errorDescription)) {
-        Debug.Log("&gt;&gt;&gt;&gt;&gt; Image have been Written To Album Successfully.");
-        Debug.Log("&gt;&gt;&gt;&gt;&gt; Delete Temporary Screenshot.");
-        System.IO.File.Delete (TemporaryScreenshotPath());
-    } else {
-        Debug.Log("&gt;&gt;&gt;&gt;&gt; An Error Occured. Error Description is..." + errorDescription);
-    }
-}</code></p>
+<div class="highlight"><pre><span class="k">void</span> <span class="nf">DidImageWriteToAlbum</span> <span class="p">(</span><span class="kt">string</span> <span class="n">errorDescription</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">errorDescription</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt;&gt;&gt; Image have been Written To Album Successfully.&quot;</span><span class="p">);</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt;&gt;&gt; Delete Temporary Screenshot.&quot;</span><span class="p">);</span>
+        <span class="n">System</span><span class="p">.</span><span class="n">IO</span><span class="p">.</span><span class="n">File</span><span class="p">.</span><span class="n">Delete</span> <span class="p">(</span><span class="n">TemporaryScreenshotPath</span><span class="p">());</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">Debug</span><span class="p">.</span><span class="n">Log</span><span class="p">(</span><span class="s">&quot;&gt;&gt;&gt;&gt;&gt; An Error Occured. Error Description is...&quot;</span> <span class="p">+</span> <span class="n">errorDescription</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
 <p>こちらは、カメラロール保存後に前述のUnitySendMessageによって呼び出される関数だ。<a href="http://docs.unity3d.com/Documentation/ScriptReference/Application.CaptureScreenshot.html">Application.CaptureScreenshot</a>は画像をDocuments内に保存するが、<a href="https://developer.apple.com/jp/devcenter/ios/library/documentation/FileSystemProgrammingGuide.pdf">一時ファイルをDocuments内に置いてはいけないことになっている</a>ので、すぐに削除している。</p>
 <p>実装するコードは以上である。</p>
 <p>また、AssetsLibraryを利用しているため、フレームワークを追加する必要がある。Xcodeから手動で追加しても良いし、<a href="http://docs.unity3d.com/Documentation/Manual/BuildPlayerPipeline.html">PostProcessBuildPlayer</a>にフレームワークを追加するコードを記述しても良い。このあたりはネット上で割りと簡単に情報が見つかるのでそちらを参考にしてほしい。</p>

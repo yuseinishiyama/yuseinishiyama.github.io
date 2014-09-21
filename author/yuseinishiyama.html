@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="jp">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>だからといって、このままでいいはずがない。 - yuseinishiyamaだからといって、このままでいいはずがない。</title>
+
+    <link rel="stylesheet" href="http://yuseinishiyama.com/theme/css/main.css">
+    <link rel="stylesheet" href="http://yuseinishiyama.com/theme/css/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <div><img src="" class="grv-img"/></div>
+        <div class="title"><a href="http://yuseinishiyama.com/">だからといって、このままでいいはずがない。 </a></div>
+        <div class="sub-title"></div>
+
+<p>
+    <div class="view"><a href="http://yuseinishiyama.com/pages/about-me.html">About Me</a></div>
+  <div class="view"><a href="http://yuseinishiyama.com/archives.html">Archives</a></div>
+  <div class="view"><a href="http://yuseinishiyama.com/categories">Categories</a></div>
+</p>
+
+<!-- Social links -->
+<div class="social">
+<h4>Follow Me</h4>
+<ul>
+    <li><a href="https://twitter.com/yuseinishiyama">twitter</a></li>
+    <li><a href="https://github.com/yuseinishiyama">github</a></li>
+</ul>
+</div>
+
+      </header>
+      <section>
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2014/05/26/build-your-own-lisp/">"Build Your Own Lisp"をやってみて</a></div>
+<p>
+<small>
+<abbr class="published" title="2014-05-26T01:30:00">
+  2014-05-26(月)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2014/05/26/build-your-own-lisp/" rel="bookmark">permalink</a>)
+</small>
+</p>      <h1>はじめに</h1>
+<p>私は、業務で主にObjective-Cを利用しているのだが、Cがよく分からないままObjective-Cを使っていると、なんともいえないモヤモヤした気持ちになる。低レイヤのAPIを使用するときや <s>、老害っぽいコード読む時など、</s>Cがよく分かっていないことを痛感させられる。Cをほとんど学んだことがないままで、CのスーパーセットであるObjective-Cをやっている。こうした境遇の人は結構多そうだ。そこで、Cを勉強するのに良いテーマが無いかと探していたところ下記のサイトを発見した。</p>
+<p><a href="http://www.buildyourownlisp.com/">Buil Your Own Lisp</a></p>
+<p>うん、これしかないだろう。何かの言語を学ぶときにLispの処理系を作るのは定番だ。CでLispを実装し、HaskellでLispを実装し、LispでLispを実装するのだ(超言語抽象)。というわけで、このチュートリアルを最後までやってみたのだが、日本語の記事でこの内容に言及しているものはほとんどなかったので、どんな内容であったのか簡単にまとめてみた。一部翻訳があるが、完全に意訳である。ご了承いただきたい。</p>
+<h1>どんな人がやるべきか</h1>
+<p>これは著者が冒頭で述べている通りである。</p>
+<blockquote>
+<p>This book is for anyone wanting to learn C, or who has once wondered how to build ...</p></blockquote> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2014/05/26/build-your-own-lisp/">read more...</a></div>
+      <hr />
+
+      </section>
+      <footer>
+        <p><small>&copy; だからといって、このままでいいはずがない。 &mdash; Theme based on Sundown by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!-- Scale fix -->
+    <script>
+      var metas = document.getElementsByTagName('meta');
+      var i;
+      
+      if (navigator.userAgent.match(/iPhone/i)) {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+          }
+        }
+      
+        document.addEventListener("gesturestart", gestureStart, false);
+      }
+
+      function gestureStart() {
+        for (i=0; i<metas.length; i++) {
+          if (metas[i].name == "viewport") {
+            metas[i].content = "width=device-width, minimum-scale=0.25, maximum-scale=1.6";
+          }
+        }
+      }
+    </script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-48020408-1', 'yuseinishiyama.com');
+  ga('send', 'pageview');
+</script>
+  </body>
+</html>

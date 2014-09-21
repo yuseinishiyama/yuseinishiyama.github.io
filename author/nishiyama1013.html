@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="jp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -22,6 +22,7 @@
 <p>
     <div class="view"><a href="http://yuseinishiyama.com/pages/about-me.html">About Me</a></div>
   <div class="view"><a href="http://yuseinishiyama.com/archives.html">Archives</a></div>
+  <div class="view"><a href="http://yuseinishiyama.com/categories">Categories</a></div>
 </p>
 
 <!-- Social links -->
@@ -35,11 +36,116 @@
 
       </header>
       <section>
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/09/29/home/">HOME</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-09-29T02:59:00">
+  2013-09-29(日)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2013/09/29/home/" rel="bookmark">permalink</a>)
+</small>
+</p>       
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/09/29/home/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/09/16/get-latest-app-version-of-ios-application/">iOSでアプリの最新バージョンを取得する方法。</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-09-16T21:50:00">
+  2013-09-16(月)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2013/09/16/get-latest-app-version-of-ios-application/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>開発者であれば、ユーザーには自分の開発したアプリの最新版を使ってほしいと思うだろう。また、ユーザーのアプリバージョンにばらつきがないことは、ビジネス面のメリットも大きい。仕事として開発を行っている人であれば、「アプリのアップデートが行われた場合に通知する機能」の実装を要求されたことは多々あるだろう。</p>
+<p>そこで今回は、</p>
+<p>アプリの最新版を取得し、ユーザーが利用しているアプリが最新版より古ければ通知する機能</p>
+<p>の実装方法を紹介する。</p>
+<p>さて、まず考えなくてはいけないのは、どこからアプリの最新版を取得するか、ということである。これにはおおまかに言って、2通りの方法がある。「1.自前のサーバを利用する方法」、と「2.AppleのAPIを利用する方法」の2つだ。どちらが適切な方法であるか比較するために、それぞれのメリット、デメリットを挙げてみた。</p>
+<p>1.自前のサーバを利用する方法</p>
+<p>メリット</p>
+<ul>
+<li>テストが容易。</li>
+<li>更新のタイミングを自由に決めることができる。</li>
+<li>取得先が勝手に変更されることがない。</li>
+</ul>
+<p>デメリット</p>
+<ul>
+<li>運用者が必要。</li>
+<li>運用ミスが発生する可能性がある。</li>
+</ul>
+<p>2.AppleのAPIを利用する方法。</p>
+<p>メリット</p>
+<ul>
+<li>自分で運用しなくて良い。</li>
+<li>運用ミスが発生しない。</li>
+</ul>
+<p>デメリット</p>
+<ul>
+<li>テストが行えない。</li>
+<li>APIが変更された場合、機能が無効になる。</li>
+<li>APIから取得できるバージョンと、ストアへ反映されているバージョンとの間にタイムラグがあったりなどした場合、その間はどうすることもできない。</li>
+</ul>
+<p>結論から言うと、「AppleのAPIを使ったほうが楽だが ...</p> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/09/16/get-latest-app-version-of-ios-application/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/09/07/addition-to-required-device-capability/">UnityでiOS向けのビルド時に、RequiredDeviceCapabilityを追加する方法。</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-09-07T21:06:00">
+  2013-09-07(土)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2013/09/07/addition-to-required-device-capability/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p><a href="https://developer.apple.com/library/ios/documentation/general/Reference/InfoPlistKeyReference/Articles/iPhoneOSKeys.html">RequiredDeviceCapability</a>を正しく設定していないと、Appleにリジェクトされてしまうことは、広く知られている。</p>
+<p>例えば、アプリに静止画を撮影する機能がある場合、このRequiredDeviceCapabilityに「still-camera」を追加してやらないといけない。</p>
+<p>RequiredDeviceCapabilityは正しく設定されていなくても、ビルドに失敗しないし、Validationも通過する。だからこそ、リジェクトされてから気づくわけで、こういう作業は特に自動化するメリットが大きいだろう。</p>
+<p>そこで、PostProcessBuildPlayerを利用し、Unityからのビルド時にInfo.plistを書き換えて、RequiredDeviceCapabilityを編集する関数を作成してみた。</p>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">process_plist</span><span class="p">(</span><span class="n">plist_filepath</span><span class="p">):</span>
+  <span class="n">pl</span> <span class="o">=</span> <span class="n">plistlib</span><span class="o">.</span><span class="n">readPlist</span><span class="p">(</span><span class="n">plist_filepath</span><span class="p">)</span>
+  <span class="n">new_settings</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;still-camera&quot;</span><span class="p">}</span>
+  <span class="k">if</span> <span class="s">&quot;UIRequiredDeviceCapabilities&quot;</span> <span class="ow">in</span> <span class="n">pl</span><span class="p">:</span>
+    <span class="n">pl</span><span class="p">[</span><span class="s">&quot;UIRequiredDeviceCapabilities&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">new_settings</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">pl</span><span class="p">[</span><span class="s">&quot;UIRequiredDeviceCapabilities&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_settings</span><span class="p">]</span>
+  <span class="n">plistlib</span><span class="o">.</span><span class="n">writePlist</span><span class="p">(</span><span class="n">pl</span><span class="p">,</span> <span class="n">plist_filepath</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Info.plistのパスを与えてやると、Info.plistに「still-camera ...</p> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/09/07/addition-to-required-device-capability/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/09/06/screenshot-with-unity-ios/">Unityでスクリーンショットを撮影し、iPhoneのカメラロールに保存する方法。</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-09-06T02:55:00">
+  2013-09-06(金)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2013/09/06/screenshot-with-unity-ios/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>Unityでスクリーンショットを撮るのは非常に簡単である。</p>
+<p><a href="http://docs.unity3d.com/Documentation/ScriptReference/Application.CaptureScreenshot.html">Application.CaptureScreenshot</a>という関数が用意されているからだ。</p>
+<p>だが、この方法ではアプリのデータ領域に画像が保存されるだけなので、ユーザーが、その画像を閲覧できるようにはならない。アプリ内で画像を管理できるようにしてもいいかもしれないが、スクリーンショットを確認したいだけなのであれば、そこまでする必要はないだろう。</p>
+<p>そこで今回は、UnityからiOSのカメラロールにアクセスする方法を紹介する。</p>
+<div class="highlight"><pre><span class="cp">#import &lt;Foundation/Foundation.h&gt;</span>
+<span class="cp">#import &lt;AssetsLibrary/AssetsLibrary.h&gt;</span>
+<span class="cp">#import &lt;AVFoundation/AVFoundation.h&gt;</span>
+
+<span class="cm">/* </span>
+<span class="cm"> スクリーンショット撮影時に利用するネイティブコード。</span>
+<span class="cm"> */</span>
+
+<span class="c1">// 指定したパスの画像をカメラロールに保存する。</span>
+<span class="k">extern</span> <span class="s">&quot;C&quot;</span> <span class="kt">void</span> <span class="n">_WriteImageToAlbum</span> <span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">path</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">UIImage</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="n">imageWithContentsOfFile</span><span class="o">:</span><span class="p">[</span><span class="n">NSString</span> <span class="n">stringWithUTF8String</span><span class="o">:</span><span class="n">path</span><span class="p">]];</span>
+    <span class="n">ALAssetsLibrary</span> <span class="o">*</span><span class="n">library</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">ALAssetsLibrary</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">]</span> <span class="n">autorelease</span><span class="p">];</span>
+    <span class="n">NSMutableDictionary</span> <span class="o">*</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">NSMutableDictionary ...</span></pre></div> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/09/06/screenshot-with-unity-ios/">read more...</a></div>
+      <hr />
       <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/08/31/setup-raspberrypi/">Raspberry Piのセットアップ(NOOBS)。</a></div>
 <p>
 <small>
 <abbr class="published" title="2013-08-31T21:08:00">
-  土 31 8月 2013
+  2013-08-31(土)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/08/31/setup-raspberrypi/" rel="bookmark">permalink</a>)
 </small>
@@ -56,40 +162,11 @@ Piを起動した。</p>
 <p>しかし、画面に何も表示されない。よくみると「ACT」のLEDが消灯しているので、それを手がかりに調べてみる ...</p> 
       <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/08/31/setup-raspberrypi/">read more...</a></div>
       <hr />
-      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/08/31/findays-released/">iOS向け動画編集アプリ「Findays」をリリースしました。</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-08-31T19:51:00">
-  土 31 8月 2013
-</abbr> | 
- -- (<a href="http://yuseinishiyama.com/posts/2013/08/31/findays-released/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>[![findays_icon][]][]</p>
-<p>今月16日(金)に、開発を1人で担当したiOS向けアプリ「Findays」がリリースされました。以下、App
-Storeに記載されている内容の一部転載です。</p>
-<hr />
-<p>【Findaysとは】  </p>
-<p>Findays（ファインデイズ）は30秒の動画を撮影して、オープニング／エンディングアニメを付けたり、フィルター、
-音楽を選択して、PVのような作品を作ってくれるアプリです。BGMを提供してくれたのは。日本を代表するミュージシャン、
-mito(clammbon)、toe、mouse on the keys、Kazuhide Takamoto(Comeback My
-Daughters)の４組。日常の瞬間を切り取って特別な思い出に変えよう！</p>
-<ul>
-<li>最新の情報はFacebookでゲットしよう -  </li>
-</ul>
-<p>撮影した動画をアップするとプレゼントがもらえるキャンペーンなどが開催されたり<br />
-ミュージシャンが曲のコンセプトなどを語ったメッセージビデオも観れます。<br />
-Official Facebook Page<br />
-<a href="https://www.facebook.com/FindaysApp">https://www.facebook.com/FindaysApp</a></p>
-<ul>
-<li>Findaysの使い方はYoutubeでチェック -<br />
-Official Youtube Page ...</li></ul> 
-      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/08/31/findays-released/">read more...</a></div>
-      <hr />
       <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/08/19/3idiots/">きっと、うまくいく</a></div>
 <p>
 <small>
 <abbr class="published" title="2013-08-19T17:18:00">
-  月 19 8月 2013
+  2013-08-19(月)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/08/19/3idiots/" rel="bookmark">permalink</a>)
 </small>
@@ -110,7 +187,7 @@ Official Youtube Page ...</li></ul>
 <p>
 <small>
 <abbr class="published" title="2013-08-08T09:34:00">
-  木 08 8月 2013
+  2013-08-08(木)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/08/08/quincy-live-in-japan/" rel="bookmark">permalink</a>)
 </small>
@@ -130,7 +207,7 @@ style="line-height: 1.5;">時系列順に内容を追っていくべきなのだ
 <p>
 <small>
 <abbr class="published" title="2013-07-21T20:27:00">
-  日 21 7月 2013
+  2013-07-21(日)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/07/21/cope-with-self-contradiction/" rel="bookmark">permalink</a>)
 </small>
@@ -157,29 +234,33 @@ style="line-height: 1.5;">時系列順に内容を追っていくべきなのだ
 <p>
 <small>
 <abbr class="published" title="2013-07-01T00:50:00">
-  月 01 7月 2013
+  2013-07-01(月)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/07/01/calculate-luminance/" rel="bookmark">permalink</a>)
 </small>
 </p>      <p>シェーダーでは、よくこんなコードを見かける。</p>
-<p>``` {.lang:c .decode:true title="Luminance"}
-const mediump vec3 Perception = vec3(0.299, 0.587, 0.114);</p>
-<p>void main(void)
-{
-    mediump vec3 color = texture2D(Sampler, TextureCoord).xyz;
-    mediump float luminance = dot(Perception, color);
-    gl_FragColor = (luminance &gt; Threshold) ? vec4(color, 1) : vec4(0);
-}
-```</p>
+<div class="highlight"><pre><span class="k">const</span> <span class="n">mediump</span> <span class="n">vec3</span> <span class="n">Perception</span> <span class="o">=</span> <span class="n">vec3</span><span class="p">(</span><span class="mf">0.299</span><span class="p">,</span> <span class="mf">0.587</span><span class="p">,</span> <span class="mf">0.114</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">mediump</span> <span class="n">vec3</span> <span class="n">color</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">Sampler</span><span class="p">,</span> <span class="n">TextureCoord</span><span class="p">).</span><span class="n">xyz</span><span class="p">;</span>
+    <span class="n">mediump</span> <span class="kt">float</span> <span class="n">luminance</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Perception</span><span class="p">,</span> <span class="n">color</span><span class="p">);</span>
+    <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="p">(</span><span class="n">luminance</span> <span class="o">&gt;</span> <span class="n">Threshold</span><span class="p">)</span> <span class="o">?</span> <span class="n">vec4</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">:</span> <span class="n">vec4</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
 <p>輝度がThresholdを上回れば、テクスチャの色を使い、そうでなければ黒にするということは分かる。それにしても、luminanceを取得するときにテクスチャの色と内積をとっているPerceptionとはなんだろうか。謎めいた値がハードコードされている。</p>
-<p>どうも人間の光受容体の特性を考慮するための値らしい ...</p> 
+<p>どうも人間の光受容体の特性を考慮するための値らしい。</p>
+<p><a href="http://en.wikipedia.org/wiki/Photoreceptor_cell" title="Photoreceptor cell">Photoreceptor cell</a></p>
+<p>人間の目は青にはあまり反応せず、緑には強く反応する。そのままRGBを平均した値を輝度に使ってしまうと、青が明るすぎ ...</p> 
       <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/07/01/calculate-luminance/">read more...</a></div>
       <hr />
       <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/06/17/about-scenece/">センスについて</a></div>
 <p>
 <small>
 <abbr class="published" title="2013-06-17T02:46:00">
-  月 17 6月 2013
+  2013-06-17(月)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/06/17/about-scenece/" rel="bookmark">permalink</a>)
 </small>
@@ -193,80 +274,6 @@ const mediump vec3 Perception = vec3(0.299, 0.587, 0.114);</p>
 <p>こんなことを考えるうちに、「芸術の価値」に関して自ら語ることはほとんど辞めてしまった。できないと考えたのだ。根拠のあるものが全てだと考えて、職業にはプログラマを選んだ。芸術についてとやかく口をはさみたがる人から見ると、私は「芸術への関心が薄い人」という風に見えるかもしれない。</p>
 <p>確かに、自分にとって価値のあるものが、他人にとっても価値あるものである「可能性は高い」。その可能性を考慮した上で行われる、芸術について語る活動というのは意味があるだろう。しかし、「物事そのものを宣伝する行為」というのは中々に難しい。どうしても「その物事を知っている自分を宣伝する行為 ...</p> 
       <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/06/17/about-scenece/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/06/13/simultaneous-video-playing-in-ios/">iPhoneでの同時動画再生数の上限について</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-06-13T00:15:00">
-  木 13 6月 2013
-</abbr> | 
- -- (<a href="http://yuseinishiyama.com/posts/2013/06/13/simultaneous-video-playing-in-ios/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>現在動画編集アプリを作っている。<br />
-動画にエフェクトとかBGMとかなんやらの設定をしていくわけだが、  </p>
-<p>画面上部にプレビュー画面を持ち、その下に編集用のOutletがいくつか存在するような見た目のViewControllerがNavigationControllerでいくつか続いていくというような作りだ。</p>
-<p>ここで奇妙な問題が発生した。<br />
-MPMoviePlayerControllerを使用して、動画を再生しようとしたところ</p>
-<p>``` {.lang:objc .decode:true}
-Error Domain=AVFoundationErrorDomain Code=-11839 "Cannot Decode"</p>
-<div class="highlight"><pre><span class="err">こんなエラーがでた。デコードできない？動画の形式が悪いのだろうか？</span>  
-
-<span class="err">だが、試しにその</span><span class="n">ViewController</span><span class="err">だけにして実行してみたところ問題なく再生できた。</span>  
-<span class="err">ということは、特定のコンテキストにおいてのみデコードが失敗するわけだ。</span>
-
-<span class="p">[</span><span class="err">先日の記事</span><span class="p">][]</span><span class="err">にもある通り、いざ実装を始めると全く予期しないところで躓くことが多々ある。</span>  
-
-<span class="err">特にこういうロジックの問題でない箇所は原因の特定が難しく、心が折れそうになる。</span>
-
-<span class="err">とにかくググるしかないので、上記のログをそのまま検索バーに貼り付けた。</span>  
-<span class="err">すると同じ様な現象で困っている人を発見することが出来た。</span>
-
-<span class="p">[</span><span class="n">http</span><span class="o">:</span><span class="c1">//stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decode][]</span>
-
-<span class="o">&gt;</span> <span class="n">There</span> <span class="n">is</span> <span class="n">a</span> <span class="n">limit</span> <span class="n">on</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">concurrent ...</span></pre></div> 
-      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/06/13/simultaneous-video-playing-in-ios/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/06/10/never-be-fool/">バカ・アホ賛美はもう結構。</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-06-10T05:52:00">
-  月 10 6月 2013
-</abbr> | 
- -- (<a href="http://yuseinishiyama.com/posts/2013/06/10/never-be-fool/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>何かに対して、バカだとかアホだとか言うと、「お前はどうなんだ」という議論に持ち込まれることがある。だからはじめに言っておくが、</p>
-<p>私もバカ・アホの部類である。</p>
-<p>だが、「バカ・アホでもいい」と思うほどはバカ・アホではないし、ましてや、「バカ・アホが世界を制する」みたいな仰天思想の持ち主のようなバカ・アホでもない。</p>
-<p>筒井康隆の『アホの壁』の冒頭にこんな文がある。</p>
-<blockquote>
-<p>むろんアホの壁を乗り越えて彼方へ行かぬ限りは成り立たない仕事もある。言うまでもなく芸術という仕事である。芸術的狂気というものは一旦良識から離れてアホの側に身を置かねばならない。それが単なるアホと異なるのは、壁の存在、壁の所在、壁の位置、壁の高さ、壁を乗り越える方法などを熟知していることだ。そのためには冷静な正気を保ちながら壁を認識しなければならない。これができていない芸術は、常識に囚われたつまらないものにならざるを得ないだろう。<br />
- \&lt;筒井康隆(2010)『アホの壁』新潮社 p7></p>
-</blockquote>
-<p>あれほど無茶苦茶なスラップスティックを書ける作家の芸術感がこのようなものであるということは、とても印象的だ（『アホの壁』は、この常識さゆえに、筒井康隆特有の痛快さにはかけるので物足りないのだが）。</p>
-<p>私は、個性というのはとても大事だと思っている。過去の財産にアクセスしやすい時代に過去の再生産を行なっても大した価値にはならないからだ。それに、今までに無かったものの見方・考え方や歴史観を生むような個性が、現代日本を覆う民族的な不安を乗り越えるためには必要不可欠だとも思う ...</p> 
-      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/06/10/never-be-fool/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/06/07/what-does-saying-i-can-means/">プログラマにとって〈できる〉とは何か。</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-06-07T00:54:00">
-  金 07 6月 2013
-</abbr> | 
- -- (<a href="http://yuseinishiyama.com/posts/2013/06/07/what-does-saying-i-can-means/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>プログラマとして働いていると、特に非プログラマの人から</p>
-<p>「hogehogeをfugafugaするようなことって（プログラムで）できるんですか？」</p>
-<p>という類の質問をされることが良くある。当然そういうことを聞かれたら</p>
-<p>「できると思いますよ。」</p>
-<p>と答えるしかない。まともな思考な人が考えるような要求、つまり「iPhoneの画面をダブルタップすると、口やかましい上司を遠隔地へと転送できる」とか「母親をカメラで撮影すると、実家への仕送りを強要しなくなる」とか、そういうのではない要求、というものはたいていの場合、理論上実現可能だからだ。</p>
-<p>コンピュータサイエンスに明るいわけではないが、「<a href="http://ja.wikipedia.org/wiki/%E3%83%81%E3%83%A5%E3%83%BC%E3%83%AA%E3%83%B3%E3%82%B0%E5%AE%8C%E5%85%A8" title="チューリング完全">チューリング完全</a>」という言葉ぐらいなら知っている。コンピュータの世界における「やればできる」に相当する概念といったところか。  </p>
-<p>つまり、「できますか」という問に「やればできる」と答えていて、さらに、「やればできる」のことを「できる」という言葉で表してしまっているわけだ。</p>
-<p>物質世界にくらべて、「やればできる」のが当たり前のソフトウェアの世界だからこそ、その当たり前の答えを使ってしまうと厄介なことが起きる。まず、</p>
-<p>「Aさんがhogehogeをfugafugaできるらしいから、やってもらおう。」</p>
-<p>という風に自分が頼まれてしまう。そして、自分自身も判断力が鈍っていると</p>
-<p>「まぁ、やればできるはずだからやってみるか。」</p>
-<p>と安易に引き受けてしまうわけである。プログラムの世界以外なら ...</p> 
-      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/06/07/what-does-saying-i-can-means/">read more...</a></div>
       <hr />
 
 <span class="paginator">

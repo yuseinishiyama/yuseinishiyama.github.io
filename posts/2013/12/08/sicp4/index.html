@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="jp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -22,6 +22,7 @@
 <p>
     <div class="view"><a href="http://yuseinishiyama.com/pages/about-me.html">About Me</a></div>
   <div class="view"><a href="http://yuseinishiyama.com/archives.html">Archives</a></div>
+  <div class="view"><a href="http://yuseinishiyama.com/categories">Categories</a></div>
 </p>
 
 <!-- Social links -->
@@ -45,7 +46,7 @@
 <p>
 <small>
 <abbr class="published" title="2013-12-08T23:35:00">
-  日 08 12月 2013
+  2013-12-08(日)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/12/08/sicp4/" rel="bookmark">permalink</a>)
 </small>
@@ -54,17 +55,17 @@
 <p>ここでは、Generic Procedureを実現するための戦略が3つ紹介される。</p>
 <ul>
 <li>
-<p>explicit dispatch  </p>
-<p>総称関数側(「たす」、「ひく」など)が、データの型(「実数」、「複素数」など)を見て、実際に実行される函数を決定する。  </p>
+<p>explicit dispatch</p>
+<p>総称関数側(「たす」、「ひく」など)が、データの型(「実数」、「複素数」など)を見て、実際に実行される函数を決定する。</p>
 <p>型が追加されるたびに、総称関数側の分岐を追加する必要がある。既存のコードを修正する必要があるので、余り得策とはいえない？</p>
 </li>
 <li>
-<p>data-directed  </p>
+<p>data-directed</p>
 <p>「総称函数名」、「型」、「実際に実行される函数」の結びつきを管理するテーブルを作成する。  </p>
 <p>総称関数内での分岐を作る必要はないが、新しい函数や型が追加されるたびにグローバルなテーブルを更新する必要がある。</p>
 </li>
 <li>
-<p>message-passing<br />
+<p>message-passing
     "intelligent operation"ではなく、"intelligent data
     object"。つまり、型に応じた処理を行う「賢い処理」の代わりに、処理に応じて動作を変える「賢いデータ」を作るという方針。</p>
 </li>

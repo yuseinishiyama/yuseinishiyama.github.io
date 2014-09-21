@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="jp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -22,6 +22,7 @@
 <p>
     <div class="view"><a href="http://yuseinishiyama.com/pages/about-me.html">About Me</a></div>
   <div class="view"><a href="http://yuseinishiyama.com/archives.html">Archives</a></div>
+  <div class="view"><a href="http://yuseinishiyama.com/categories">Categories</a></div>
 </p>
 
 <!-- Social links -->
@@ -35,11 +36,159 @@
 
       </header>
       <section>
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2014/09/22/embedded-os-in-12steps/">『12ステップで作る組込みOS自作入門』を読んで〜モバイルアプリエンジニアの生存戦略〜</a></div>
+<p>
+<small>
+<abbr class="published" title="2014-09-22T01:37:00">
+  2014-09-22(月)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2014/09/22/embedded-os-in-12steps/" rel="bookmark">permalink</a>)
+</small>
+</p>      <iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=usay0b-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=4877832394" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+
+<p>『12ステップで作る組込みOS自作入門』という本を読んだので、その内容や感想について書いてみる。</p>
+<h1>動機</h1>
+<h3>ウェアラブル時代に備えて</h3>
+<p>勝手な予想ではあるが、これからウェアラブル端末向けアプリケーションの需要が高まるとすれば、それはすなわち計算資源の少ない環境での開発が避けられないということではないかと思う。そうすると、アプリケーション開発者も低レイヤの知識を身につけておいて損はないのではないかと考えている。</p>
+<h3>モバイルソフトウェアの限界を感じて</h3>
+<p>なんとなくソフトウェアだけで問題が解決できそうな時代ではなくなってきた気がして不安を感じている。もし本当にハードウェア・スタートアップとかが台頭してきて、一山当てる時代とかになったら対応できないとまずそうだ。(モバイルソフトウェア開発自体に価値がないということではない。「アプリとか誰でも作れる。そのうち無くなる仕事。」みたいなニュアンスの語り口の人をtwitterとかで稀に見ることがあるが、「いや、そもそもこっちだって動くものを作るだけなら簡単なのは百も承知だ」というのがあって、そういう言説には多少イライラしている。ある程度の規模のアプリケーションを長期的に運用していくマネジメントとか、大規模なフレームワークを隅まで理解している人の重要さとかを側で見ていると、「誰でも作れる、なんていう暴論を吐くのはアプリケーション開発に対する無知のなせる業だろ」っていうのが一番言いたくなることだが、それは置いておく。)</p>
+<h3>未来予測のため</h3>
+<p>コンパイラやハードの進化がソフトウェアで実現できることを底上げするわけであるから、これらの進化を追うことはソフトウェアの未来予測に繋がるはずである。例えば、Appleが製造するチップの性能やLLVMの新機能などを見ていれば、Apple製デバイスの長期的な戦略が多少は察しがつく(今だとGPU関連の技術への投資が目立つ...)。</p>
+<h3>ブラックボックスを減らすことで、心理的負荷が下がる</h3>
+<p>私の中でプログラミングの最大のモチベーションはブラックボックスを減らすことだ。前書きにこんな記述がある。</p>
+<blockquote>
+<p>興味があれば、本を読むのも試行錯誤をするのも面白いでしょう。面白ければ続けることができます。大切なのは継続することです。そしてそのために考えるべきは、「どの順番で読むべきか？」ではなく「自分のモチベーションを維持するにはどうしたらよいか？」なのです。だから好きなことをやる ...</p></blockquote> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2014/09/22/embedded-os-in-12steps/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2014/07/07/recently-read-books/">プログラマ歴2年の文系出身プログラマがこの1年で読んだ本</a></div>
+<p>
+<small>
+<abbr class="published" title="2014-07-07T23:49:00">
+  2014-07-07(月)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2014/07/07/recently-read-books/" rel="bookmark">permalink</a>)
+</small>
+</p>      <h1>はじめに</h1>
+<p>私は文系出身のプログラマであるが、今年の4月でようやくプログラマ歴2年になった。
+その私がこの1年間で読んだ本を、整理も兼ねてまとめてみる。</p>
+<h1>読んだ本一覧</h1>
+<h2>コンピュータサイエンス全般</h2>
+<p>「文系出身の」と見出しをつけたものの、文系・理系がどうとかあまりそういうことにはこだわらないし、また、こだわるのは愚かだと思っている。
+かの<a href="http://ja.wikipedia.org/wiki/%E3%83%B4%E3%82%A7%E3%83%AB%E3%83%8A%E3%83%BC%E3%83%BB%E3%83%8F%E3%82%A4%E3%82%BC%E3%83%B3%E3%83%99%E3%83%AB%E3%82%AF">ハイゼンベルク</a>も</p>
+<blockquote>
+<p>科学は人間によってつくられるものであります。これはもともと自明のことですが、簡単に忘れてしまいがちです。
+このことをもう一度思いかえすならば、、しばしば嘆かれるような人文科学-芸術と、
+技術-自然科学という二つの文化の間にある断然を少なくすることに役立つのではないでしょうか。\&lt;W.ハイゼンベルク(1974)『部分と全体』みすず書房 p.vii></p>
+</blockquote>
+<p>と文理の壁を超えることの重要性を説いている。こうした哲学的基礎があったからこそ、
+<a href="http://ja.wikipedia.org/wiki/%E4%B8%8D%E7%A2%BA%E5%AE%9A%E6%80%A7%E5%8E%9F%E7%90%86">不確定性原理</a>という非常に深遠な考えを導き出すことが出来たのであろう(私程度の知性では全く理解できない原理ではあるが)。
+とはいえ、文系出身の私にとってはアカデミックな教養がないというのは大変なコンプレックスであり、</p>
+<p>「「コンピュータサイエンス」」</p>
+<p>とか、ましてや</p>
+<p>「「計算機科学」」</p>
+<p>などと唱えられると、「ははぁ、参りました」となってしまう。
+というわけで、そういうアカデミックな雰囲気を醸し出す本にはめっぽう弱い。</p>
+<h3>コンピュータの構成と設計〜ハードウエアとソフトウエアのインタフェース</h3>
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=usay0b-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=4822284786" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+
+<p>通称パタヘネ。
+3章までしか読めていない ...</p> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2014/07/07/recently-read-books/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2014/06/25/swift-lt1/">第1回 Swift LT会で発表しました</a></div>
+<p>
+<small>
+<abbr class="published" title="2014-06-25T23:49:00">
+  2014-06-25(水)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2014/06/25/swift-lt1/" rel="bookmark">permalink</a>)
+</small>
+</p>      <h1>はじめに</h1>
+<p><a href="http://connpass.com/event/6740/">Yahoo!JAPAN様主催の第1回 Swift LT会</a>に参加し、発表してきた。</p>
+<h1>資料</h1>
+<script async class="speakerdeck-embed" data-id="31011ac0de640131ffed2ad9291baba4" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+<h1>要点</h1>
+<p>「Swift中級編」と銘打ち、初見では気づきにくい側面について自分なりにまとめてみた。</p>
+<p>Objective-Cでの開発経験があり、Swiftの特徴・メジャーな言語仕様についてある程度理解していている、そういう人を対象にしている。</p>
+<p>そういう意味での「中級」だ。</p>
+<p>内容から察していただける通り、「Objective-Cの動的特性にかなり愛着がある」というのが、この発表での私の立場だ。</p>
+<h1>Swiftに対する印象</h1>
+<p>自分のまだまだ短い業務経験の中で、実用的な言語の登場を目の当たりにしたのはこれがはじめてだった。</p>
+<p>だが、別に物珍しい言語でもなんでもない。近年の実用的な言語の仕様、LLVMの進化などから言って「当然そうなるであろう」という言語だ。</p>
+<p>実用化を強く意識しているだけに、「驚き最小の原則」が徹底されていて、ドラスティックな機能は存在しない。</p>
+<p>あくまでアクのないベーシックな言語ではあるが、</p>
+<ul>
+<li>型推論</li>
+<li>失敗可能性のコンテキストを持つ多相型、Optional</li>
+<li>関数オブジェクトの容易な操作</li>
+</ul>
+<p>等々、モダンで重要な機能は全部取り入れた、そういう印象が強い言語だ。</p>
+<h1>情報発信の価値について</h1>
+<p>むしろ印象的だったのは、言語そのものではなく、その広がり方だった。</p>
+<ul>
+<li>登場1週間を待たずして、Qiita等で大量のまとめが投稿される ...</li></ul> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2014/06/25/swift-lt1/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2014/05/26/build-your-own-lisp/">"Build Your Own Lisp"をやってみて</a></div>
+<p>
+<small>
+<abbr class="published" title="2014-05-26T01:30:00">
+  2014-05-26(月)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2014/05/26/build-your-own-lisp/" rel="bookmark">permalink</a>)
+</small>
+</p>      <h1>はじめに</h1>
+<p>私は、業務で主にObjective-Cを利用しているのだが、Cがよく分からないままObjective-Cを使っていると、なんともいえないモヤモヤした気持ちになる。低レイヤのAPIを使用するときや <s>、老害っぽいコード読む時など、</s>Cがよく分かっていないことを痛感させられる。Cをほとんど学んだことがないままで、CのスーパーセットであるObjective-Cをやっている。こうした境遇の人は結構多そうだ。そこで、Cを勉強するのに良いテーマが無いかと探していたところ下記のサイトを発見した。</p>
+<p><a href="http://www.buildyourownlisp.com/">Buil Your Own Lisp</a></p>
+<p>うん、これしかないだろう。何かの言語を学ぶときにLispの処理系を作るのは定番だ。CでLispを実装し、HaskellでLispを実装し、LispでLispを実装するのだ(超言語抽象)。というわけで、このチュートリアルを最後までやってみたのだが、日本語の記事でこの内容に言及しているものはほとんどなかったので、どんな内容であったのか簡単にまとめてみた。一部翻訳があるが、完全に意訳である。ご了承いただきたい。</p>
+<h1>どんな人がやるべきか</h1>
+<p>これは著者が冒頭で述べている通りである。</p>
+<blockquote>
+<p>This book is for anyone wanting to learn C, or who has once wondered how to build ...</p></blockquote> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2014/05/26/build-your-own-lisp/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2014/05/05/negator/">否定すること</a></div>
+<p>
+<small>
+<abbr class="published" title="2014-05-05T01:09:00">
+  2014-05-05(月)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2014/05/05/negator/" rel="bookmark">permalink</a>)
+</small>
+</p>      <h1>中途半端な否定</h1>
+<p>「私はネガティブなんです」と嬉々として喧伝する者が、如何に中途半端な否定を実践しているかを指摘することはいとも簡単である。それは、彼らが「自分自身の否定的傾向について、肯定している」という中途半端さを持っているからだ。これは、負数に正数を掛け続けるようなものであり、その符号は負で在り続ける。私はこれを誤解されたネガティビズムと考える。</p>
+<h1>現実は残酷である</h1>
+<p>はじめて自らに対して否定の目を向けた時、確かに世界は地獄の様相を示す。己を客観的に観察した時、誤魔化しようのない欠陥が幾つも見つかるからだ。そして、唯物論の世界を信じるものは、その欠陥をあるがまま見つめ耐えるしかない。唯物論者は嘘偽りによって自らを慰めたり、誰かの慰めの言葉に耳を貸すことはできない。たとえ幸せであったとしても、盲目的な考えに支配されているものは不幸であり、我々はそこから解放されなければならない。しかし、そのようにして解放された先の、物事があるがままである地は恐ろしく残酷だ(私の尊敬する優れた哲学者たちは、その残酷な世界で哲学をどう働かせれば絶望することなく生きていけるかを模索している人たちである)。こうした容赦無い否定に自らを晒し続けることで、自信は喪失し、他者からの信頼も失う。その中で、気づくことがある。</p>
+<p>「この否定は果たして私の役に立っているのだろうか。」</p>
+<h1>真に否定的であるとうこと</h1>
+<p>否定に対し否定の目を向けた時、何が起こるだろうか。肯定的な人間になったといえるだろうか。そうではない。自分の精神活動を否定する行為によって、己の限界を打破しようとしているわけで、あくまで否定的な人間のままだ。だが、これは大きな進歩である。自らが「否定そのもの」ではなく ...</p> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2014/05/05/negator/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2014/04/30/science-for-english-learning/">外国語学習とプログラミング</a></div>
+<p>
+<small>
+<abbr class="published" title="2014-04-30T02:28:00">
+  2014-04-30(水)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2014/04/30/science-for-english-learning/" rel="bookmark">permalink</a>)
+</small>
+</p>      <h1>はじめに。</h1>
+<p>昨年末から休日を図書館で過ごすことが多くなったが、お陰で有用な本に出会う確率が大幅に上がった。せっかくなので、備忘録も兼ねて有益な本を紹介していきたい。ちなみに、図書館を利用しても本を買わなくて良くなることはない。むしろ、手元に置いておきたいと思う本が増えるので、本に対する投資は増えた。</p>
+<h1>情報格差、おいしい？</h1>
+<p>プログラマとして自分の価値を高めるためには、やはり情報格差を利用したい。つまり、入手できる情報が他人より多いということで差別化を計りたいのだ。そのためには、英語は必須となる。英語で検索し、英語で一次情報にあたることができるだけで、それができない人よりも鮮度も精度も高い情報を得ることができるというのは当然のことだ。このような理由から、英語学習の熱意が高まる中で、この本に出会った。</p>
+<iframe src="http://rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=usay0b-22&o=9&p=8&l=as4&m=amazon&f=ifr&ref=ss_til&asins=4004311500" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+
+<p>(ちなみに、まつもとゆきひろさんは「情報格差」より「情熱格差」が重要だと仰っていた。日本のような出版・翻訳が盛んな国では、情報格差というのはかなり少なく、むしろ情熱の有無が格差になってくるだろうというご意見である。これは最もであるが、とりあえずは情報格差があるという前提で話を進めたい。)</p>
+<h1>外国語学習の科学。</h1>
+<p>内容はいたってシンプル。第二言語習得(SLA)の専門家である著者が、その理論を一般向けに紹介した本である。まぁ、要するに「条件Aと条件Bで外国語学習を行わせた結果、統計的に有意味な差が認められましたよー」といった類の情報が沢山紹介されていると思っていただければ良い。簡略化しすぎて、怒られそうではあるが...。ところでこの本 ...</p> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2014/04/30/science-for-english-learning/">read more...</a></div>
+      <hr />
       <div class="front-title"><a href="http://yuseinishiyama.com/posts/2014/02/19/open-hack-day-japan2/">Open Hack Day Japan 2に参加してきた。</a></div>
 <p>
 <small>
 <abbr class="published" title="2014-02-19T00:49:00">
-  水 19 2月 2014
+  2014-02-19(水)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2014/02/19/open-hack-day-japan2/" rel="bookmark">permalink</a>)
 </small>
@@ -59,7 +208,7 @@
 <p>
 <small>
 <abbr class="published" title="2014-02-12T00:11:00">
-  水 12 2月 2014
+  2014-02-12(水)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2014/02/12/rejection-for-advertisingIdentifier/" rel="bookmark">permalink</a>)
 </small>
@@ -76,7 +225,7 @@
 <p>
 <small>
 <abbr class="published" title="2014-01-31T00:00:00">
-  金 31 1月 2014
+  2014-01-31(金)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2014/01/31/transition-from-wordpress-to-pelican/" rel="bookmark">permalink</a>)
 </small>
@@ -88,7 +237,7 @@
 <p>
 <small>
 <abbr class="published" title="2013-12-24T22:32:00">
-  火 24 12月 2013
+  2013-12-24(火)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/12/24/face-detection-from-movie/" rel="bookmark">permalink</a>)
 </small>
@@ -115,151 +264,6 @@
 <div class="highlight"><pre><span class="cp">#import &quot;VFDVideoFaceDetector.h&quot;</span>
 <span class="cp">#import &lt;AVFoundation/AVFoundation.h ...</span></pre></div> 
       <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/12/24/face-detection-from-movie/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/12/19/sicp5/">SICP 3.1.2 The Benefits of Introducing Assignment</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-12-19T03:11:00">
-  木 19 12月 2013
-</abbr> | 
- -- (<a href="http://yuseinishiyama.com/posts/2013/12/19/sicp5/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>代入の効用について説明するだけにしては、Ex 3.5.
-はちょっとやり過ぎな気もするが、なかなか興味深い内容ではある。</p>
-<blockquote>
-<p>Monte Carlo integration is a method of estimating definite integrals
-by means of Monte Carlo simulation. Consider computing the area of a
-region of space described by a predicate P(x, y) that is true for
-points (x, y) in the region and false ...</p></blockquote> 
-      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/12/19/sicp5/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/12/12/potatotips2/">第2回potatotipsに参加してきた。</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-12-12T00:54:00">
-  木 12 12月 2013
-</abbr> | 
- -- (<a href="http://yuseinishiyama.com/posts/2013/12/12/potatotips2/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p><a href="https://github.com/potatotips/potatotips/wiki/potatotips-2#potatotips-iosandroid%E9%96%8B%E7%99%BAtips%E5%85%B1%E6%9C%89%E4%BC%9A-%E7%AC%AC2%E5%9B%9E" title="potatotips (iOS/Android開発Tips共有会) 第2回">第2回potatotipsに</a>参加し、発表してきた。  </p>
-<p>主にAVFoundationを利用した、iOSでの動画編集の話をした。使用したスライドは以下のものである。</p>
-<iframe src="http://www.slideshare.net/slideshow/embed_code/29084610" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px 1px 0; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
-
-<p><div style="margin-bottom:5px"> <strong> <a href="https://www.slideshare.net/u-say/video-editing-in-ios" title="Video Editing in iOS" target="_blank">Video Editing in iOS</a> </strong> from <strong><a href="http://www.slideshare.net/u-say" target="_blank">Yusei Nishiyama</a></strong> </div></p>
-<p>噂通りのハイレベルさで、1人持ち時間5分という短さながらも、濃い内容の発表ばかりであった。<br />
-特に珍しい意見でもないと思うが、</p>
-<ul>
-<li>調べたらすぐに発見できるわけではないが、</li>
-<li>かといってニッチすぎず、普段の業務に活かせて、</li>
-<li>しかも、ユーモアがあって面白い内容</li>
-</ul>
-<p>これらが揃うと、「良い発表」だったなと感じる。<br />
-とはいえ、普通は1つ満たすだけでも難しい。  </p>
-<p>それぞれのトレードオフもあるので、全部揃えるとなると、これは並大抵のことではない。</p>
-<p>まだまだ、先は長い。</p> 
-      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/12/12/potatotips2/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/12/08/sicp4/">SICP 第2章「Building Abstractions with Data」【後編】</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-12-08T23:35:00">
-  日 08 12月 2013
-</abbr> | 
- -- (<a href="http://yuseinishiyama.com/posts/2013/12/08/sicp4/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>後半はGeneric Procedure関する解説。</p>
-<p>オブジェクト指向の言語で開発を行っていると、「そもそも型とは」というようなことを考える機会がほとんどない。言語のプリミティブな機能を利用して、型の仕組みを実装してみるのはなかなか貴重な経験だ。</p>
-<p>ここでは、Generic Procedureを実現するための戦略が3つ紹介される。</p>
-<ul>
-<li>
-<p>explicit dispatch  </p>
-<p>総称関数側(「たす」、「ひく」など)が、データの型(「実数」、「複素数」など)を見て、実際に実行される函数を決定する。  </p>
-<p>型が追加されるたびに、総称関数側の分岐を追加する必要がある。既存のコードを修正する必要があるので、余り得策とはいえない？</p>
-</li>
-<li>
-<p>data-directed  </p>
-<p>「総称函数名」、「型」、「実際に実行される函数」の結びつきを管理するテーブルを作成する。  </p>
-<p>総称関数内での分岐を作る必要はないが、新しい函数や型が追加されるたびにグローバルなテーブルを更新する必要がある。</p>
-</li>
-<li>
-<p>message-passing<br />
-    "intelligent operation"ではなく、"intelligent data
-    object"。つまり、型に応じた処理を行う「賢い処理」の代わりに、処理に応じて動作を変える「賢いデータ」を作るという方針。</p>
-</li>
-</ul>
-<p>message-passingは非常にオブジェクト指向的だ。直交座標系で複素数を表現する ...</p> 
-      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/12/08/sicp4/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/12/01/autocomplite-scheme-with-emacs-and-gauche/">EmacsでSchemeの自動補完を行う。</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-12-01T23:41:00">
-  日 01 12月 2013
-</abbr> | 
- -- (<a href="http://yuseinishiyama.com/posts/2013/12/01/autocomplite-scheme-with-emacs-and-gauche/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>環境構築に手間をかけたくない質なので、最初はDrRacketを利用してSchemeのコードを書いていた。</p>
-<p><a href="http://www.atmarkit.co.jp/ait/articles/0812/17/news149_3.html" title="Gaucheでメタプログラミング">Gaucheでメタプログラミング</a></p>
-<p>しかし、上記のサイトなどから、Emacsでも「別ウインドウで評価しながら、ソースを書けること」が分った。<br />
-その結果、結局Emacs+Gaucheの環境に落ち着いた。</p>
-<p>しばらくはこれで満足していたし、新しい言語であれば、全て手で打つことも、理解を早めるという点では無駄ではないだろう。  </p>
-<p>しかし、SICPの分量・難易度を考えると、あまりゆっくりコーディングしている暇はない。さすがに、最低限の自動補完が欲しくなった。</p>
-<p>ところが、「scheme emacs
-補完」とかで検索すると、結構面倒臭そうな方法が多い。  </p>
-<p>結局、emacsのパッケージ管理システムを使ってauto-completeをインストールする方法が一番楽そうだ、という結論に達した。  </p>
-<p>その方法を備忘録も兼ねて記載しておく。ちなみにEmacsのバージョンは24.2だ。</p>
-<p>まず、パッケージ管理システムを利用したことのない人はリポジトリを設定しよう。</p>
-<div class="highlight"><pre><span class="p">;;;;;;;;;;;;;;;;;;;;</span><span class="n">Package</span><span class="p">;;;;;;;;;;;;;;;;;;;;</span>
-<span class="p">(</span><span class="n">require</span> <span class="err">&#39;</span><span class="n">package</span><span class="p">)</span>
-<span class="p">(</span><span class="n">add</span><span class="o">-</span><span class="n">to</span><span class="o">-</span><span class="n">list</span> <span class="err">&#39;</span><span class="n">package</span><span class="o">-</span><span class="n">archives</span>
-     <span class="err">&#39;</span><span class="p">(</span><span class="s">&quot;marmalade&quot;</span> <span class="p">.</span> <span class="s">&quot;http://marmalade-repo.org/packages/&quot;</span><span class="p">)</span>
-     <span class="err">&#39;</span><span class="p">(</span><span class="s">&quot;melpa ...</span></pre></div> 
-      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/12/01/autocomplite-scheme-with-emacs-and-gauche/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/11/25/sicp3/">SICP 第2章「Building Abstractions with Data」【前編】</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-11-25T04:18:00">
-  月 25 11月 2013
-</abbr> | 
- -- (<a href="http://yuseinishiyama.com/posts/2013/11/25/sicp3/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>1章が割りとすんなり終わったものだから、少し油断していた。2章からは分量も問題数も随分多くなりなかなか終わりそうにない。大体2章の60%ぐらいが終わったから、備忘録も兼ねてこの辺りで感想をまとめておこう。</p>
-<p>ところで、Edsgar Dijkstraの言葉にこのようなものがある</p>
-<blockquote>
-<p>Being abstract is something profoundly different from being vague…<br />
- The purpose of abstraction is not to be vague, but to create a new
-semantic level in which one can be absolutely precise.   (<a href="http://www.linfo.org/q_programming.html" title="Best Programming Quotations">「Best
-Programming Quotations」</a>より)</p>
-<p>抽象的であることと曖昧であることは全く違う。<br />
- 抽象化の目的は、曖昧にすることではない。<br />
- 抽象化は、新たなセマンティックレベルを創出し ...</p></blockquote> 
-      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/11/25/sicp3/">read more...</a></div>
-      <hr />
-      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/11/13/tech-hills7/">第7回テックヒルズにいってきました。</a></div>
-<p>
-<small>
-<abbr class="published" title="2013-11-13T02:27:00">
-  水 13 11月 2013
-</abbr> | 
- -- (<a href="http://yuseinishiyama.com/posts/2013/11/13/tech-hills7/" rel="bookmark">permalink</a>)
-</small>
-</p>      <p>Unityを触ったり、簡単なシェーダー書いたりしてるうちに描画処理への関心が高まってきた。ゲームとかグラフィックスの分野は、一定以上のものを作るために比較的コアな知識がいる一方で、結果がキャッチーで分かりやすい。ゲームにはあまり興味がない私だが、ゲームエンジンブームである。先日、<a href="http://d.hatena.ne.jp/hdk_embedded/20131106/1383681073">「Playgroundハッカソン」</a>に参加してからというもの、ますます興味が湧いてきている。</p>
-<p>そんなわけで、「Game
-Engines」がテーマの<a href="http://atnd.org/events/44622" title="第7回テックヒルズ">第7回テックヒルズ</a>に行ってきた。</p>
-<p>以下が公開されているスライドへのリンクだ(一部、公開が確認できていないものもある)。</p>
-<ol>
-<li><a href="http://www.slideshare.net/keigoando/unity2-dnew-gui" title="Unity2DとnewGUIについて">「Unity2DとnewGUIについて」</a>安藤
-    圭吾さん(ユニティ・テクノロジーズ・ジャパン)</li>
-<li><a href="http://www.slideshare.net/KatsutoshiMakino/aiming" title="Aiming開発ゲームの裏側">「Aiming開発ゲームの裏側」</a>牧野 克俊さん(Aiming)</li>
-<li><a href="http://www.slideshare.net/doraemonsss/cocos2d-x-28145813?ref=http://sssslide.com/www.slideshare.net/doraemonsss/cocos2d-x-28145813" title="cocos2d-xおよび開発ツールについて">「cocos2d-xおよび開発ツールについて」</a>清水 友晶さん(TKS2)</li>
-<li>「 enchant.jsの野望 9分コーディングライブ」 清水
-    亮さん(ユビキタスエンターテインメント)</li>
-<li><a href="http://www.slideshare.net/KeiNakazawa/131112-tech-hills-playground-introduction" title="Introduction">「イントロダクション」</a>
-    &amp;<a href="http://www.slideshare.net/RomainPiquois/playground-28101668" title="Playground内の描画仕組み">「Playgroundの描画仕組み」</a>＆<a href="http://www.slideshare.net/KeiNakazawa/playgroundandroid-pfandroid" title="&quot;Playground&quot;とAndroid">「マルチPF対応ゲームエンジン内のAndroid対応」</a>ロマン・ピコアさん(KLab)
-    ・中澤 慧さん(KLab)</li>
-<li>「次世代ゲームエンジンの比較 ...</li></ol> 
-      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/11/13/tech-hills7/">read more...</a></div>
       <hr />
 
 <span class="paginator">

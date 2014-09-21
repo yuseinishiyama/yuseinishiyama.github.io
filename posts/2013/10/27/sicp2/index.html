@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="jp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -22,6 +22,7 @@
 <p>
     <div class="view"><a href="http://yuseinishiyama.com/pages/about-me.html">About Me</a></div>
   <div class="view"><a href="http://yuseinishiyama.com/archives.html">Archives</a></div>
+  <div class="view"><a href="http://yuseinishiyama.com/categories">Categories</a></div>
 </p>
 
 <!-- Social links -->
@@ -45,7 +46,7 @@
 <p>
 <small>
 <abbr class="published" title="2013-10-27T03:50:00">
-  日 27 10月 2013
+  2013-10-27(日)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/10/27/sicp2/" rel="bookmark">permalink</a>)
 </small>
@@ -55,18 +56,20 @@
 <p>if、cond、define、let、lambdaなどを用いてプログラミングできるようになった。例の「カッコ」にもだいぶ慣れてきた。</p>
 <p>・linear recursionとiterationの違いが分かるようになった。  </p>
 <p>今以上に不慣れな時のコードではあるが、以下のようにrecursionとiterationで再帰が書けるようになった。後者のほうが遥かに効率が良い。</p>
-<p>``` {.lang:scheme .decode:true title="Exercise 1.11. "}
-;recursion
-(define (f n)
-  (cond ((&lt; n 3) n)
-        (else (+ (f (- n 1))
-                 (<em> 2 (f (- n 2)))
-                 (</em> 3 (f (- n 3)))))))</p>
-<p>;iteration
-(define (f-iter product product-1 product-2 counter max-count)
-  (cond ((&gt; counter max-count) product)
-        (else (f-iter (+ product (<em> 2 product-1) (</em> 3 product-2)) product product-1 (+ counter 1) max-count))))
-```</p>
+<div class="highlight"><pre><span class="p">;</span><span class="n">recursion</span>
+<span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">f</span> <span class="n">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">cond</span> <span class="p">((</span><span class="o">&lt;</span> <span class="n">n</span> <span class="mi">3</span><span class="p">)</span> <span class="n">n</span><span class="p">)</span>
+        <span class="p">(</span><span class="k">else</span> <span class="p">(</span><span class="o">+</span> <span class="p">(</span><span class="n">f</span> <span class="p">(</span><span class="o">-</span> <span class="n">n</span> <span class="mi">1</span><span class="p">))</span>
+                 <span class="p">(</span><span class="o">*</span> <span class="mi">2</span> <span class="p">(</span><span class="n">f</span> <span class="p">(</span><span class="o">-</span> <span class="n">n</span> <span class="mi">2</span><span class="p">)))</span>
+                 <span class="p">(</span><span class="o">*</span> <span class="mi">3</span> <span class="p">(</span><span class="n">f</span> <span class="p">(</span><span class="o">-</span> <span class="n">n</span> <span class="mi">3</span><span class="p">)))))))</span>
+
+<span class="p">;</span><span class="n">iteration</span>
+<span class="p">(</span><span class="n">define</span> <span class="p">(</span><span class="n">f</span><span class="o">-</span><span class="n">iter</span> <span class="n">product</span> <span class="n">product</span><span class="o">-</span><span class="mi">1</span> <span class="n">product</span><span class="o">-</span><span class="mi">2</span> <span class="n">counter</span> <span class="n">max</span><span class="o">-</span><span class="n">count</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">cond</span> <span class="p">((</span><span class="o">&gt;</span> <span class="n">counter</span> <span class="n">max</span><span class="o">-</span><span class="n">count</span><span class="p">)</span> <span class="n">product</span><span class="p">)</span>
+        <span class="p">(</span><span class="k">else</span> <span class="p">(</span><span class="n">f</span><span class="o">-</span><span class="n">iter</span> <span class="p">(</span><span class="o">+</span> <span class="n">product</span> <span class="p">(</span><span class="o">*</span> <span class="mi">2</span> <span class="n">product</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span> <span class="mi">3</span> <span class="n">product</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span> <span class="n">product</span> <span class="n">product</span><span class="o">-</span><span class="mi">1</span> <span class="p">(</span><span class="o">+</span> <span class="n">counter</span> <span class="mi">1</span><span class="p">)</span> <span class="n">max</span><span class="o">-</span><span class="n">count</span><span class="p">))))</span>
+</pre></div>
+
+
 <p>・ファーストクラスオブジェクトについて理解した。  </p>
 <p>当然Lispをやるのだから事前に知っていたことではあったが、Procedureを返す関数とかをたくさん書いているうちに以前よりはっきり「ファーストクラス感(？)」を理解できるようになった。</p>
 <blockquote>

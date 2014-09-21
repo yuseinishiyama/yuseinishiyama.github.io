@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja">
+<html lang="jp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -22,6 +22,7 @@
 <p>
     <div class="view"><a href="http://yuseinishiyama.com/pages/about-me.html">About Me</a></div>
   <div class="view"><a href="http://yuseinishiyama.com/archives.html">Archives</a></div>
+  <div class="view"><a href="http://yuseinishiyama.com/categories">Categories</a></div>
 </p>
 
 <!-- Social links -->
@@ -35,23 +36,95 @@
 
       </header>
       <section>
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/06/13/simultaneous-video-playing-in-ios/">iPhoneでの同時動画再生数の上限について</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-06-13T00:15:00">
+  2013-06-13(木)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2013/06/13/simultaneous-video-playing-in-ios/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>現在動画編集アプリを作っている。<br />
+動画にエフェクトとかBGMとかなんやらの設定をしていくわけだが、  </p>
+<p>画面上部にプレビュー画面を持ち、その下に編集用のOutletがいくつか存在するような見た目のViewControllerがNavigationControllerでいくつか続いていくというような作りだ。</p>
+<p>ここで奇妙な問題が発生した。<br />
+MPMoviePlayerControllerを使用して、動画を再生しようとしたところ</p>
+<div class="highlight"><pre><span class="n">Error</span> <span class="n">Domain</span><span class="o">=</span><span class="n">AVFoundationErrorDomain</span> <span class="n">Code</span><span class="o">=-</span><span class="mi">11839</span> <span class="s">&quot;Cannot Decode&quot;</span>
+</pre></div>
+
+
+<p>こんなエラーがでた。デコードできない？動画の形式が悪いのだろうか？  </p>
+<p>だが、試しにそのViewControllerだけにして実行してみたところ問題なく再生できた。<br />
+ということは、特定のコンテキストにおいてのみデコードが失敗するわけだ。</p>
+<p><a href="http://yuseinishiyama.com/archives/51">先日の記事</a>にもある通り、いざ実装を始めると全く予期しないところで躓くことが多々ある。  </p>
+<p>特にこういうロジックの問題でない箇所は原因の特定が難しく、心が折れそうになる。</p>
+<p>とにかくググるしかないので、上記のログをそのまま検索バーに貼り付けた。<br />
+すると同じ様な現象で困っている人を発見することが出来た。</p>
+<p><a href="http://stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decode">http://stackoverflow.com/questions/8608570/avplayeritem-fails-with-avstatusfailed-and-error-code-cannot-decode</a></p>
+<blockquote>
+<p>There is a limit on the number of concurrent video players that
+AVFoundation will allow ...</p></blockquote> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/06/13/simultaneous-video-playing-in-ios/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/06/10/never-be-fool/">バカ・アホ賛美はもう結構。</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-06-10T05:52:00">
+  2013-06-10(月)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2013/06/10/never-be-fool/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>何かに対して、バカだとかアホだとか言うと、「お前はどうなんだ」という議論に持ち込まれることがある。だからはじめに言っておくが、</p>
+<p>私もバカ・アホの部類である。</p>
+<p>だが、「バカ・アホでもいい」と思うほどはバカ・アホではないし、ましてや、「バカ・アホが世界を制する」みたいな仰天思想の持ち主のようなバカ・アホでもない。</p>
+<p>筒井康隆の『アホの壁』の冒頭にこんな文がある。</p>
+<blockquote>
+<p>むろんアホの壁を乗り越えて彼方へ行かぬ限りは成り立たない仕事もある。言うまでもなく芸術という仕事である。芸術的狂気というものは一旦良識から離れてアホの側に身を置かねばならない。それが単なるアホと異なるのは、壁の存在、壁の所在、壁の位置、壁の高さ、壁を乗り越える方法などを熟知していることだ。そのためには冷静な正気を保ちながら壁を認識しなければならない。これができていない芸術は、常識に囚われたつまらないものにならざるを得ないだろう。<br />
+ \&lt;筒井康隆(2010)『アホの壁』新潮社 p7></p>
+</blockquote>
+<p>あれほど無茶苦茶なスラップスティックを書ける作家の芸術感がこのようなものであるということは、とても印象的だ（『アホの壁』は、この常識さゆえに、筒井康隆特有の痛快さにはかけるので物足りないのだが）。</p>
+<p>私は、個性というのはとても大事だと思っている。過去の財産にアクセスしやすい時代に過去の再生産を行なっても大した価値にはならないからだ。それに、今までに無かったものの見方・考え方や歴史観を生むような個性が、現代日本を覆う民族的な不安を乗り越えるためには必要不可欠だとも思う ...</p> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/06/10/never-be-fool/">read more...</a></div>
+      <hr />
+      <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/06/07/what-does-saying-i-can-means/">プログラマにとって〈できる〉とは何か。</a></div>
+<p>
+<small>
+<abbr class="published" title="2013-06-07T00:54:00">
+  2013-06-07(金)
+</abbr> | 
+ -- (<a href="http://yuseinishiyama.com/posts/2013/06/07/what-does-saying-i-can-means/" rel="bookmark">permalink</a>)
+</small>
+</p>      <p>プログラマとして働いていると、特に非プログラマの人から</p>
+<p>「hogehogeをfugafugaするようなことって（プログラムで）できるんですか？」</p>
+<p>という類の質問をされることが良くある。当然そういうことを聞かれたら</p>
+<p>「できると思いますよ。」</p>
+<p>と答えるしかない。まともな思考な人が考えるような要求、つまり「iPhoneの画面をダブルタップすると、口やかましい上司を遠隔地へと転送できる」とか「母親をカメラで撮影すると、実家への仕送りを強要しなくなる」とか、そういうのではない要求、というものはたいていの場合、理論上実現可能だからだ。</p>
+<p>コンピュータサイエンスに明るいわけではないが、「<a href="http://ja.wikipedia.org/wiki/%E3%83%81%E3%83%A5%E3%83%BC%E3%83%AA%E3%83%B3%E3%82%B0%E5%AE%8C%E5%85%A8" title="チューリング完全">チューリング完全</a>」という言葉ぐらいなら知っている。コンピュータの世界における「やればできる」に相当する概念といったところか。  </p>
+<p>つまり、「できますか」という問に「やればできる」と答えていて、さらに、「やればできる」のことを「できる」という言葉で表してしまっているわけだ。</p>
+<p>物質世界にくらべて、「やればできる」のが当たり前のソフトウェアの世界だからこそ、その当たり前の答えを使ってしまうと厄介なことが起きる。まず、</p>
+<p>「Aさんがhogehogeをfugafugaできるらしいから、やってもらおう。」</p>
+<p>という風に自分が頼まれてしまう。そして、自分自身も判断力が鈍っていると</p>
+<p>「まぁ、やればできるはずだからやってみるか。」</p>
+<p>と安易に引き受けてしまうわけである。プログラムの世界以外なら ...</p> 
+      <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/06/07/what-does-saying-i-can-means/">read more...</a></div>
+      <hr />
       <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/06/02/constant-string-in-objectivec/">Objective-Cで文字列定数</a></div>
 <p>
 <small>
 <abbr class="published" title="2013-06-02T21:54:00">
-  日 02 6月 2013
+  2013-06-02(日)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/06/02/constant-string-in-objectivec/" rel="bookmark">permalink</a>)
 </small>
 </p>      <p>Objective-Cで文字列定数の宣言をする方法について考えてみた。<br />
 最も手っ取り早いのは当然マクロだろう。</p>
-<p>``` {.lang:objc .decode:true title="SomeClass.m"}</p>
-<h1>define CONST_STR @"Const Str"</h1>
-<div class="highlight"><pre><span class="err">だが、当然二重定義の問題があるので好ましいとは言えない。</span>  
-<span class="err">より好ましいのは以下の方法だろう。</span>
+<div class="highlight"><pre><span class="cp">#define CONST_STR @&quot;Const Str&quot;</span>
+</pre></div>
 
-<span class="err">```</span> <span class="p">{.</span><span class="n">lang</span><span class="o">:</span><span class="n">objc</span> <span class="p">.</span><span class="n">decode</span><span class="o">:</span><span class="nb">true</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;SomeClass.m&quot;</span><span class="p">}</span>
-<span class="k">static</span> <span class="n">NSString</span> <span class="o">*</span> <span class="k">const</span> <span class="n">kConstStr</span> <span class="o">=</span> <span class="s">@&quot;Const Str&quot;</span><span class="p">;</span>
+
+<p>だが、当然二重定義の問題があるので好ましいとは言えない。<br />
+より好ましいのは以下の方法だろう。</p>
+<div class="highlight"><pre><span class="k">static</span> <span class="n">NSString</span> <span class="o">*</span> <span class="k">const</span> <span class="n">kConstStr</span> <span class="o">=</span> <span class="s">@&quot;Const Str&quot;</span><span class="p">;</span>
 </pre></div>
 
 
@@ -60,41 +133,59 @@
 <p>（ちなみにObective-Cではメンバ変数のプレフィックは「_」が完全に推奨されている一方で、定数にこうしたハンガリアン記法を使うかどうか迷いどころだが、たいがいのフレームワークでは定数はこの形で書かれているし、実際しっくりくる。）</p>
 <p>さてこの定数を外部に公開したいとする。<br />
 ここでこんな風にやってしまうと間違いだ。</p>
-<p>``` {.lang:objc .decode:true title="SomeClass.h"}
-static NSString * const kConstStr ...</p> 
+<div class="highlight"><pre><span class="k">static</span> <span class="n">NSString</span> <span class="o">*</span> <span class="k">const</span> <span class="n">kConstStr</span> <span class="o">=</span> <span class="s">@&quot;Const Str&quot;</span><span class="p">;</span>
+</pre></div>
+
+
+<p><a href="http://stackoverflow.com/a/7642561">http://stackoverflow.com/a/7642561</a><br />
+ここにstaticに関する分かりやすい説明がある。</p>
+<blockquote>
+<p>static in Objective-C means a different thing than static in a C++
+class ...</p></blockquote> 
       <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/06/02/constant-string-in-objectivec/">read more...</a></div>
       <hr />
       <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/05/21/simple-is-best/">Simple is best.</a></div>
 <p>
 <small>
 <abbr class="published" title="2013-05-21T21:42:00">
-  火 21 5月 2013
+  2013-05-21(火)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/05/21/simple-is-best/" rel="bookmark">permalink</a>)
 </small>
-</p>      <p>特別飾らず、<br />
-特別奇抜でもなく、<br />
+</p>      <p>特別飾らず、
+特別奇抜でもなく、
 それでも見ているだけで、格好いい、と思えるアーティストがいる。</p>
-<p>たとえば、Caetano Velosoや、<br />
-http://www.youtube.com/watch?v=4OOa_Ffv0wg</p>
-<p>Peter Gabrielや<br />
-http://www.youtube.com/watch?v=3_Q79lls1f0</p>
-<p>David Bowieなんかがそうだ。<br />
-http://www.youtube.com/watch?v=YYjBQKIOb-w</p>
-<p>視覚的にも、聴覚的にも無駄が少なく、<br />
-どのようにすれば、「どう見えるか」「どう聴こえるか」分かっている。<br />
+<p>たとえば、Caetano Velosoや、</p>
+<iframe width="420" height="315" src="//www.youtube.com/embed/KH-dtHH6-tA" frameborder="0" allowfullscreen></iframe>
+
+<p>Peter Gabrielや</p>
+<iframe width="420" height="315" src="//www.youtube.com/embed/aO-TM9GA3Tg" frameborder="0" allowfullscreen></iframe>
+
+<p>David Bowieなんかがそうだ。</p>
+<iframe width="420" height="315" src="//www.youtube.com/embed/YYjBQKIOb-w" frameborder="0" allowfullscreen></iframe>
+
+<p>視覚的にも、聴覚的にも無駄が少なく、
+どのようにすれば、「どう見えるか」「どう聴こえるか」分かっている。
 そんなベテランミュージシャンだからこそ、なせる技であろう。</p>
-<p>だが、シンプルにすれば格好良く見えるだろうか。<br />
-当たり前だが、そうではない。<br />
-素人のシンプルさなど、つまらないものでしかないし、<br />
-無数の「俺でもできる」の一言で片付けられてしまう ...</p> 
+<p>だが、シンプルにすれば格好良く見えるだろうか。
+当たり前だが、そうではない。
+素人のシンプルさなど、つまらないものでしかないし、
+無数の「俺でもできる」の一言で片付けられてしまう。</p>
+<p>たとえば、音楽などは、いい加減な曲でも、ボーカルを重ねたり、</p>
+<p>ストリングスを入れたり、コーラスをかけたりすると、なんとなくよく聞こえる。
+自分で音楽を作ってみたことがある人は実感があるだろう。
+こんな風に、簡素な駄作よりは、手の込んだ駄作のほうがまだマシだ。</p>
+<p>つまり、「探しても見つからない」と「探せばなにかあるかもしれない」の違いである。</p>
+<p>では、「探しものがそこにある」状態を生み出すにはなにをすればよいか。
+ゴミの山に浸かるしかない。</p>
+<p>そこで色々なムダに出会い ...</p> 
       <div class="read-more"><a href="http://yuseinishiyama.com/posts/2013/05/21/simple-is-best/">read more...</a></div>
       <hr />
       <div class="front-title"><a href="http://yuseinishiyama.com/posts/2013/05/17/self-censorship/">自己検閲の重要さ</a></div>
 <p>
 <small>
 <abbr class="published" title="2013-05-17T00:16:00">
-  金 17 5月 2013
+  2013-05-17(金)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/05/17/self-censorship/" rel="bookmark">permalink</a>)
 </small>
@@ -121,7 +212,7 @@ http://www.youtube.com/watch?v=YYjBQKIOb-w</p>
 <p>
 <small>
 <abbr class="published" title="2013-04-24T08:12:00">
-  水 24 4月 2013
+  2013-04-24(水)
 </abbr> | 
  -- (<a href="http://yuseinishiyama.com/posts/2013/04/24/hello-world/" rel="bookmark">permalink</a>)
 </small>
